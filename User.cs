@@ -15,11 +15,11 @@ namespace BankApp_GroupProject
 
         public User(string username, string password)
         {
-            Username = ValidateUsername(username);
-            Password = ValidatePassword(password);
+            Username = VerifyNewUsername(username);
+            Password = VerifyNewPassword(password);
         }
 
-        private string ValidateUsername(string username)
+        private string VerifyNewUsername(string username)
         {
             byte minLength = 4;
             byte maxLength = 25;
@@ -42,7 +42,7 @@ namespace BankApp_GroupProject
             return username;
         }
 
-        private string ValidatePassword(string password)
+        private string VerifyNewPassword(string password)
         {
             byte minLength = 6;
             byte maxLength = 30;
@@ -65,11 +65,11 @@ namespace BankApp_GroupProject
             return password;
         }
 
-        private bool CheckValidChar(string username)
+        private static bool CheckValidChar(string username)
         {
-            char[] invalidChars = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?', '%', '.',
-                                    ',', '\'', '"', '(', ')', '[', ']', '{', '}', '=', '-', '+',
-                                    '*', '_', ';', ':', '£', '€', '¨', '^', '~', '`', '<', '<', '|', };
+            char[] invalidChars = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?', '%', '.', ',',
+                                    '\'', '"', '(', ')', '[', ']', '{', '}', '=', '-', '+', '*',
+                                    '_', ';', ':', '£', '€', '¨', '^', '~', '`', '<', '<', '|', };
 
             foreach (var c in username)
             {
