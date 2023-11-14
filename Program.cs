@@ -11,14 +11,14 @@
 
         // LOGIN METHOD
         static void Login()
-        {            
+        {
             LogInManager logInManager = new LogInManager();
             ConsoleIO io = new ConsoleIO();
 
             // Login counter
             int loginCounter = 0;
-            
-            while (loginCounter <3)
+
+            while (loginCounter < 3)
             {
                 // LÄGG TILL FELHANTERING!!!
                 Console.Clear();
@@ -35,7 +35,7 @@
                     io.DisplayMenu();
                     // LA TILL DENNA BREAK DÅ VI HAMNADE TILLBAKA I LOOPEN EFTER ATT VI GÅTT UR Menu() ANNARS. KOMMER SÄKERT ÄNDRAS SENARE
                     break;
-                  
+
                     if (username == "admin")
                     {
                         // Go to admin menu method.
@@ -66,7 +66,7 @@
                     }
                 }
             }
-            
+
         }
     }
 }
