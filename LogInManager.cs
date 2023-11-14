@@ -9,6 +9,7 @@ namespace BankApp_GroupProject
     internal class LogInManager
     {
         private List<User> _users;
+        public List<User> Users { get => _users; set => _users = value; }
 
         public LogInManager()
         {
@@ -26,12 +27,12 @@ namespace BankApp_GroupProject
         {
             foreach (var user in _users)
             {
-                if (user.UserName == username && user.Password == password)
+                if (user.Username == username && user.Password == password)
                 {
                     return true;
                 }
             }
             return false;
-        }
+        }        
     }
 }
