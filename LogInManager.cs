@@ -26,7 +26,7 @@ namespace BankApp_GroupProject
         {
             foreach (var user in _users)
             {
-                if(user.UserName == username && user.Password == password)
+                if (user.UserName == username && user.Password == password)
                 {
                     return true;
                 }
