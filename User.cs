@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace BankApp_GroupProject
 {
-    public class User
+    public abstract class User
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
 
         private bool _verified;
 
         public User(string username, string password)
         {
-            Username = VerifyNewUsername(username);
-            Password = VerifyNewPassword(password);
+            Username = username;
+            Password = password;
         }
 
-        private string VerifyNewUsername(string username)
+        public string VerifyNewUsername(string username)
         {
             byte minLength = 4;
-            byte maxLength = 25;
+            byte maxLength = 24;
 
             while (!_verified)
             {
@@ -32,48 +32,50 @@ namespace BankApp_GroupProject
                                 "\ntecken långt och får ej innehålla några specialtecken.\n" +
                                 "\nTryck \"ENTER\" och försök igen.");
                     Console.ReadKey();
+                    Console.Clear();
                 }
                 else
                 {
                     _verified = true;
                 }
             }
-
             return username;
         }
 
-        private string VerifyNewPassword(string password)
+        public string VerifyNewPassword(string password)
         {
             byte minLength = 6;
             byte maxLength = 30;
 
             while (!_verified)
             {
-                if (password == null || password.Length < minLength || password.Length > maxLength || !CheckValidChar(password))
-                {
-                    Console.Write("Fel input! Ditt lösenord kan endast vara mellan 6-30 " +
-                                "\ntecken långt och måste innehålla minst ett specialtecken.\n" +
-                                "\nTryck \"ENTER\" och försök igen.");
-                    Console.ReadKey();
-                }
-                else
+                if (password != null && password.Length >= minLength && 
+                    password.Length <= maxLength && password.Any(c => char.IsAsciiLetterUpper(c))
+                    && password.Any(c => char.IsAsciiDigit(c)) && CheckValidChar(password))
                 {
                     _verified = true;
                 }
+                else
+                {
+                    Console.Write("Fel input! Ditt lösenord måste vara mellan 6-30 tecken långt och" +
+                                "\ninnehålla minst en stor bokstav, en siffra och ett specialtecken.\n" +
+                                "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
             }
-
             return password;
         }
 
-        private static bool CheckValidChar(string username)
+        private static bool CheckValidChar(string input)
         {
-            char[] invalidChars = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?', '%', '.', ',',
+            char[] symbolArray = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?', '%', '.', ',',
                                     '\'', '"', '(', ')', '[', ']', '{', '}', '=', '-', '+', '*',
-                                    '_', ';', ':', '£', '€', '¨', '^', '~', '`', '<', '<', '|', };
+                                    '_', ';', ':', '£', '€', '¨', '^', '~', '`', '<', '>', '|', '&' };
 
-            foreach (var c in username)
+            foreach (var c in input)
             {
-                if (invalidChars.Contains(c))
+                if (symbolArray.Contains(c))
                 {
                     return true;
                 }
