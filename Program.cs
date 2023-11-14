@@ -28,8 +28,10 @@
 
                 if (success)
                 {
-                    // GÅ VIDARE TILL NÄSTA MENY
+                    // Go to menu method.
                     Menu();
+                    // LA TILL DENNA BREAK DÅ VI HAMNADE TILLBAKA I LOOPEN EFTER ATT VI GÅTT UR Menu() ANNARS. KOMMER SÄKERT ÄNDRAS SENARE
+                    break;
                 }
                 else
                 {
@@ -55,6 +57,8 @@
             Console.WriteLine("1. ");
             Console.WriteLine("2. ");
             Console.WriteLine("3. ");
+
+            Console.ReadLine();
         }
     }
 }
