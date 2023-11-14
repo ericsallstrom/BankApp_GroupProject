@@ -2,6 +2,7 @@
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
             //Byta namn??
@@ -10,6 +11,8 @@
 
         static void Login()
         {
+            ConsoleIO io = new ConsoleIO();
+
             // LOGIN METHOD
             LogInManager logInManager = new LogInManager();
             // Login counter
@@ -29,7 +32,7 @@
                 if (success)
                 {
                     // Go to menu method.
-                    Menu();
+                    io.DisplayMenu();
                     // LA TILL DENNA BREAK DÅ VI HAMNADE TILLBAKA I LOOPEN EFTER ATT VI GÅTT UR Menu() ANNARS. KOMMER SÄKERT ÄNDRAS SENARE
                     break;
                 }
