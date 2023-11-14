@@ -6,12 +6,7 @@
         static void Main(string[] args)
         {
             //Byta namn??
-            //Login();
-
-            Console.Write("Lösenord: ");
-            string input1 = Console.ReadLine();
-
-            User user = new("testet", input1);
+            Login();
         }
 
         // LOGIN METHOD
