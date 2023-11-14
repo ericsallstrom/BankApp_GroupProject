@@ -13,14 +13,16 @@ namespace BankApp_GroupProject
 
         public LogInManager()
         {
-            _users = new List<User>();
             // Fyll på med användare här
-            _users.Add(new User("admin", "password"));
-            _users.Add(new User("olov", "hej123"));
-            _users.Add(new User("olof", "hej123"));
-            _users.Add(new User("eric", "hej123"));
-            _users.Add(new User("patrik", "hej123"));
-            _users.Add(new User("hany", "hej123"));
+            _users = new List<User>()
+                {
+                    new Admin("admin", "password"),
+                    new Customer("olov", "hej123"),
+                    new Customer("olof", "hej123"),
+                    new Customer("eric", "hej123"),
+                    new Customer("patrik", "hej123"),
+                    new Customer("hany", "hej123")
+                };
         }
 
         public bool Login(string username, string password)
@@ -33,6 +35,6 @@ namespace BankApp_GroupProject
                 }
             }
             return false;
-        }        
+        }
     }
 }

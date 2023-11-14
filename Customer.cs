@@ -1,11 +1,11 @@
 ﻿namespace BankApp_GroupProject
 {
-    //public class Customer : User
-    //{
-    //    public Customer(string username, string password) 
-    //        : base(username, password)
-    //    {
+    public class Customer : User
+    {
+        public Customer(string username, string password)
+            : base(username, password)
+        {
 
-    //    }
-    //}
+        }
+    }
 }
