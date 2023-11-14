@@ -8,10 +8,12 @@
             Login();
         }
 
+        // LOGIN METHOD
         static void Login()
-        {
-            // LOGIN METHOD
+        {            
             LogInManager logInManager = new LogInManager();
+            ConsoleIO io = new ConsoleIO();
+
             // Login counter
             int loginCounter = 0;
             
@@ -19,26 +21,36 @@
             {
                 // LÄGG TILL FELHANTERING!!!
                 Console.Clear();
-                Console.WriteLine("Vänligen ange användarnamn:");
+                Console.Write("Vänligen ange användarnamn: ");
                 string username = Console.ReadLine();
-                Console.WriteLine("Vänligen ange lösenord");
+                Console.Write("Vänligen ange lösenord: ");
                 string password = Console.ReadLine();
 
                 bool success = logInManager.Login(username, password);
 
                 if (success)
                 {
-                    // Go to menu method.
-                    Menu();
-                    // LA TILL DENNA BREAK DÅ VI HAMNADE TILLBAKA I LOOPEN EFTER ATT VI GÅTT UR Menu() ANNARS. KOMMER SÄKERT ÄNDRAS SENARE
-                    break;
+                    if (username == "admin")
+                    {
+                        // Go to admin menu method.
+                        io.DisplayAdminMenu();
+                        // LA TILL DENNA BREAK DÅ VI HAMNADE TILLBAKA I LOOPEN EFTER ATT VI GÅTT UR MENYERNA ANNARS. KOMMER SÄKERT ÄNDRAS SENARE
+                        break;
+                    }
+                    else
+                    {
+                        // Go to customer menu method.
+                        io.DisplayMenu();
+                        // LA TILL DENNA BREAK DÅ VI HAMNADE TILLBAKA I LOOPEN EFTER ATT VI GÅTT UR MENYERNA ANNARS. KOMMER SÄKERT ÄNDRAS SENARE
+                        break;
+                    }
                 }
                 else
                 {
                     loginCounter++;
                     if (loginCounter < 3)
                     {
-                        Console.WriteLine("Fel användarnamn eller lösernord, försök igen...");
+                        Console.WriteLine("Fel användarnamn eller lösenord, försök igen...");
                         Console.ReadLine();
                     }
                     else
@@ -49,16 +61,6 @@
                 }
             }
             
-        }
-        // LÄGG TILL MENYALTERNATIV
-        static void Menu()
-        {
-            Console.WriteLine("Vänligen gör ett val");
-            Console.WriteLine("1. ");
-            Console.WriteLine("2. ");
-            Console.WriteLine("3. ");
-
-            Console.ReadLine();
         }
     }
 }
