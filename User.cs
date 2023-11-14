@@ -15,36 +15,65 @@ namespace BankApp_GroupProject
 
         public User(string username, string password)
         {
-            Username = username;
-            Password = password;
+            Username = ValidateUsername(username);
+            Password = ValidatePassword(password);
         }
 
-        public void ValidateUsername(string userInput)
+        private string ValidateUsername(string username)
         {
-            string username = userInput.Trim();
+            byte minLength = 4;
+            byte maxLength = 25;
 
             while (!_verified)
             {
-                if (!string.IsNullOrWhiteSpace(username) || CheckValidChar(username))
+                if (username == null || username.Length < minLength || username.Length > maxLength || CheckValidChar(username))
                 {
-                    Username = username;
-                    Console.WriteLine("Good");
-                    _verified = true;
+                    Console.Write("Fel input! Ditt användarnamn kan endast vara mellan 4-24" +
+                                "\ntecken långt och får ej innehålla några specialtecken.\n" +
+                                "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
                 }
                 else
                 {
-                    Console.WriteLine("Fel input! Var god ange ett korrekt användarnamn.");
+                    _verified = true;
                 }
             }
+
+            return username;
         }
 
-        private static bool CheckValidChar(string username)
+        private string ValidatePassword(string password)
         {
-            char[] invalidChars = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?' };
+            byte minLength = 6;
+            byte maxLength = 30;
+
+            while (!_verified)
+            {
+                if (password == null || password.Length < minLength || password.Length > maxLength || !CheckValidChar(password))
+                {
+                    Console.Write("Fel input! Ditt lösenord kan endast vara mellan 6-30 " +
+                                "\ntecken långt och måste innehålla minst ett specialtecken.\n" +
+                                "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    _verified = true;
+                }
+            }
+
+            return password;
+        }
+
+        private bool CheckValidChar(string username)
+        {
+            char[] invalidChars = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?', '%', '.',
+                                    ',', '\'', '"', '(', ')', '[', ']', '{', '}', '=', '-', '+',
+                                    '*', '_', ';', ':', '£', '€', '¨', '^', '~', '`', '<', '<', '|', };
 
             foreach (var c in username)
             {
-                if (!invalidChars.Contains(c))
+                if (invalidChars.Contains(c))
                 {
                     return true;
                 }
