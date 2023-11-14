@@ -19,6 +19,7 @@ namespace BankApp_GroupProject
             _users.Add(new User("olof", "hej123"));
             _users.Add(new User("eric", "hej123"));
             _users.Add(new User("patrik", "hej123"));
+            _users.Add(new User("hany", "hej123"));
         }
 
         public bool Login(string username, string password)
