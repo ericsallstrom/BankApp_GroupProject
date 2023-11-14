@@ -10,14 +10,14 @@
             {
                 Console.Clear();
                 Console.WriteLine(
-                    "Costumer Menu\r" +
+                    "Customer Meny\r" +
                     "\n=================\r" +
                     "\n1. Skapa nytt konto\r" +
                     "\n2. Visa konton\r" +
                     "\n3. Låna\r" +
                     "\n4. Avsluta");
 
-                menuChoice = GetMenuChoice("costumer");
+                menuChoice = GetMenuChoice("admin");
                 Console.ReadKey();
 
 
@@ -49,7 +49,7 @@
             {
                 Console.Clear();
                 Console.WriteLine(
-                    "Admin Menu\r" +
+                    "Admin Meny\r" +
                     "\n=================\r" +
                     "\n1. Skapa användare\r" +
                     "\n2. Visa användare\r" +
@@ -89,23 +89,37 @@
             }
         }
 
-        public int GetMenuChoice(string UserType)
+        //Method for getting user menu choice that cathes wrong input.
+        public int GetMenuChoice(string userType)
         {
             while (true)
             {
 
-                Console.Write("\nEnter choice:");
+                Console.Write("\nDitt val:");
 
                 if (int.TryParse(Console.ReadLine(), out menuChoice))
                 {
-                    if (menuChoice >= 1 && menuChoice <= 4)
+                    //If Admin menu is called
+                    if (userType == "admin")
                     {
-                        return menuChoice;
+                        if (menuChoice >= 1 && menuChoice <= 5)
+                        {
+                            return menuChoice;
+                        }
+                    }
+
+                    //If Customer menu is called
+                    if (userType == "customer")
+                    {
+                        if (menuChoice >= 1 && menuChoice <= 4)
+                        {
+                            return menuChoice;
+                        }
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Enter a valid choice.");
+                    Console.WriteLine("Skriv in ett giltigt val.");
                     Console.ReadKey();
                 }
             }
