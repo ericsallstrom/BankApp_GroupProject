@@ -8,20 +8,15 @@ namespace BankApp_GroupProject
 {
     public abstract class User
     {
-        public string Username { get; private set; }
-        private string Password { get; set; }
+        public string Username { get; }
+        private string Password { get; }
 
         private bool _verified;
 
         public User(string username, string password)
         {
             Username = username;
-            Password = password;            
-        }
-
-        public bool CheckPassword(string enteredPassword)
-        {
-            return Password == enteredPassword;             
+            Password = password;
         }
 
         public string VerifyNewUsername(string enteredUsername)
@@ -31,7 +26,7 @@ namespace BankApp_GroupProject
 
             while (!_verified)
             {
-                if (enteredUsername == null || enteredUsername.Length < minLength || 
+                if (enteredUsername == null || enteredUsername.Length < minLength ||
                     enteredUsername.Length > maxLength || CheckValidChar(enteredUsername))
                 {
                     Console.Write("Ogiltigt användarnamn. Ditt användarnamn kan endast vara mellan" +
@@ -45,8 +40,27 @@ namespace BankApp_GroupProject
                     _verified = true;
                 }
             }
-            Username = enteredUsername;
-            return Username;
+            return enteredUsername;
+        }
+
+        public void ChangePassword()
+        {
+            Console.Write("Skriv in ditt gamla lösenord: ");
+            string oldPassword = Console.ReadLine();
+
+            if (CheckPassword(oldPassword))
+            {
+                Console.WriteLine("Lösenordet är nu ändrat!");
+            }
+            else
+            {
+                Console.WriteLine("Fel lösenord! Var god försök igen.");
+            }
+        }
+
+        public bool CheckPassword(string enteredPassword)
+        {
+            return Password == enteredPassword;
         }
 
         public string VerifyNewPassword(string enteredPassword)
@@ -71,8 +85,7 @@ namespace BankApp_GroupProject
                     Console.Clear();
                 }
             }
-            Password = enteredPassword;
-            return Password;
+            return enteredPassword;
         }
 
         private static bool CheckValidChar(string input)
