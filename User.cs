@@ -8,15 +8,20 @@ namespace BankApp_GroupProject
 {
     public abstract class User
     {
-        public string Username { get; private set; }
-        public string Password { get; private set; }
+        public string Username { get; }
+        private string Password { get; }
 
         private bool _verified;
 
         public User(string username, string password)
         {
             Username = username;
-            Password = password;
+            Password = password;            
+        }
+
+        public bool CheckPassword(string enteredPassword)
+        {
+            return Password == enteredPassword;             
         }
 
         public string VerifyNewUsername(string username)
@@ -49,7 +54,7 @@ namespace BankApp_GroupProject
 
             while (!_verified)
             {
-                if (password != null && password.Length >= minLength && 
+                if (password != null && password.Length >= minLength &&
                     password.Length <= maxLength && password.Any(c => char.IsAsciiLetterUpper(c))
                     && password.Any(c => char.IsAsciiDigit(c)) && CheckValidChar(password))
                 {
