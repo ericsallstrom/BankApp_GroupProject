@@ -8,8 +8,7 @@ namespace BankApp_GroupProject
 {
     internal class LogInManager
     {
-        private List<User> _users;
-        public List<User> Users { get => _users; set => _users = value; }
+        private readonly List<User> _users;
 
         public LogInManager()
         {
@@ -25,11 +24,16 @@ namespace BankApp_GroupProject
                 };
         }
 
-        public bool Login(string username, string password)
+        public void AddUser(User user)
         {
-            foreach (var user in _users)
+            _users.Add(user);
+        }
+
+        public bool Login(string enteredUsername, string enteredPassword)
+        {
+            foreach (User user in _users)
             {
-                if (user.Username == username && user.Password == password)
+                if (user.Username == enteredUsername && user.CheckPassword(enteredPassword))
                 {
                     return true;
                 }
