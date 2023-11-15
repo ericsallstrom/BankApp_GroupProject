@@ -50,7 +50,8 @@ namespace BankApp_GroupProject
 
             if (CheckPassword(oldPassword))
             {
-                Console.WriteLine("Lösenordet är nu ändrat!");
+                Console.Write("Skriv in ditt nya lösenord: ");
+                string newPassword = Console.ReadLine();
             }
             else
             {
