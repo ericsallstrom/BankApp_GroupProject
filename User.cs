@@ -19,6 +19,7 @@ namespace BankApp_GroupProject
             Password = password;
         }
 
+        // Metod för att verifiera en användares användarnamn.
         public void VerifyNewUsername(string username)
         {
             byte minLength = 4;
@@ -26,6 +27,8 @@ namespace BankApp_GroupProject
 
             while (!_verified)
             {
+                // Användarnamn får inte vara null, innehålla färre eller mer än  
+                // 4-24 tecken eller innehålla ett eller flera specialtecken.
                 if (username == null || username.Length < minLength ||
                     username.Length > maxLength || CheckValidChar(username))
                 {
@@ -43,6 +46,8 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Metod som tillåter användaren att byta lösenord.
+        // Lösenordet verifieras sedan i en annan metod.
         public void ChangePassword()
         {
             Console.Write("Skriv in ditt gamla lösenord: ");
@@ -61,6 +66,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Verifierar en användares lösenord.
         public void VerifyNewPassword(string password)
         {
             byte minLength = 6;
@@ -68,6 +74,8 @@ namespace BankApp_GroupProject
 
             while (!_verified)
             {
+                // Lösenordet måste ha minst en stor bokstav, en siffra och ett specialtecken
+                // och lösenordet kan inte vara null och måste vara mellan 6-30 tecken långt.
                 if (password != null && password.Length >= minLength &&
                     password.Length <= maxLength && password.Any(c => char.IsAsciiLetterUpper(c))
                     && password.Any(c => char.IsAsciiDigit(c)) && CheckValidChar(password))
@@ -86,11 +94,14 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Kollar om det inmatade lösenordet matchar lösenordet 
+        // för en viss användare. Returnerar true om det matchar.
         public bool CheckPassword(string password)
         {
             return Password == password;
         }
 
+        // Kollar om användarnamn/lösenord innehåller ett visst specialtecken.
         private static bool CheckValidChar(string input)
         {
             char[] symbolArray = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?', '%', '.', ',',

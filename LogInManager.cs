@@ -24,21 +24,23 @@ namespace BankApp_GroupProject
                 };
         }
 
+        // Publik metod som lägger till en användare i listan.
         public void AddUser(User user)
         {
             _users.Add(user);
         }
 
-        public bool IsUsernameUnique(string enteredUsername)
+        // Metod för att kontrollera att varje användarnamn är unikt.
+        public bool IsUsernameUnique(string username)
         {
-            return !_users.Exists(user => user.Username == enteredUsername);
+            return _users.Exists(user => user.Username == username);
         }
 
-        public bool Login(string enteredUsername, string enteredPassword)
+        public bool Login(string username, string password)
         {
             foreach (User user in _users)
             {
-                if (user.Username == enteredUsername && user.CheckPassword(enteredPassword))
+                if (user.Username == username && user.CheckPassword(password))
                 {
                     return true;
                 }
