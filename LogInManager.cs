@@ -9,6 +9,7 @@ namespace BankApp_GroupProject
     public class LogInManager
     {
         private readonly List<User> _users;
+        private readonly List<User> _blockedUsers;
 
         public LogInManager()
         {
@@ -23,8 +24,37 @@ namespace BankApp_GroupProject
                     new Customer("hany", "Hej123@", "Hany", "Alhabboby")
                 };
 
-          
+            _blockedUsers = new();
         }
+
+        // Metod för att spärra en användare efter tre misslyckade försök.
+        public void BlockUser(string username)
+        {           
+            foreach (var user in _users)
+            {
+                if (user.Username == username)
+                {
+                    _blockedUsers.Add(user);
+                    DeleteUser(user);                    
+                }
+            }
+        }
+
+        // Metod för att kolla om en användare är spärrad och returnerar sedan användarnamnet
+        public string GetBlockedUser(string username)
+        {
+            string blockedUser = "";
+
+            foreach(var user in _blockedUsers)
+            {
+                if (user.Username == username)
+                {
+                    blockedUser = user.Username;
+                }
+            }
+            return blockedUser;
+        }
+
       
         // Publik metod som lägger till en användare i listan.
         public void AddUser(User user)
