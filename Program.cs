@@ -31,11 +31,6 @@
 
                 if (success)
                 {
-                    // Go to menu method.
-                    io.DisplayMenu();
-                    // LA TILL DENNA BREAK DÅ VI HAMNADE TILLBAKA I LOOPEN EFTER ATT VI GÅTT UR Menu() ANNARS. KOMMER SÄKERT ÄNDRAS SENARE
-                    break;
-
                     if (username == "admin")
                     {
                         // Go to admin menu method.
