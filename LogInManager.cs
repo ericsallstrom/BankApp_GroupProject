@@ -24,7 +24,7 @@ namespace BankApp_GroupProject
                     new Customer("hany", "Hej123@", "Hany", "Alhabboby")
                 };
 
-            _blockedUsers = new();
+            _blockedUsers = new List<User>();
         }
 
         // Metod för att spärra en användare efter tre misslyckade försök.
@@ -35,24 +35,22 @@ namespace BankApp_GroupProject
                 if (user.Username == username)
                 {
                     _blockedUsers.Add(user);
-                    DeleteUser(user);                    
+                    DeleteUser(user);                  
                 }
             }
         }
 
         // Metod för att kolla om en användare är spärrad och returnerar sedan användarnamnet
-        public string GetBlockedUser(string username)
+        public bool IsBlocked(string username)
         {
-            string blockedUser = "";
-
             foreach(var user in _blockedUsers)
             {
                 if (user.Username == username)
                 {
-                    blockedUser = user.Username;
+                    return true;
                 }
             }
-            return blockedUser;
+            return false;
         }
 
       

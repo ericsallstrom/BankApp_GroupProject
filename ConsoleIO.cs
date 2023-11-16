@@ -38,13 +38,13 @@
                 Console.Write("Användarnamn: ");
                 string username = Console.ReadLine();
 
-                //if (LogInManager.GetBlockedUser(username) == username)
-                //{
-                //    Console.WriteLine("Kontot är spärrat! Kontakta vår administrativa avdelning för ytterligare information.");
-                //    break;
-                //}
-                //else
-                //{
+                if (LogInManager.IsBlocked(username))
+                {
+                    Console.WriteLine("\nKontot är spärrat! Kontakta vår administrativa avdelning för ytterligare information.");
+                    break;
+                }
+                else
+                {
                     Console.Write("Lösenord: ");
                     string password = Console.ReadLine();
 
@@ -71,10 +71,11 @@
                     {
                         if (loginCounter == 0)
                         {
+                            LogInManager.BlockUser(username);
                             Console.Write("\nFör många felaktiga försök har genomförts" +
-                                          "\noch kontot kommer nu att spärras.");
-                            //LogInManager.BlockUser(username);
-                            Thread.Sleep(4000);
+                                          "\noch kontot kommer nu att spärras." +
+                                          "\nTryck \"ENTER\" för att återgå till huvudmenyn.");                            
+                            Console.ReadKey();
                             break;
                         }
                         else
@@ -85,7 +86,7 @@
                             Console.Clear();
                         }
                     }
-                //}               
+                }
             }
         }
 
@@ -95,7 +96,7 @@
             Console.Clear();
 
             Console.WriteLine("NAMN PÅ BANK\n" +
-                           $"\nVälkommen {loggedInCustomer.FirstName} {loggedInCustomer.LastName}" + 
+                           $"\nVälkommen {loggedInCustomer.FirstName} {loggedInCustomer.LastName}" +
                             "\n=================" +
                             "\n[1] Se kontosaldo" +
                             "\n[2] Föra över <pengar" +
