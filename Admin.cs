@@ -25,12 +25,12 @@
 
         public void DeleteUser()
         {
-            //ska skapa metod i loginmanager som ta bort användare 
+            Console.WriteLine("Användaren är borttagen");
         }
 
         public void PrintUsers()
         {
-            //inte klar än
+            //Finns i LoginManager klassen, Vet ej om vi behöver den här
         }
 
 

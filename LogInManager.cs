@@ -21,12 +21,33 @@ namespace BankApp_GroupProject
                     new Customer("eric", "hej123"),
                     new Customer("patrik", "hej123"),
                     new Customer("hany", "hej123")
+
+                    
                 };
+
+          
         }
+
 
         public void AddUser(User user)
         {
             _users.Add(user);
+        }
+
+        // Här kan man ta bort användare från listan
+        public void DeleteUser(User user)
+        {
+            _users.Remove(user);
+        }
+
+        //Skapade en metod som visar alla användare
+        public void PrintUsers(List <User> _users)
+        {
+            foreach (var user in _users)
+            {
+                Console.WriteLine(user);
+            }
+
         }
 
         public bool Login(string enteredUsername, string enteredPassword)
