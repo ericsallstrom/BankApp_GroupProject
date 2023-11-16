@@ -5,7 +5,6 @@
         private readonly LogInManager LogInManager = new();
         //private Customer loggedInCustomer = new();
         //private readonly Admin admin = new();
-        //private List<User> blockedUsers = new();
 
         // Main menu
         public static void DisplayMainMenu()
@@ -36,45 +35,52 @@
                 Console.Write("Användarnamn: ");
                 string username = Console.ReadLine();
 
-                Console.Write("Lösenord: ");
-                string password = Console.ReadLine();
+                //if (LogInManager.GetBlockedUser(username) == username)
+                //{
+                //    Console.WriteLine("Kontot är spärrat! Kontakta vår administrativa avdelning för ytterligare information.");
+                //    break;
+                //}
+                //else
+                //{
+                    Console.Write("Lösenord: ");
+                    string password = Console.ReadLine();
 
-                bool loginSuccess = LogInManager.ConfirmUser(username, password);
+                    bool loginSuccess = LogInManager.ConfirmUser(username, password);
 
-                loginCounter--;
+                    loginCounter--;
 
-                if (loginSuccess)
-                {
-                    if (username == "admin")
+                    if (loginSuccess)
                     {
-                        DisplayAdminMenu();
-                        break;
+                        if (username == "admin")
+                        {
+                            DisplayAdminMenu();
+                            break;
+                        }
+                        else
+                        {
+                            DisplayCustomerMenu();
+                            break;
+                        }
                     }
                     else
                     {
-                        DisplayCustomerMenu();
-                        break;
+                        if (loginCounter == 0)
+                        {
+                            Console.Write("\nFör många felaktiga försök har genomförts" +
+                                          "\noch kontot kommer nu att spärras.");
+                            //LogInManager.BlockUser(username);
+                            Thread.Sleep(4000);
+                            break;
+                        }
+                        else
+                        {
+                            Console.Write($"\nFel användarnamn eller lösenord! {loginCounter} försök återstår." +
+                                     "\nTryck \"ENTER\" och försök igen.");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
                     }
-                }
-                else
-                {
-                    if (loginCounter == 0)
-                    {
-                        Console.Write("\nFör många felaktiga försök har genomförts" +
-                                      "\noch kontot kommer nu att spärras.");
-                        // Spärra kontot och lägg in det i en lista över spärrade konton så att användaren inte kan logga in igen.
-                        // Alternativt radera det direkt.
-                        Thread.Sleep(4000);
-                        break;
-                    }
-                    else
-                    {
-                        Console.Write($"\nFel användarnamn eller lösenord! {loginCounter} försök återstår." +
-                                 "\nTryck \"ENTER\" och försök igen.");
-                        Console.ReadKey();
-                        Console.Clear();
-                    }
-                }
+                //}               
             }
         }
 
