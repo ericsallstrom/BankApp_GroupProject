@@ -10,9 +10,9 @@ namespace BankApp_GroupProject
     {
         public string Username { get; private set; }
         private string Password { get; set; }
+        private LogInManager LogInManager { get; set; }
 
         private bool _verified;
-        private LogInManager LogInManager { get; set; }
 
         public User()
         {

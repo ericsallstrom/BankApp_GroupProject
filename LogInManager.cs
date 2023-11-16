@@ -27,25 +27,32 @@ namespace BankApp_GroupProject
             _blockedUsers = new List<User>();
         }
 
-        // Metod för att spärra en användare efter tre misslyckade försök.
-        public void BlockUser(string username)
-        {           
-            foreach (var user in _users)
+        public void UnblockCustomer()
+        {
+            PrintUsers();
+
+            Console.Write("Skriv in användarnamnet på den användare du önskar återställa: ");
+            string username = Console.ReadLine();
+
+            if (_blockedUsers.Exists(user => user.Username == username)) 
             {
-                if (user.Username == username)
-                {
-                    _blockedUsers.Add(user);
-                    DeleteUser(user);                  
-                }
+                
             }
         }
 
-        // Metod för att kolla om en användare är spärrad och returnerar sedan användarnamnet
-        public bool IsBlocked(string username)
+        // Metod för att spärra en användare efter tre misslyckade försök.
+        public void BlockCustomer(User user)
         {
-            foreach(var user in _blockedUsers)
+            DeleteUser(user);
+            _blockedUsers.Add(user);
+        }
+
+        // Metod för att kolla om en användare är spärrad och returnerar sedan användarnamnet
+        public bool IsBlocked(User user)
+        {
+            foreach (var blockedUser in _blockedUsers)
             {
-                if (user.Username == username)
+                if (blockedUser == user)
                 {
                     return true;
                 }
@@ -53,7 +60,6 @@ namespace BankApp_GroupProject
             return false;
         }
 
-      
         // Publik metod som lägger till en användare i listan.
         public void AddUser(User user)
         {
@@ -67,7 +73,7 @@ namespace BankApp_GroupProject
         }
 
         //Skapade en metod som visar alla användare
-        public void PrintUsers(List <User> _users)
+        public void PrintUsers()
         {
             foreach (var user in _users)
             {
