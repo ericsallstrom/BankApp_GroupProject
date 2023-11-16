@@ -22,12 +22,30 @@ namespace BankApp_GroupProject
                     new Customer("patrik", "Hej123@"),
                     new Customer("hany", "Hej123@")
                 };
-        }
 
+          
+        }
+      
         // Publik metod som lägger till en användare i listan.
         public void AddUser(User user)
         {
             _users.Add(user);
+        }
+
+        // Här kan man ta bort användare från listan
+        public void DeleteUser(User user)
+        {
+            _users.Remove(user);
+        }
+
+        //Skapade en metod som visar alla användare
+        public void PrintUsers(List <User> _users)
+        {
+            foreach (var user in _users)
+            {
+                Console.WriteLine(user);
+            }
+
         }
 
         // Metod för att kontrollera att varje användarnamn är unikt.
