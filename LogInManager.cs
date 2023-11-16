@@ -15,20 +15,18 @@ namespace BankApp_GroupProject
             // Fyll på med användare här
             _users = new List<User>()
                 {
-                    new Admin("admin", "password"),
-                    new Customer("olov", "hej123"),
-                    new Customer("olof", "hej123"),
-                    new Customer("eric", "hej123"),
-                    new Customer("patrik", "hej123"),
-                    new Customer("hany", "hej123")
-
-                    
+                    new Admin("admin", "Password1@"),
+                    new Customer("olov", "Hej123@"),
+                    new Customer("olof", "Hej123@"),
+                    new Customer("eric", "Hej123@"),
+                    new Customer("patrik", "Hej123@"),
+                    new Customer("hany", "Hej123@")
                 };
 
           
         }
-
-
+      
+        // Publik metod som lägger till en användare i listan.
         public void AddUser(User user)
         {
             _users.Add(user);
@@ -50,11 +48,17 @@ namespace BankApp_GroupProject
 
         }
 
-        public bool Login(string enteredUsername, string enteredPassword)
+        // Metod för att kontrollera att varje användarnamn är unikt.
+        public bool IsUsernameUnique(string username)
+        {
+            return _users.Exists(user => user.Username == username);
+        }
+
+        public bool Login(string username, string password)
         {
             foreach (User user in _users)
             {
-                if (user.Username == enteredUsername && user.CheckPassword(enteredPassword))
+                if (user.Username == username && user.CheckPassword(password))
                 {
                     return true;
                 }
