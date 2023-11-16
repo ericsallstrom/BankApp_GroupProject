@@ -49,9 +49,14 @@
                 else
                 {
                     loginCounter++;
-                    if (loginCounter < 3)
+                    if (loginCounter == 1)
                     {
-                        Console.WriteLine("Fel användarnamn eller lösenord, försök igen...");
+                        Console.WriteLine("Fel användarnamn eller lösenord, två försök kvar...");
+                        Console.ReadLine();
+                    }
+                    else if (loginCounter == 2)
+                    {
+                        Console.WriteLine("Fel användarnamn eller lösenord, ett försök kvar...");
                         Console.ReadLine();
                     }
                     else
