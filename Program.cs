@@ -27,7 +27,6 @@
                     userChoice = Console.ReadLine();
 
                     switch (userChoice)
-
                     {
                         case "1":
                             io.LogIn();
