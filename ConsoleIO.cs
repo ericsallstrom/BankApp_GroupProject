@@ -2,8 +2,6 @@
 {
     public class ConsoleIO
     {
-        //int menuChoice;
-        //private bool isRunning;
         private readonly LogInManager LogInManager = new();
 
         // Main menu
@@ -13,7 +11,6 @@
             Console.WriteLine("Välkommen till NAMN PÅ BANK!" +
                             "\n=================" +
                             "\n[1] Logga in" +
-                            "\n[2] Skapa ny användare" +
                             "\n-----------------" +
                             "\n[0] Avsluta programmet" +
                             "\n=================");
@@ -85,11 +82,11 @@
                 "\n[1] Föra över pengar" +
                 "\n[2] Ta ut pengar" +
                 "\n[3] Låna pengar av banken" +
-                "\n[4] Öppna sparkonto" +
+                "\n[4] Öppna nytt bankkonto" +
                 "\n[5] Se tidigare transaktioner" +
                 "\n[6] Visa konton" +
                 "\n-----------------" +
-                "\n[9] Konfigurera konto" +
+                "\n[9] Ändra lösenord" +
                 "\n[0] Logga ut" +
                 "\n=================");
 
@@ -108,7 +105,7 @@
                     // Anropa metod för att låna pengar!
                     break;
                 case "4":
-                    // Anropa metod för att öppna ett sparkonto!
+                    // Går till en till meny där användaren kan välja att öppna sparkonto, skapa nytt bankkonto med eller utan en annan valuta.
                     break;
                 case "5":
                     // Anropa metod för att se tidigare transaktioner!
