@@ -31,7 +31,7 @@
                             break;
                         case "0":
                             Console.Clear();
-                            Console.WriteLine("Du har valt att avsluta...\n" +
+                            Console.WriteLine("\nDu har valt att avsluta...\n" +
                                     "\nVälkommen åter!");
                             runApp = false;
                             break;

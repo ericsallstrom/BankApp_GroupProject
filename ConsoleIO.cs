@@ -6,6 +6,7 @@
 
         //Håller koll på vem som är inloggad
         private Customer customer = new();
+        private Admin admin = new();
 
         //private readonly Admin admin = new();
 
@@ -119,9 +120,8 @@
             {
                 case "1":
                     // Anropa metod för att visa kontosaldo!
-                    customer.NewAccount();
                     // Anropa metod för att visa kundens konton!
-                    loggedInCustomer.PrintAccounts();
+                    customer.PrintAccounts();
                     DisplayCustomerMenu();
                     break;
                 case "2":
@@ -181,6 +181,7 @@
             {
                 case "1":
                     // Anropa metod för att skapa nytt konto!
+                    customer.NewAccount();
                     break;
                 case "2":
                     // Anropa metod för att öppna ett nytt sparkonto!
@@ -202,7 +203,7 @@
             }
         }
 
-        public static void DisplayAdminMenu()
+        public void DisplayAdminMenu()
         {
             Console.Clear();
 
@@ -234,7 +235,9 @@
                     //LogInManager.DeleteUser();
                     break;
                 case "4":
-                    // Återställ spärrad användare
+                    // Återställ spärrad användare                    
+                    LogInManager.UnblockCustomer();
+                    DisplayAdminMenu();
                     break;
                 case "5":
                     // Sätt växelkurs

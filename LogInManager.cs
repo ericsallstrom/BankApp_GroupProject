@@ -29,14 +29,39 @@ namespace BankApp_GroupProject
 
         public void UnblockCustomer()
         {
-            PrintUsers();
-
-            Console.Write("Skriv in användarnamnet på den användare du önskar återställa: ");
-            string username = Console.ReadLine();
-
-            if (_blockedUsers.Exists(user => user.Username == username)) 
+            while (true)
             {
-                
+                Console.Clear();
+
+                if (_blockedUsers.Count > 0)
+                {
+                    Console.Write("Skriv in användarnamnet från listan på den användare du önskar återställa: ");
+                    string username = Console.ReadLine();
+                    PrintUsers();
+
+                    foreach (var user in _blockedUsers)
+                    {
+                        if (user.Username == username)
+                        {
+                            _users.Add(user);
+                            _blockedUsers.Remove(user);
+                            Console.WriteLine("\nAnvändaren återställd.");
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nAnvändaren finns inte i listan." +
+                                              "\nTryck \"ENTER\" och försök igen.");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Det finns för tillfället inga spärrade användare.\n" +
+                                    "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                    Console.ReadKey();
+                    break;
+                }
             }
         }
 
