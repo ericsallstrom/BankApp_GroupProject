@@ -12,6 +12,7 @@ namespace BankApp_GroupProject
         private string Password { get; set; }
 
         private bool _verified;
+        private LogInManager LogInManager { get; set; }
 
         public User(string username, string password)
         {
@@ -24,8 +25,9 @@ namespace BankApp_GroupProject
         {
             byte minLength = 4;
             byte maxLength = 24;
+            bool usernameIsUnique = LogInManager.IsUsernameUnique(username);
 
-            while (!_verified)
+            while (usernameIsUnique)
             {
                 // Användarnamn får inte vara null, innehålla färre eller mer än  
                 // 4-24 tecken eller innehålla ett eller flera specialtecken.
@@ -41,9 +43,11 @@ namespace BankApp_GroupProject
                 else
                 {
                     Username = username;
-                    _verified = true;
+                    //_verified = true;
+                    break;
                 }
             }
+            Console.WriteLine("Användarnamnet är upptaget. Var god försök igen.");
         }
 
         // Metod som tillåter användaren att byta lösenord.

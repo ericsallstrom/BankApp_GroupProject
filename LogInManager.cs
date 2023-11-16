@@ -54,9 +54,9 @@ namespace BankApp_GroupProject
             return _users.Exists(user => user.Username == username);
         }
 
-        public bool Login(string username, string password)
+        public bool ConfirmUser(string username, string password)
         {
-            foreach (User user in _users)
+            foreach (var user in _users)
             {
                 if (user.Username == username && user.CheckPassword(password))
                 {
