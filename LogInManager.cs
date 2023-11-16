@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankApp_GroupProject
 {
-    internal class LogInManager
+    public class LogInManager
     {
         private readonly List<User> _users;
 
