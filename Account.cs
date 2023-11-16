@@ -11,6 +11,7 @@ namespace BankApp_GroupProject
         public string Currency { get; set; }
         public List<Transaction> AccountHistory { get; set; }
         public List<string> Currencies { get; set; }
+        public int Deposit { get; set; }
 
         public Account()
         {
@@ -19,6 +20,7 @@ namespace BankApp_GroupProject
             DateCreated = DateTime.Now;
             AccountHistory = new List<Transaction>();
             Currencies = new List<String>();
+            Deposit = 0;
         }
         protected string GenerateAccountNumber()
         {
@@ -46,6 +48,45 @@ namespace BankApp_GroupProject
             //Skriv kod för att hämta saldot
             return Balance;
           
+        }
+        public int MakeDeposit() //Metod för insättning av pengar
+
+        {
+            int deposit;
+            
+            Console.WriteLine("How much would you like to deposit?");
+            string userInput = Console.ReadLine();
+
+            if (int.TryParse(userInput, out deposit)&& deposit >=1 && deposit <= 999999)
+             {
+                Console.WriteLine($"Would you like to acceept your deposit of {deposit} to your bank account");
+                Console.WriteLine("1:for Yes \n2: for No");
+
+                string userChoiche = Console.ReadLine();
+
+                if (int.TryParse(userChoiche, out int choice) && (choice == 1 || choice == 2))
+                {
+                    if (choice == 1)
+                    {
+                        Balance += deposit;
+                        Deposit = deposit;
+                        Console.WriteLine($"Deposit of {deposit} accepted. New balance: {Balance}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Deposit canceled");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid choice. Please enter 1 for Yes or 2 for No");
+                }                          
+            }
+            else
+            {
+                Console.WriteLine("Input not valid. Please enter a numbmer between 1-999999");
+            }
+            return deposit;
         }
         public List<Transaction> GetTransactions()
         {
