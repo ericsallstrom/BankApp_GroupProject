@@ -30,9 +30,52 @@ namespace BankApp_GroupProject
         {
             Account account = new Account();
             Console.WriteLine("Skapa nytt konto");
+            Console.WriteLine("Vänligen välj valuta:" +
+                "\n[1] SEK" +
+                "\n[2] EUR" +
+                "\n[3] USD");
 
+
+            while (true)
+            {
+                string userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out int result))
+                {
+                    if (result == 1)
+                    {
+                        account.SetCurency("SEK");
+                        break;
+                    }
+                    if (result == 2)
+                    {
+                        account.SetCurency("EUR");
+                        break;
+                    }
+                    if (result == 3)
+                    {
+                        account.SetCurency("USD");
+                        break;
+                    }
+                    if (result == 0 || result > 3)
+                    {
+                        Console.WriteLine("Ogiltigt val. Prova igen");
+                    }
+                } else
+                {
+                    Console.WriteLine("Ogiltigt val. Prova igen");
+                }
+            }
 
             UserAccounts.Add(account);
+
+            Console.Clear();
+            Console.WriteLine($"\n\nGrattis! Ett nytt lönekonto är skapat:" +
+                $"\n\nKonto nr\tSaldo\tValuta\tSkapat" +
+                "\n****************************************************" +
+                $"\n{account.AccountNumber}\t{account.Balance}\t{account.Currency}\t{account.DateCreated}" +
+                "\n\nTryck för att gå tillbaka");
+            Console.ReadKey();
         }
 
         //Skriver ut kundens alla konton
