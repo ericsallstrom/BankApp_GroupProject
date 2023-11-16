@@ -20,7 +20,7 @@
 
                 while (userChoice != "0")
                 {
-                    ConsoleIO.DisplayMainMenu();
+                    io.DisplayMainMenu();
 
                     userChoice = Console.ReadLine();
 

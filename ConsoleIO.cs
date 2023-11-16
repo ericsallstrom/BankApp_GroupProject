@@ -5,12 +5,13 @@
         private readonly LogInManager LogInManager = new();
 
         //Håller koll på vem som är inloggad
-        private Customer customer = new();
-        private Admin admin = new();
+        private Customer customer;
 
         // Main menu
-        public static void DisplayMainMenu()
+        public void DisplayMainMenu()
         {
+            customer = new Customer();
+
             Console.Clear();
             Console.WriteLine("Välkommen till NAMN PÅ BANK!" +
                             "\n=================" +
@@ -70,14 +71,22 @@
                     }
                     else
                     {
-                        if (loginCounter == 0)
+                        if (loginCounter == 0 && username != "admin")
                         {
-                            
+
                             Console.Write("\nFör många felaktiga försök har genomförts" +
                                           "\noch kontot kommer nu att spärras.\n" +
-                                          "\nTryck \"ENTER\" för att återgå till huvudmenyn.");                        
+                                          "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
                             Console.ReadKey();
                             LogInManager.BlockCustomer(customer);
+                            break;
+                        }
+                        else if (loginCounter == 0 && username == "admin" )
+                        {
+                            Console.Write("\nFör många felaktiga försök har genomförts." +
+                                          "\nDu saknar åtkomst för att utföra administrativa uppgifter.\n" +
+                                          "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
+                            Console.ReadKey();
                             break;
                         }
                         else
