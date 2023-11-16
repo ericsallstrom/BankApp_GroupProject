@@ -14,6 +14,12 @@ namespace BankApp_GroupProject
         private bool _verified;
         private LogInManager LogInManager { get; set; }
 
+        public User()
+        {
+            Username = "";
+            Password = "";
+        }
+
         public User(string username, string password)
         {
             Username = username;

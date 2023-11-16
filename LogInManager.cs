@@ -17,11 +17,11 @@ namespace BankApp_GroupProject
             _users = new List<User>()
                 {
                     new Admin("admin", "Password1@"),
-                    new Customer("olov", "Hej123@"),
-                    new Customer("olof", "Hej123@"),
-                    new Customer("eric", "Hej123@"),
-                    new Customer("patrik", "Hej123@"),
-                    new Customer("hany", "Hej123@")
+                    new Customer("olov", "Hej123@", "Olov", "Olsson"),
+                    new Customer("olof", "Hej123@", "Olof", "Nordin"),
+                    new Customer("eric", "Hej123@", "Eric", "Sällström"),
+                    new Customer("patrik", "Hej123@", "Patrik", "Petterson"),
+                    new Customer("hany", "Hej123@", "Hany", "Alhabboby")
                 };
 
             _blockedUsers = new();
@@ -94,6 +94,12 @@ namespace BankApp_GroupProject
                 }
             }
             return false;
+        }
+
+
+        public Customer GetCustomerByUsername(string username)
+        {
+            return _users.OfType<Customer>().FirstOrDefault(c => c.Username == username);
         }
     }
 }

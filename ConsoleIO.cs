@@ -3,7 +3,10 @@
     public class ConsoleIO
     {
         private readonly LogInManager LogInManager = new();
-        //private Customer loggedInCustomer = new();
+
+        //Håller koll på vem som är inloggad
+        private Customer loggedInCustomer = new();
+
         //private readonly Admin admin = new();
 
         // Main menu
@@ -58,6 +61,8 @@
                         }
                         else
                         {
+                            //Kallar metod för att hämta användarnamn
+                            loggedInCustomer = LogInManager.GetCustomerByUsername(username);
                             DisplayCustomerMenu();
                             break;
                         }
@@ -85,12 +90,12 @@
         }
 
         // Customer menu
-        public static void DisplayCustomerMenu()
+        public void DisplayCustomerMenu()
         {
             Console.Clear();
 
             Console.WriteLine("NAMN PÅ BANK\n" +
-                           $"\nVälkommen " + // BÖR KANSKE STÅ ANVÄNDARENS FÖR- OCH EFTERNAMN!
+                           $"\nVälkommen {loggedInCustomer.FirstName} {loggedInCustomer.LastName}" + 
                             "\n=================" +
                             "\n[1] Se kontosaldo" +
                             "\n[2] Föra över <pengar" +
@@ -111,6 +116,7 @@
             {
                 case "1":
                     // Anropa metod för att visa kontosaldo!
+                    loggedInCustomer.NewAccount();
                     break;
                 case "2":
                     // Anropa metod för att föra över pengar!
@@ -130,6 +136,7 @@
                     break;
                 case "7":
                     // Anropa metod för att visa kundens konton!
+                    loggedInCustomer.PrintAccounts();
                     break;
                 case "9":
                     // Anropa metod för att ändra lösenord!
@@ -148,7 +155,7 @@
             }
         }
 
-        public static void DisplayAccountMenu()
+        public void DisplayAccountMenu()
         {
             Console.Clear();
 
