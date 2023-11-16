@@ -101,13 +101,12 @@
             Console.WriteLine("NAMN PÅ BANK\n" +
                            $"\nVälkommen {customer.FirstName} {customer.LastName}" +
                             "\n=================" +
-                            "\n[1] Se kontosaldo" +
-                            "\n[2] Föra över <pengar" +
-                            "\n[3] Ta ut pengar" +
-                            "\n[4] Låna pengar av banken" +
-                            "\n[5] Öppna nytt bankkonto" +
+                            "\n[1] Visa konton" +
+                            "\n[2] Öppna nytt bankkonto" +
+                            "\n[3] Föra över pengar" +
+                            "\n[4] Ta ut pengar" +
+                            "\n[5] Låna pengar av banken" +
                             "\n[6] Se tidigare transaktioner" +
-                            "\n[7] Visa konton" +
                             "\n-----------------" +
                             "\n[9] Ändra lösenord" +
                             "\n[0] Logga ut" +
@@ -121,19 +120,22 @@
                 case "1":
                     // Anropa metod för att visa kontosaldo!
                     customer.NewAccount();
+                    // Anropa metod för att visa kundens konton!
+                    loggedInCustomer.PrintAccounts();
+                    DisplayCustomerMenu();
                     break;
                 case "2":
-                    // Anropa metod för att föra över pengar!
-                    break;
-                case "3":
-                    // Anropa metod för att ta ut pengar!
-                    break;
-                case "4":
-                    // Anropa metod för att låna pengar!
-                    break;
-                case "5":
                     // Går till en till meny där användaren kan välja att öppna sparkonto, skapa nytt bankkonto med eller utan en annan valuta.
                     DisplayAccountMenu();
+                    break;
+                case "3":
+                    // Anropa metod för att föra över pengar!
+                    break;
+                case "4":
+                    // Anropa metod för att ta ut pengar!
+                    break;
+                case "5":
+                    // Anropa metod för att låna pengar!
                     break;
                 case "6":
                     // Anropa metod för att se tidigare transaktioner!
