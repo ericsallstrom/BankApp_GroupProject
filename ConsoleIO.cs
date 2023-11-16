@@ -3,6 +3,9 @@
     public class ConsoleIO
     {
         private readonly LogInManager LogInManager = new();
+        //private Customer loggedInCustomer = new();
+        //private readonly Admin admin = new();
+        //private List<User> blockedUsers = new();
 
         // Main menu
         public static void DisplayMainMenu()
@@ -23,12 +26,12 @@
             Console.Clear();
 
             // Run counter
-            int loginCounter = 0;
+            int loginCounter = 3;
 
-            while (loginCounter < 3)
+            while (loginCounter > 0)
             {
                 Console.WriteLine("Ange ditt användarnamn och lösenord för att logga in." +
-                                "\nEfter tre misslyckade försök återgår du till huvudmenyn.\n");
+                                "\nEfter tre misslyckade försök spärras ditt konto av säkerhetsskäl.\n");
 
                 Console.Write("Användarnamn: ");
                 string username = Console.ReadLine();
@@ -38,12 +41,13 @@
 
                 bool loginSuccess = LogInManager.ConfirmUser(username, password);
 
-                loginCounter++;
+                loginCounter--;
 
                 if (loginSuccess)
                 {
                     if (username == "admin")
                     {
+                        DisplayAdminMenu();
                         break;
                     }
                     else
@@ -54,16 +58,18 @@
                 }
                 else
                 {
-                    if (loginCounter == 3)
+                    if (loginCounter == 0)
                     {
-                        Console.Write("\nFör många felaktiga försök har genomförts och" +
-                                      "\ndu kommer snart att återgå till huvudmenyn.");
+                        Console.Write("\nFör många felaktiga försök har genomförts" +
+                                      "\noch kontot kommer nu att spärras.");
+                        // Spärra kontot och lägg in det i en lista över spärrade konton så att användaren inte kan logga in igen.
+                        // Alternativt radera det direkt.
                         Thread.Sleep(4000);
                         break;
                     }
                     else
                     {
-                        Console.Write("\nFel användarnamn eller lösenord! Försök igen" +
+                        Console.Write($"\nFel användarnamn eller lösenord! {loginCounter} försök återstår." +
                                  "\nTryck \"ENTER\" och försök igen.");
                         Console.ReadKey();
                         Console.Clear();
@@ -76,19 +82,21 @@
         public static void DisplayCustomerMenu()
         {
             Console.Clear();
-            Console.WriteLine(
-                  "NAMN PÅ BANK!" +
-                "\n=================" +
-                "\n[1] Föra över pengar" +
-                "\n[2] Ta ut pengar" +
-                "\n[3] Låna pengar av banken" +
-                "\n[4] Öppna nytt bankkonto" +
-                "\n[5] Se tidigare transaktioner" +
-                "\n[6] Visa konton" +
-                "\n-----------------" +
-                "\n[9] Ändra lösenord" +
-                "\n[0] Logga ut" +
-                "\n=================");
+
+            Console.WriteLine("NAMN PÅ BANK\n" +
+                           $"\nVälkommen " + // BÖR KANSKE STÅ ANVÄNDARENS FÖR- OCH EFTERNAMN!
+                            "\n=================" +
+                            "\n[1] Se kontosaldo" +
+                            "\n[2] Föra över <pengar" +
+                            "\n[3] Ta ut pengar" +
+                            "\n[4] Låna pengar av banken" +
+                            "\n[5] Öppna nytt bankkonto" +
+                            "\n[6] Se tidigare transaktioner" +
+                            "\n[7] Visa konton" +
+                            "\n-----------------" +
+                            "\n[9] Ändra lösenord" +
+                            "\n[0] Logga ut" +
+                            "\n=================");
 
             Console.Write("Ditt val: ");
             string menuChoice = Console.ReadLine();
@@ -96,25 +104,116 @@
             switch (menuChoice)
             {
                 case "1":
-                    // Anropa metod för att föra över pengar!
+                    // Anropa metod för att visa kontosaldo!
                     break;
                 case "2":
-                    // Anropa metod för att ta ut pengar!
+                    // Anropa metod för att föra över pengar!
                     break;
                 case "3":
-                    // Anropa metod för att låna pengar!
+                    // Anropa metod för att ta ut pengar!
                     break;
                 case "4":
-                    // Går till en till meny där användaren kan välja att öppna sparkonto, skapa nytt bankkonto med eller utan en annan valuta.
+                    // Anropa metod för att låna pengar!
                     break;
                 case "5":
-                    // Anropa metod för att se tidigare transaktioner!
+                    // Går till en till meny där användaren kan välja att öppna sparkonto, skapa nytt bankkonto med eller utan en annan valuta.
+                    DisplayAccountMenu();
                     break;
                 case "6":
+                    // Anropa metod för att se tidigare transaktioner!
+                    break;
+                case "7":
                     // Anropa metod för att visa kundens konton!
                     break;
                 case "9":
-                    // EN MENY DÄR ANVÄNDAREN KAN ÄNDRA LÖSENORD, KANSKE TA BORT SITT KONTO ETC.
+                    // Anropa metod för att ändra lösenord!
+                    break;
+                case "0":
+                    Console.Write("\nDu loggas nu ut och återgår snart till huvudmenyn." +
+                                  "\nHa en trevlig dag!");
+                    Thread.Sleep(4000);
+                    break;
+                default:
+                    Console.WriteLine("Ogiltigt menyval! Var god välj ett alternativ från menyn." +
+                                    "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                    Console.Clear();
+                    break;
+            }
+        }
+
+        public static void DisplayAccountMenu()
+        {
+            Console.Clear();
+
+            Console.WriteLine("NAMN PÅ BANK\n" +
+                            "\n=================" +
+                            "\n[1] Skapa nytt lönekonto" +
+                            "\n[2] Skapa nytt sparkonto" +
+                            "\n[3] Skapa nytt konto med en annan valuta" +
+                            "\n-----------------" +
+                            "\n[0] Återgå till kontoöversikten" +
+                            "\n=================");
+
+            Console.Write("Ditt val: ");
+            string menuChoice = Console.ReadLine();
+
+            switch (menuChoice)
+            {
+                case "1":
+                    // Anropa metod för att skapa nytt konto!
+                    break;
+                case "2":
+                    // Anropa metod för att öppna ett nytt sparkonto!
+                    break;
+                case "3":
+                    // Anropa metod för att öppna ett nytt konto med en annan valuta!
+                    break;
+                case "0":
+                    Console.Write("\nDu återgår nu till kontoöversikten.");
+                    Thread.Sleep(4000);
+                    DisplayCustomerMenu();
+                    break;
+                default:
+                    Console.WriteLine("Ogiltigt menyval! Var god välj ett alternativ från menyn." +
+                                    "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                    Console.Clear();
+                    break;
+            }
+        }
+
+        public static void DisplayAdminMenu()
+        {
+            Console.Clear();
+
+            Console.WriteLine("NAMN PÅ BANK\n" +
+                            "\nDu är inloggad som admin" +
+                            "\n=================" +
+                            "\n[1] Lägg till ny användare" +
+                            "\n[2] Visa alla användare" +
+                            "\n[3] Radera användare" +
+                            "\n[4] Sätt växelkurs" +
+                            "\n-----------------" +
+                            "\n[9] Ändra lösenord" +
+                            "\n[0] Logga ut" +
+                            "\n=================");
+
+            Console.Write("Ditt val: ");
+            string menuChoice = Console.ReadLine();
+
+            switch (menuChoice)
+            {
+                case "1":
+                    //LogInManager.AddUser();
+                    break;
+                case "2":
+                    //LogInManager.PrintUsers();
+                    break;
+                case "3":
+                    //LogInManager.DeleteUser();
+                    break;
+                case "9":
                     break;
                 case "0":
                     Console.Write("\nDu loggas nu ut och återgår snart till huvudmenyn.");
@@ -128,85 +227,5 @@
                     break;
             }
         }
-
-        //public void DisplayAdminMenu()
-        //{
-        //    while (true)
-        //    {
-        //        Console.Clear();
-        //        Console.WriteLine(
-        //            "Admin Meny\r" +
-        //            "\n=================\r" +
-        //            "\n1. Skapa användare\r" +
-        //            "\n2. Visa användare\r" +
-        //            "\n3. Ta bort användare\r" +
-        //            "\n4. Sätt växelkurs\r" +
-        //            "\n5. Avsluta");
-
-        //        menuChoice = GetMenuChoice("admin");
-        //        Console.ReadKey();
-
-
-        //        if (menuChoice == 1)
-        //        {
-        //            //CreateAccount();
-        //        }
-
-        //        if (menuChoice == 2)
-        //        {
-        //            //PrintAccounts();
-        //        }
-
-        //        if (menuChoice == 3)
-        //        {
-        //            //TakeLoan();
-        //        }
-
-        //        if (menuChoice == 4)
-        //        {
-        //            //SetCurrency();
-        //        }
-
-        //        if (menuChoice == 5)
-        //        {
-        //            break;
-        //        }
-
-        //    }
     }
-
-    //Method for getting user menu choice that cathes wrong input.
-    //public int GetMenuChoice(string userType)
-    //{
-    //    while (true)
-    //    {
-
-    //        Console.Write("\nDitt val:");
-
-    //        if (int.TryParse(Console.ReadLine(), out menuChoice))
-    //        {
-    //            //If Admin menu is called
-    //            if (userType == "admin")
-    //            {
-    //                if (menuChoice >= 1 && menuChoice <= 5)
-    //                {
-    //                    return menuChoice;
-    //                }
-    //            }
-
-    //            //If Customer menu is called
-    //            if (userType == "customer")
-    //            {
-    //                if (menuChoice >= 1 && menuChoice <= 4)
-    //                {
-    //                    return menuChoice;
-    //                }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Console.WriteLine("Skriv in ett giltigt val.");
-    //            Console.ReadKey();
-    //        }
-    //    }
 }

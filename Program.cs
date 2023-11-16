@@ -5,7 +5,6 @@
 
         static void Main(string[] args)
         {
-            //Byta namn??
             Run();
         }
 
@@ -13,7 +12,6 @@
         static void Run()
         {
             bool runApp = true;
-            LogInManager logInManager = new();
             ConsoleIO io = new();
 
             while (runApp)
@@ -30,8 +28,6 @@
                     {
                         case "1":
                             io.LogIn();
-                            break;
-                        case "2":
                             break;
                         case "0":
                             Console.Clear();
