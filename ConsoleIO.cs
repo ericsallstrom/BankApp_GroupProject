@@ -8,8 +8,6 @@
         private Customer customer = new();
         private Admin admin = new();
 
-        //private readonly Admin admin = new();
-
         // Main menu
         public static void DisplayMainMenu()
         {
