@@ -189,6 +189,7 @@
                 case "1":
                     // Anropa metod för att skapa nytt konto!
                     customer.NewAccount();
+                    DisplayCustomerMenu();                    
                     break;
                 case "2":
                     // Anropa metod för att öppna ett nytt sparkonto!
