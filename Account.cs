@@ -4,6 +4,8 @@ namespace BankApp_GroupProject
 {
     public class Account
     {
+        //Lade till denna för att särskilja alla konton
+        public string AccType { get; set; }
         //Ändrat Number till AccountNumber för att jag tycker att det passar sammanhanget bättre
         public string AccountNumber { get; set; }
         public Decimal Balance { get; set; }
@@ -22,6 +24,7 @@ namespace BankApp_GroupProject
             AccountHistory = new List<Transaction>();
             Currencies = new Dictionary<string, decimal>();
             Deposit = 0;
+            Currency = "SEK";
         }
         protected string GenerateAccountNumber()
         {
@@ -78,6 +81,7 @@ namespace BankApp_GroupProject
         {
             int deposit;
             
+            Console.Clear();
             Console.WriteLine("How much would you like to deposit?");
             string userInput = Console.ReadLine();
 
