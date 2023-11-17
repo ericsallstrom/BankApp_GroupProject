@@ -2,11 +2,9 @@
 {
     public class Admin : User
     {
-        public Admin(string username, string password)
+        public Admin(string username = "admin", string password = "Password1@")
             : base(username, password)
         {
-           
-
         }
         
         //anropar metoden från "user" klassen för att skapa ny användare namn samt lösenord

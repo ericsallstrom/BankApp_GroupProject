@@ -9,7 +9,7 @@ namespace BankApp_GroupProject
     public class LogInManager
     {
         private readonly List<User> _users;
-        private readonly List<User> _blockedUsers;
+        private readonly List<Customer> _blockedCustomers;
 
         public LogInManager()
         {
@@ -24,38 +24,85 @@ namespace BankApp_GroupProject
                     new Customer("hany", "Hej123@", "Hany", "Alhabboby")
                 };
 
-            _blockedUsers = new();
+            _blockedCustomers = new List<Customer>() { new Customer("amanda", "test", "Amanda", "Jönsson"), new Customer("hans", "test", "Hans", "Elofsson") };
+        }
+
+        // IN PROGRESS!
+        //public void UnblockCustomer()
+        //{
+        //    //while (true)
+        //    //{
+        //    Console.Clear();
+
+        //    if (_blockedCustomers.Count > 0)
+        //    {
+        //        PrintBlockedCustomers();
+        //        Console.Write("Skriv in användarnamnet från listan på den användare du önskar återställa: ");
+        //        string username = Console.ReadLine();
+
+        //        foreach (var user in _blockedCustomers)
+        //        {
+        //            if (user.Username == username)
+        //            {
+        //                _users.Add(user);
+        //                _blockedCustomers.Remove(user);
+        //                Console.WriteLine("\nAnvändaren återställd.");
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("\nAnvändaren finns inte i listan." +
+        //                                  "\nTryck \"ENTER\" och försök igen.");
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Det finns för tillfället inga spärrade användare.\n" +
+        //                        "\nTryck \"ENTER\" för att återgå till föregående meny.");
+        //        Console.ReadKey();
+        //        //break;
+        //    }
+        //    //}
+        //}
+
+        public void PrintBlockedCustomers()
+        {
+            Console.WriteLine("Lista över spärrade användare" +
+                            "\n-----------------------------");
+            foreach (var blockedUser in _blockedCustomers)
+            {
+                if (blockedUser is Customer c)
+                {
+                    Console.WriteLine($"Namn: {c.FirstName} {c.LastName}" +
+                                    $"\nAnvändarnamn: {c.Username}\n");
+                }
+            }
         }
 
         // Metod för att spärra en användare efter tre misslyckade försök.
-        public void BlockUser(string username)
-        {           
-            foreach (var user in _users)
+        public void BlockCustomer(Customer customer)
+        {
+            _blockedCustomers.Add(customer);
+
+            if (_users.Contains(customer))
             {
-                if (user.Username == username)
-                {
-                    _blockedUsers.Add(user);
-                    DeleteUser(user);                    
-                }
+                DeleteUser(customer);
             }
         }
 
         // Metod för att kolla om en användare är spärrad och returnerar sedan användarnamnet
-        public string GetBlockedUser(string username)
+        public bool IsBlocked(User user)
         {
-            string blockedUser = "";
-
-            foreach(var user in _blockedUsers)
+            foreach (var blockedUser in _blockedCustomers)
             {
-                if (user.Username == username)
+                if (blockedUser == user)
                 {
-                    blockedUser = user.Username;
+                    return true;
                 }
             }
-            return blockedUser;
+            return false;
         }
 
-      
         // Publik metod som lägger till en användare i listan.
         public void AddUser(User user)
         {
@@ -69,13 +116,18 @@ namespace BankApp_GroupProject
         }
 
         //Skapade en metod som visar alla användare
-        public void PrintUsers(List <User> _users)
+        public void PrintUsers()
         {
             foreach (var user in _users)
             {
-                Console.WriteLine(user);
+                if (user is Customer c)
+                {
+                    Console.WriteLine($"Lista över användare:" +
+                                    $"\n---------------------" +
+                                    $"\nNamn: {c.FirstName} {c.LastName}" +
+                                    $"\nAnvändarnamn: {c.Username}\n");
+                }
             }
-
         }
 
         // Metod för att kontrollera att varje användarnamn är unikt.

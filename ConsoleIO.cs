@@ -5,13 +5,13 @@
         private readonly LogInManager LogInManager = new();
 
         //Håller koll på vem som är inloggad
-        private Customer loggedInCustomer = new();
-
-        //private readonly Admin admin = new();
+        private Customer customer;
 
         // Main menu
-        public static void DisplayMainMenu()
+        public void DisplayMainMenu()
         {
+            customer = new Customer();
+
             Console.Clear();
             Console.WriteLine("Välkommen till NAMN PÅ BANK!" +
                             "\n=================" +
@@ -38,13 +38,15 @@
                 Console.Write("Användarnamn: ");
                 string username = Console.ReadLine();
 
-                //if (LogInManager.GetBlockedUser(username) == username)
-                //{
-                //    Console.WriteLine("Kontot är spärrat! Kontakta vår administrativa avdelning för ytterligare information.");
-                //    break;
-                //}
-                //else
-                //{
+                if (LogInManager.IsBlocked(customer))
+                {
+                    Console.Write("\nKontot är spärrat! Kontakta vår administrativa avdelning för ytterligare information.\n" +
+                                      "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
+                    Console.ReadKey();
+                    break;
+                }
+                else
+                {
                     Console.Write("Lösenord: ");
                     string password = Console.ReadLine();
 
@@ -62,19 +64,29 @@
                         else
                         {
                             //Kallar metod för att hämta användarnamn
-                            loggedInCustomer = LogInManager.GetCustomerByUsername(username);
+                            customer = LogInManager.GetCustomerByUsername(username);
                             DisplayCustomerMenu();
                             break;
                         }
                     }
                     else
                     {
-                        if (loginCounter == 0)
+                        if (loginCounter == 0 && username != "admin")
                         {
+
                             Console.Write("\nFör många felaktiga försök har genomförts" +
-                                          "\noch kontot kommer nu att spärras.");
-                            //LogInManager.BlockUser(username);
-                            Thread.Sleep(4000);
+                                          "\noch kontot kommer nu att spärras.\n" +
+                                          "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
+                            Console.ReadKey();
+                            LogInManager.BlockCustomer(customer);
+                            break;
+                        }
+                        else if (loginCounter == 0 && username == "admin" )
+                        {
+                            Console.Write("\nFör många felaktiga försök har genomförts." +
+                                          "\nDu saknar åtkomst för att utföra administrativa uppgifter.\n" +
+                                          "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
+                            Console.ReadKey();
                             break;
                         }
                         else
@@ -85,7 +97,7 @@
                             Console.Clear();
                         }
                     }
-                //}               
+                }
             }
         }
 
@@ -95,7 +107,7 @@
             Console.Clear();
 
             Console.WriteLine("NAMN PÅ BANK\n" +
-                           $"\nVälkommen {loggedInCustomer.FirstName} {loggedInCustomer.LastName}" + 
+                           $"\nVälkommen {customer.FirstName} {customer.LastName}" +
                             "\n=================" +
                             "\n[1] Visa konton" +
                             "\n[2] Öppna nytt bankkonto" +
@@ -114,8 +126,9 @@
             switch (menuChoice)
             {
                 case "1":
+                    // Anropa metod för att visa kontosaldo!
                     // Anropa metod för att visa kundens konton!
-                    loggedInCustomer.PrintAccounts();
+                    customer.PrintAccounts();
                     DisplayCustomerMenu();
                     break;
                 case "2":
@@ -134,7 +147,10 @@
                 case "6":
                     // Anropa metod för att se tidigare transaktioner!
                     break;
-
+                case "7":
+                    // Anropa metod för att visa kundens konton!
+                    customer.PrintAccounts();
+                    break;
                 case "9":
                     // Anropa metod för att ändra lösenord!
                     break;
@@ -172,8 +188,8 @@
             {
                 case "1":
                     // Anropa metod för att skapa nytt konto!
-                    loggedInCustomer.NewAccount();
-                    DisplayCustomerMenu();
+                    customer.NewAccount();
+                    DisplayCustomerMenu();                    
                     break;
                 case "2":
                     // Anropa metod för att öppna ett nytt sparkonto!
@@ -195,7 +211,7 @@
             }
         }
 
-        public static void DisplayAdminMenu()
+        public void DisplayAdminMenu()
         {
             Console.Clear();
 
@@ -205,7 +221,8 @@
                             "\n[1] Lägg till ny användare" +
                             "\n[2] Visa alla användare" +
                             "\n[3] Radera användare" +
-                            "\n[4] Sätt växelkurs" +
+                            "\n[4] Återställ spärrade användare" +
+                            "\n[5] Sätt växelkurs" +
                             "\n-----------------" +
                             "\n[9] Ändra lösenord" +
                             "\n[0] Logga ut" +
@@ -224,6 +241,14 @@
                     break;
                 case "3":
                     //LogInManager.DeleteUser();
+                    break;
+                case "4":
+                    // Återställ spärrad användare                    
+                    LogInManager.UnblockCustomer();
+                    DisplayAdminMenu();
+                    break;
+                case "5":
+                    // Sätt växelkurs
                     break;
                 case "9":
                     break;
