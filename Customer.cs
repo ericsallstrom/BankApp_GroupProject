@@ -27,15 +27,28 @@ namespace BankApp_GroupProject
             UserAccounts = new List<Account>();
         }
 
-        public void NewAccount()
+        //Skapa Lönekontot
+        public void NewCheckingAccount()
         {
-            Account account = new Account();
-            Console.WriteLine("Skapa nytt konto");
+            Account checkingAccount = new Account();
+            checkingAccount.AccType = "Lönekonto";
+
+            UserAccounts.Add(checkingAccount);
+            PrintAccountSuccess(checkingAccount);
+            DoYouWantToDeposit(checkingAccount);
+        }
+
+        //Skapa Utlandskontot
+        public void NewGlobalAccount()
+        {
+            Account globalAccount = new Account();
+            globalAccount.AccType = "Utlandskonto";
+
+            Console.WriteLine("Skapa nytt utlandskonto");
             Console.WriteLine("Vänligen välj valuta:" +
                 "\n[1] SEK" +
                 "\n[2] EUR" +
                 "\n[3] USD");
-
 
             while (true)
             {
@@ -45,38 +58,56 @@ namespace BankApp_GroupProject
                 {
                     if (result == 1)
                     {
-                        account.SetCurency("SEK");
+                        globalAccount.SetCurency("SEK");
                         break;
                     }
                     if (result == 2)
                     {
-                        account.SetCurency("EUR");
+                        globalAccount.SetCurency("EUR");
                         break;
                     }
                     if (result == 3)
                     {
-                        account.SetCurency("USD");
+                        globalAccount.SetCurency("USD");
                         break;
                     }
                     if (result == 0 || result > 3)
                     {
                         Console.WriteLine("Ogiltigt val. Prova igen");
                     }
-                } else
+                }
+                else
                 {
                     Console.WriteLine("Ogiltigt val. Prova igen");
                 }
             }
 
-            UserAccounts.Add(account);
+            UserAccounts.Add(globalAccount);
+            PrintAccountSuccess(globalAccount);
+            DoYouWantToDeposit(globalAccount);
+        }
+        
+        //Frågar om man vill göra en deposit
+        public void DoYouWantToDeposit(Account account)
+        {
+            Console.WriteLine("\nTryck [j] göra en insättning på kontot.");
+            Console.WriteLine("Annars tryck valfri tangent för att gå tillbaka");
 
+            string x = Console.ReadLine();
+            if (x.ToLower() == "j")
+            {
+                account.MakeDeposit();
+            }
+        }
+
+        //Skriver ut Grattis och kontoöversikt
+        public void PrintAccountSuccess(Account account)
+        {
             Console.Clear();
-            Console.WriteLine($"\n\nGrattis! Ett nytt lönekonto är skapat:" +
+            Console.WriteLine($"\n\nGrattis! Ett nytt {account.AccType} är skapat:" +
                 $"\n\nKonto nr\tSaldo\tValuta\tSkapat" +
                 "\n****************************************************" +
-                $"\n{account.AccountNumber}\t{account.Balance}\t{account.Currency}\t{account.DateCreated}" +
-                "\n\nTryck för att gå tillbaka");
-            Console.ReadKey();
+                $"\n{account.AccountNumber}\t{account.Balance}\t{account.Currency}\t{account.DateCreated}");
         }
 
         //Skriver ut kundens alla konton
@@ -86,12 +117,13 @@ namespace BankApp_GroupProject
             {
                 Console.WriteLine("Du har inga konton än.\n");
 
-            } else 
+            } else
+
+            Console.WriteLine($"Konto nr\tSaldo\tValuta\tSkapat");
+            Console.WriteLine("**************************************************");
 
             foreach (var item in UserAccounts)
             {
-                Console.WriteLine($"Konto nr\tSaldo\tValuta\tSkapat");
-                Console.WriteLine("**************************************************");
                 Console.WriteLine($"{item.AccountNumber}\t{item.Balance}\t{item.Currency}\t{item.DateCreated}");
             }
 

@@ -189,7 +189,7 @@
             {
                 case "1":
                     // Anropa metod för att skapa nytt konto!
-                    customer.NewAccount();
+                    customer.NewCheckingAccount();
                     DisplayCustomerMenu();                    
                     break;
                 case "2":
@@ -197,6 +197,8 @@
                     break;
                 case "3":
                     // Anropa metod för att öppna ett nytt konto med en annan valuta!
+                    customer.NewGlobalAccount();
+                    DisplayCustomerMenu();
                     break;
                 case "0":
                     Console.Write("\nDu återgår nu till kontoöversikten.");
