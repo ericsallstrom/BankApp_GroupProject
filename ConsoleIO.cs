@@ -142,7 +142,8 @@
                     // Anropa metod för att ta ut pengar!
                     break;
                 case "5":
-                    // Anropa metod för att låna pengar!
+                    customer.TakeLoan();
+                    DisplayCustomerMenu();
                     break;
                 case "6":
                     // Anropa metod för att se tidigare transaktioner!
@@ -244,7 +245,7 @@
                     break;
                 case "4":
                     // Återställ spärrad användare                    
-                    LogInManager.UnblockCustomer();
+                    //LogInManager.UnblockCustomer();
                     DisplayAdminMenu();
                     break;
                 case "5":
