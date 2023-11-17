@@ -4,7 +4,6 @@
     {
         private readonly LogInManager LogInManager = new();
 
-        //Håller koll på vem som är inloggad
         private Customer inloggedCustomer;
         private User user;
 
@@ -42,7 +41,7 @@
 
                 bool loginSuccess = LogInManager.ConfirmUserLogin(username, password);
 
-                if (loginSuccess)
+                if (loginSuccess && !user.IsBlocked)
                 {
                     if (user.Username == "admin")
                     {
@@ -56,7 +55,7 @@
                 }
                 else
                 {
-                    if (user.IsBlocked == true)
+                    if (user.IsBlocked)
                     {
                         Console.Write("\nKontot är spärrat. Kontakta vår administrativa avdelning för ytterligare information.\n" +
                                                  "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
@@ -136,6 +135,8 @@
                         break;
                     case "5":
                         // Anropa metod för att låna pengar!
+                        inloggedCustomer.TakeLoan();
+                        DisplayCustomerMenu();
                         break;
                     case "6":
                         // Anropa metod för att se tidigare transaktioner!
@@ -187,13 +188,16 @@
                 {
                     case "1":
                         // Anropa metod för att skapa nytt konto!
-                        inloggedCustomer.NewAccount();
+                        inloggedCustomer.NewCheckingAccount();
+                        DisplayCustomerMenu();
                         break;
                     case "2":
                         // Anropa metod för att öppna ett nytt sparkonto!
                         break;
                     case "3":
                         // Anropa metod för att öppna ett nytt konto med en annan valuta!
+                        inloggedCustomer.NewGlobalAccount();
+                        DisplayCustomerMenu();
                         break;
                     case "0":
                         Console.Write("\nDu återgår nu till kontoöversikten.");

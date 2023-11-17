@@ -4,13 +4,16 @@ namespace BankApp_GroupProject
 {
     public class Account
     {
+        //Lade till denna för att särskilja alla konton
+        public string AccType { get; set; }
         //Ändrat Number till AccountNumber för att jag tycker att det passar sammanhanget bättre
         public string AccountNumber { get; set; }
         public Decimal Balance { get; set; }
         public DateTime DateCreated { get; set; }
         public string Currency { get; set; }
         public List<Transaction> AccountHistory { get; set; }
-        public List<string> Currencies { get; set; }
+        //Dictionary som håller valutorna, även där vi sätter växelkurs
+        public Dictionary<string, decimal> Currencies { get; set; }
         public int Deposit { get; set; }
 
         public Account()
@@ -19,8 +22,9 @@ namespace BankApp_GroupProject
             Balance = 0.0m;
             DateCreated = DateTime.Now;
             AccountHistory = new List<Transaction>();
-            Currencies = new List<String>();
+            Currencies = new Dictionary<string, decimal>();
             Deposit = 0;
+            Currency = "SEK";
         }
         protected string GenerateAccountNumber()
         {
@@ -39,10 +43,33 @@ namespace BankApp_GroupProject
 
             return generatedNumber;
         }
-        public void SetCurency(string currency, Admin admin)
+
+        public void SetCurency(string currency)
         {
-            //kod ska implementeras
+            Currency = currency;
         }
+
+        //Lägger till valutorna med defaultvärden till dictionary.
+        //OBS! Admin kanske vill ändra växelkurser innan ett konto är skapat?
+        //Currencies kanske ska ha en egen klass som heter typ ExchangeManager?
+        public void InitCurrencies()
+        {
+            Currencies.Add("SEK", 1.0m);
+            Currencies.Add("EUR", 0.85m);
+            Currencies.Add("USD", 0.75m);
+        }
+
+        //Här sätter admin nya värden för växelkursen.
+        public void SetCurrencies()
+        {
+            //Skriv kod för admin för att sätta varje enskild växelkurs
+            
+            //Currencies["SEK"] = userInput;
+            //Currencies["EUR"] = 0.85m;
+            //Currencies["SEK"] = 0.75m;
+        }
+
+
         public decimal GetBalance()
         {
             //Skriv kod för att hämta saldot
@@ -54,6 +81,7 @@ namespace BankApp_GroupProject
         {
             int deposit;
             
+            Console.Clear();
             Console.WriteLine("How much would you like to deposit?");
             string userInput = Console.ReadLine();
 
