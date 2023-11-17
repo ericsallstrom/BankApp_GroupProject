@@ -6,24 +6,37 @@ using System.Threading.Tasks;
 
 namespace BankApp_GroupProject
 {
-    public abstract class User
+    public class User
     {
         public string Username { get; private set; }
         private string Password { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsBlocked { get; set; }
         private LogInManager LogInManager { get; set; }
 
         private bool _verified;
 
         public User()
         {
-            Username = "";
-            Password = "";
+
         }
 
         public User(string username, string password)
         {
             Username = username;
             Password = password;
+            IsBlocked = false;
+            IsAdmin = false;
+        }
+
+        public void Block()
+        {
+            IsBlocked = true;
+        }
+
+        public void Unblock()
+        {
+            IsBlocked = false;
         }
 
         // Metod för att verifiera en användares användarnamn.
@@ -49,7 +62,6 @@ namespace BankApp_GroupProject
                 else
                 {
                     Username = username;
-                    //_verified = true;
                     break;
                 }
             }
@@ -68,7 +80,7 @@ namespace BankApp_GroupProject
                 Console.Write("Skriv in ditt nya lösenord: ");
                 string newPassword = Console.ReadLine();
 
-                VerifyNewPassword(newPassword);                
+                VerifyNewPassword(newPassword);
             }
             else
             {

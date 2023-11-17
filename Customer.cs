@@ -12,9 +12,7 @@ namespace BankApp_GroupProject
         public List<Account> UserAccounts { get; set; }
 
         public Customer()
-        {
-            FirstName = "";
-            LastName = "";
+        {            
         }
 
         public Customer(string username, string password, string firstname, string lastname)
@@ -22,13 +20,12 @@ namespace BankApp_GroupProject
         {
             FirstName = firstname;
             LastName = lastname;
-
             UserAccounts = new List<Account>();
-        }
+        }   
 
         public void NewAccount()
         {
-            Account account = new Account();
+            Account account = new();
             Console.WriteLine("Skapa nytt konto");
 
 
