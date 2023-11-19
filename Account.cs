@@ -14,7 +14,7 @@ namespace BankApp_GroupProject
         public List<Transaction> AccountHistory { get; set; }
         //Dictionary som håller valutorna, även där vi sätter växelkurs
         public Dictionary<string, decimal> Currencies { get; set; }
-        public int Deposit { get; set; }
+        public decimal Deposit { get; set; }
 
         public Account()
         {
@@ -76,44 +76,47 @@ namespace BankApp_GroupProject
             return Balance;
           
         }
-        public int MakeDeposit() //Metod för insättning av pengar
+        public bool IsSavingsAccount { get; set; }
+        public virtual decimal MakeDeposit()
 
         {
-            int deposit;
-            
+            string accountType = IsSavingsAccount ? "sparkonto" : "bankkonto";
+            decimal deposit;
+
             Console.Clear();
-            Console.WriteLine("How much would you like to deposit?");
+            Console.WriteLine("Hur mycket vill du sätta in?");
             string userInput = Console.ReadLine();
 
-            if (int.TryParse(userInput, out deposit)&& deposit >=1 && deposit <= 999999)
-             {
-                Console.WriteLine($"Would you like to acceept your deposit of {deposit} to your bank account");
-                Console.WriteLine("1:for Yes \n2: for No");
+            if (decimal.TryParse(userInput, out deposit) && deposit >= 1 && deposit <= 999999) //ändrat till decimal
+            {
+                Console.WriteLine($"Accepterar du en insättning på {deposit} till ditt {accountType}");
+                Console.WriteLine("1: för JA\n2: för NEJ");
 
-                string userChoiche = Console.ReadLine();
+                string userChoice = Console.ReadLine();
 
-                if (int.TryParse(userChoiche, out int choice) && (choice == 1 || choice == 2))
+                if (int.TryParse(userChoice, out int choice) && (choice == 1 || choice == 2))
                 {
                     if (choice == 1)
                     {
                         Balance += deposit;
                         Deposit = deposit;
-                        Console.WriteLine($"Deposit of {deposit} accepted. New balance: {Balance}");
+                        Console.WriteLine($"Insättning av {deposit} accepterad. Nytt saldo: {Balance}");
                     }
                     else
                     {
-                        Console.WriteLine("Deposit canceled");
+                        Console.WriteLine("Insättning avbruten");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid choice. Please enter 1 for Yes or 2 for No");
-                }                          
+                    Console.WriteLine("Ogiltigt val. Vänligen välj 1 för JA eller 2 för NEJ");
+                }
             }
             else
             {
-                Console.WriteLine("Input not valid. Please enter a numbmer between 1-999999");
+                Console.WriteLine("Ogiltig inmatning. Vänligen ange ett nummer mellan 1-999999");
             }
+
             return deposit;
         }
         public List<Transaction> GetTransactions()
