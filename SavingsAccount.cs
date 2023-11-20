@@ -4,13 +4,7 @@
     {
         public double Interest { get; set; }
         public int InterestTime { get; set; }
-
-
-        public SavingsAccount(double interest, int interestTime)
-        {
-            Interest = interest;
-            InterestTime = interestTime;
-        }
+        public string Months { get; set; }
 
         public void InterestChoice()
         {
@@ -25,10 +19,12 @@
                     case 1:
                         Interest = 0.03; //3% interest
                         InterestTime = 3; //3 months time period
+                        Months = "3 månander";
                         break;
                     case 2:
                         Interest = 0.05; //5% interest
                         InterestTime = 12; //12 months time period
+                        Months = "1 år";
                         break;
 
                     default:
@@ -40,19 +36,21 @@
             {
                 Console.WriteLine("ogiltig inmatning");
             }
-            Console.WriteLine($"Du har valt {Interest * 100}% ränta");
+            Console.WriteLine($"Du har valt att skapa ett sparkonto med {Interest * 100}% ränta");
         }
         public override decimal MakeDeposit()
         {
             IsSavingsAccount = true; // Clearifing that its a savings account
             return base.MakeDeposit(); // Calling the base method
         }
-        public void CalcInterest(decimal userDeposit)
+        //metod för att räkna ut räntan
+        public void CalcInterest()
         {
             double selectedInterestRate = Interest;
-            decimal interestAmount = userDeposit * (decimal)selectedInterestRate * InterestTime / 12;
+            decimal interestAmount = Deposit * (decimal)selectedInterestRate * InterestTime / 12;
             Console.WriteLine($"Med en räntesats på {Interest * 100}%, skulle du få " +
-                $"{interestAmount} i värdeökning");
+                $"{interestAmount} i värdeökning på {Months}");
+            Console.ReadKey();
         }
     }
 }

@@ -105,6 +105,7 @@ namespace BankApp_GroupProject
                     else
                     {
                         Console.WriteLine("Insättning avbruten");
+                        return 0;
                     }
                 }
                 else
@@ -116,7 +117,7 @@ namespace BankApp_GroupProject
             {
                 Console.WriteLine("Ogiltig inmatning. Vänligen ange ett nummer mellan 1-999999");
             }
-
+          
             return deposit;
         }
         public List<Transaction> GetTransactions()
