@@ -192,6 +192,8 @@
                         break;
                     case "2":
                         // Anropa metod för att öppna ett nytt sparkonto!
+                        inloggedCustomer.NewSavingsAccount();
+                        DisplayCustomerMenu();                   
                         break;
                     case "3":
                         // Anropa metod för att öppna ett nytt konto med en annan valuta!

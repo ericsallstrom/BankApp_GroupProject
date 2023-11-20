@@ -37,6 +37,26 @@ namespace BankApp_GroupProject
             PrintAccountSuccess(checkingAccount);
             DoYouWantToDeposit(checkingAccount);
         }
+        //skapa nytt sparkonto
+        public void NewSavingsAccount()
+        {
+
+            SavingsAccount savingsAccount = new();
+            Console.WriteLine("Skapa nytt sparkonto");
+            Console.Clear();
+            savingsAccount.InterestChoice();
+            savingsAccount.AccType = "Sparkonto";
+            UserAccounts.Add(savingsAccount);
+            
+            DoYouWantToDeposit(savingsAccount);
+            PrintAccountSuccess(savingsAccount);
+            savingsAccount.IsSavingsAccount = true; //kollar om savingsAccount
+            Console.WriteLine();
+            savingsAccount.CalcInterest();
+            Console.WriteLine("tryck på valfri tangent för att gå tillbaka");
+
+
+        }
 
         //Skapa Utlandskontot
         public void NewGlobalAccount()
@@ -96,7 +116,7 @@ namespace BankApp_GroupProject
             string x = Console.ReadLine();
             if (x.ToLower() == "j")
             {
-                account.MakeDeposit();
+                account.MakeDeposit();          
             }
         }
 
