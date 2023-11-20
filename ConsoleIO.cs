@@ -4,12 +4,14 @@
     {
         private readonly LogInManager LogInManager = new();
         private Customer inloggedCustomer;
+        private Admin inloggedAdmin;
         private User user;
 
         // Main menu
         public void DisplayMainMenu()
         {
             Console.Clear();
+
             Console.WriteLine("Välkommen till NAMN PÅ BANK!" +
                             "\n=================" +
                             "\n[1] Logga in" +
@@ -42,14 +44,17 @@
 
                 if (loginSuccess && !user.IsBlocked)
                 {
-                    if (user.Username == "admin")
+                    if (user.IsAdmin)
                     {
+                        inloggedAdmin = LogInManager.GetAdmin();                        
                         DisplayAdminMenu();
+                        break;
                     }
                     else
                     {
                         inloggedCustomer = LogInManager.GetCustomer(username);
                         DisplayCustomerMenu();
+                        break;
                     }
                 }
                 else
@@ -68,7 +73,7 @@
                     {
                         if (user.Username != "admin")
                         {
-                            LogInManager.BlockCustomer(user);
+                            LogInManager.BlockCustomer(user);                            
                         }
                         else
                         {
@@ -144,8 +149,8 @@
                         // Anropa metod för att visa kundens konton!
                         inloggedCustomer.PrintAccounts();
                         break;
-                    case "9":
-                        // Anropa metod för att ändra lösenord!
+                    case "9":                       
+                        inloggedCustomer.ChangePassword();
                         break;
                     case "0":
                         Console.Write("\nDu loggas nu ut. Tryck \"ENTER\" för att återgå till huvudmenyn.\n" +
@@ -199,8 +204,8 @@
                         DisplayCustomerMenu();
                         break;
                     case "0":
-                        Console.Write("\nDu återgår nu till kontoöversikten.");
-                        Thread.Sleep(3000);
+                        Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
+                        Console.ReadKey();
                         DisplayCustomerMenu();
                         break;
                     default:
@@ -226,7 +231,7 @@
                                 "\n=================" +
                                 "\n[1] Lägg till ny användare" +
                                 "\n[2] Visa alla användare" +
-                                "\n[3] Radera användare" +
+                                "\n[3] Radera en användare" +
                                 "\n[4] Återställ spärrade användare" +
                                 "\n[5] Sätt växelkurs" +
                                 "\n-----------------" +
@@ -240,17 +245,19 @@
                 switch (menuChoice)
                 {
                     case "1":
-                        //LogInManager.AddUser();
+                        LogInManager.CreateNewUser();
+                        DisplayAdminMenu();
                         break;
                     case "2":
                         LogInManager.PrintUsers();
+                        Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+                        Console.ReadKey();
                         DisplayAdminMenu();
                         break;
                     case "3":
-                        //LogInManager.DeleteUser();
+                        LogInManager.DeleteExistingCustomer();
                         break;
-                    case "4":
-                        // Återställ spärrad användare                    
+                    case "4":                  
                         LogInManager.UnblockCustomer();
                         DisplayAdminMenu();
                         break;
@@ -258,11 +265,11 @@
                         // Sätt växelkurs
                         break;
                     case "9":
+                        inloggedAdmin.ChangePassword();
                         break;
                     case "0":
                         Console.Write("\nDu loggas nu ut. Tryck \"ENTER\" för att återgå till huvudmenyn.");
                         Console.ReadKey();
-                        DisplayMainMenu();
                         break;
                     default:
                         Console.WriteLine("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +

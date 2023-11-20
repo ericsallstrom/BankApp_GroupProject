@@ -9,18 +9,15 @@ namespace BankApp_GroupProject
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
         public List<Account> UserAccounts { get; set; }
-
-        public Customer()
-        {            
-        }
 
         public Customer(string username, string password, string firstname, string lastname)
             : base(username, password)
         {
             FirstName = firstname;
             LastName = lastname;
+            IsAdmin = false;
+            IsBlocked = false;
             UserAccounts = new List<Account>();
         }   
 
@@ -237,6 +234,6 @@ namespace BankApp_GroupProject
             Console.WriteLine("Tryck för att gå tillbaka");
             Console.ReadKey();
 
-        }
+        }    
     }
 }

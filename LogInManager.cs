@@ -2,68 +2,253 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace BankApp_GroupProject
 {
     public class LogInManager
     {
-        private readonly List<User> _users;
+        private readonly List<Customer> _customers;
+        private readonly Admin _admin;
 
         public LogInManager()
         {
-            _users = new List<User>()
+            _admin = new Admin("admin", "Password1@");
+
+            _customers = new List<Customer>()
                 {
-                    new("admin", "Password1@") {IsAdmin = true},
                     new Customer("olov", "Hej123@", "Olov", "Olsson"),
                     new Customer("olof", "Hej123@", "Olof", "Nordin"),
                     new Customer("eric", "Hej123@", "Eric", "Sällström"),
                     new Customer("patrik", "Hej123@", "Patrik", "Petterson"),
                     new Customer("hany", "Hej123@", "Hany", "Alhabboby"),
-                    new Customer("amanda", "Hej123@", "Amanda", "Jönsson") { IsBlocked = true },
                     new Customer("hans", "Hej123@", "Hans", "Elofsson") { IsBlocked = true },
                     new Customer("karin", "Hej123@", "Karin", "Andersson") { IsBlocked = true }
                 };
         }
 
-
-        public void NewUser()
+        public void DeleteExistingCustomer()
         {
-            Console.WriteLine("Ange förnamn");
-            string firstName = Console.ReadLine();
-            Console.WriteLine("Ange efternamn");
-            string lastName = Console.ReadLine();
-            Console.WriteLine($"Hej och välkommen {firstName} {lastName}");
-            Console.WriteLine("Ange användarnamn");
-            string username = Console.ReadLine();
-            Console.WriteLine("ange lösenord");
-            string password = Console.ReadLine();
-
-            if (IsUsernameUnique(username))
+            string username;
+            string heading = "VARNING! Denna åtgärd är ej reversibel." +
+                           "\nFör att ta bort en användare från systemet behöver du mata in användarens " +
+                           "\nanvändarnamn och sedan mata in ditt lösenord för att åtgärden skall fastställas.\n";
+            while (true)
             {
-                Console.WriteLine("användarnamnet existerar redan");
+                Console.Clear();
+                PrintUsers();
 
+                Console.WriteLine(heading);
+                Console.Write("Användarnamn: ");
+                username = Console.ReadLine();
+
+                if (UsernameExistsInList(username))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Write("\nFelaktig inamtning! Användaren finns inte i systemet.\n" +
+                                    "Tryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
             }
-            else
+
+            while (true)
             {
-                _users.Add(new Customer(username, password, firstName, lastName));
-                Console.WriteLine($"användare {username} har lagts till");
+                Console.Clear();
+                PrintUsers();
+
+                Console.Write($"{heading}" +
+                              $"\nAnvändarnamn: {username}" +
+                              $"\nAnge ditt lösenord: ");
+                string adminPassword = Console.ReadLine();
+
+                if (_admin.CheckPassword(adminPassword))
+                {
+                    Console.Write($"\nÄr du säker på att du vill ta bort användaren {username}?" +
+                                  $"\n[1] Ja" +
+                                  $"\n[2] Nej" +
+                                  $"\n---" +
+                                  $"\nDitt val: ");
+                    string answer = Console.ReadLine();
+
+                    if (answer == "1")
+                    {
+                        var customerToRemove = _customers.Find(c => c.Username == username);
+                        DeleteCustomer(customerToRemove);
+                        Console.Write($"\nAnvändaren {username} är nu borttagen från systemet." +
+                          $"\nTryck \"ENTER\" för att återgå till föregående meny.");
+                        Console.ReadKey();
+                        break;
+                    }
+                    else if (answer == "2")
+                    {
+                        Console.Write("\nDu har valt att avsluta processen." +
+                                        "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    }
+                    else
+                    {
+                        Console.Write("\nFel input! Som säkerhetsåtgärd får du mata in lösenordet igen");
+                        Console.ReadKey();
+                    }
+                }
+                else
+                {
+                    Console.Write("\nFel lösenord!" +
+                                  "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+            }
+        }
+
+        public void CreateNewUser()
+        {
+            Console.Clear();
+            string heading = "Du kommer nu att få skapa en ny användare genom att fylla i kundens" +
+                           "\nförnamn, efternamn samt ange ett användarnamn och ett lösenord.\n";
+            string username;
+            string firstName = VerifyFirstName(heading);
+            string lastName = VerifyLastName(heading, firstName);
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"{heading}" +
+                                $"\nFörnamn: {firstName} " +
+                                $"\nEfternamn: {lastName}");
+
+                Console.Write("\nEtt nytt användarnamn skall nu anges. Användarnamnet får inte innehålla några" +
+                      "\nspecialtecken (t.ex. %, &, !, @ etc.) och vara mellan 4-24 tecken långt.\n" +
+                      "\nAnvändarnamn: ");
+                username = Console.ReadLine();
+
+                if (IsUsernameTaken(username))
+                {
+                    Console.Write($"\nEtt konto med användarnamnet {username} existerar redan. " +
+                                    $"\nVar god välj ett nytt användarnamn.\n" +
+                                    $"\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    if (User.VerifyNewUsername(username))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.Write("\nOgiltigt användarnamn. Användarnamnet kan endast vara mellan" +
+                                      "\n4-24 tecken långt och får ej innehålla några specialtecken.\n" +
+                                      "\nTryck \"ENTER\" och försök igen.");
+                        Console.ReadKey();
+                    }
+                }
             }
 
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"{heading}" +
+                       $"\nFörnamn: {firstName} " +
+                       $"\nEfternamn: {lastName}" +
+                       $"\nAnvändarnamn: {username}");
 
+                Console.Write("\nNu skall ett nytt lösenord anges. Lösenordet måste innehålla" +
+                              "\nminst ett specialtecken (t.ex. %, &, !, @ etc.), minst" +
+                              "\nen versal och en siffra samt vara mellan 6-30 tecken långt.\n" +
+                              "\nLösenord: ");
+                string password = Console.ReadLine();
 
+                if (User.VerifyNewPassword(password))
+                {
+                    AddCustomer(new Customer(username, password, firstName, lastName));
+                    break;
+                }
+                else
+                {
+                    Console.Write("\nOgiltigt lösenord. Lösenordet måste vara mellan 6-30 tecken långt" +
+                                 "\noch innehålla minst en stor bokstav, en siffra och ett specialtecken.\n" +
+                                "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+            }
+            Console.Write($"\nBra jobbat! Användaren {username} finns nu inlagd i systemet.\n" +
+                            $"\nTryck \"ENTER\" för att återgå till föregående meny.");
+            Console.ReadKey();
+        }
+
+        public static string VerifyLastName(string heading, string firstName)
+        {
+            string verifiedLastName;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine(heading);
+                Console.WriteLine($"Förnamn: {firstName}");
+
+                Console.Write("Efternamn: ");
+                string lastName = Console.ReadLine();
+
+                if (lastName == "")
+                {
+                    Console.Write("\nFältet kan ej lämnas tomt. Var god fyll i ett efternamn." +
+                                    "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    verifiedLastName = lastName.Trim();
+                    break;
+                }
+            }
+            return verifiedLastName;
+        }
+
+        public static string VerifyFirstName(string heading)
+        {
+            string verifiedFirstName;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine(heading);
+
+                Console.Write("Förnamn: ");
+                string firstName = Console.ReadLine();
+
+                if (firstName == "")
+                {
+                    Console.Write("\nFältet kan ej lämnas tomt. Var god fyll i ett förnamn." +
+                                    "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    verifiedFirstName = firstName.Trim();
+                    break;
+                }
+            }
+            return verifiedFirstName;
         }
 
         // Publik metod som lägger till en användare i listan.
-        public void AddUser(User user)
+        public void AddCustomer(Customer customer)
         {
-            _users.Add(user);
+            _customers.Add(customer);
         }
 
         // Här kan man ta bort användare från listan
-        public void DeleteUser(User user)
+        public void DeleteCustomer(Customer customer)
         {
-            _users.Remove(user);
+            _customers.Remove(customer);
         }
 
         //Skapade en metod som visar alla användare
@@ -71,14 +256,32 @@ namespace BankApp_GroupProject
         {
             Console.Clear();
 
-            foreach (var user in _users)
+            if (_customers.Count == 0)
             {
-                if (user is Customer c)
+                Console.WriteLine("För tillfället finns inga användare i banken.\n");
+            }
+            else
+            {
+                Console.WriteLine("Lista över användare:" +
+                          "\n---------------------");
+
+                foreach (var user in _customers)
                 {
-                    Console.WriteLine($"Lista över användare:" +
-                                    $"\n---------------------" +
-                                    $"\nNamn: {c.FirstName} {c.LastName}" +
-                                    $"\nAnvändarnamn: {c.Username}\n");
+                    if (user is Customer c)
+                    {
+                        if (c.IsBlocked)
+                        {
+                            Console.Write($"Namn: {c.FirstName} {c.LastName}" +
+                                        $"\nAnvändarnamn: {c.Username}" +
+                                        $"\nKontot är för närvarande spärrat.\n");
+                        }
+                        else
+                        {
+                            Console.Write($"Namn: {c.FirstName} {c.LastName}" +
+                                        $"\nAnvändarnamn: {c.Username}\n");
+                        }
+                        Console.WriteLine();
+                    }
                 }
             }
         }
@@ -88,7 +291,7 @@ namespace BankApp_GroupProject
         {
             Console.Clear();
             bool isRunning = true;
-            var blockedCustomers = _users.FindAll(c => c.IsBlocked);
+            var blockedCustomers = _customers.FindAll(c => c.IsBlocked);
 
             if (blockedCustomers.Count > 0)
             {
@@ -105,7 +308,7 @@ namespace BankApp_GroupProject
 
                     if (UsernameExistsInList(username))
                     {
-                        var customerToUnblock = _users.Find(c => c.Username == username);
+                        var customerToUnblock = _customers.Find(c => c.Username == username);
                         customerToUnblock.Unblock();
                         Console.WriteLine($"\nAnvändaren {customerToUnblock.Username} är nu återställd.");
                         Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
@@ -118,7 +321,8 @@ namespace BankApp_GroupProject
                          "\nVill du försöka igen?" +
                          "\n[1] Ja" +
                          "\n[2] Nej" +
-                         "\nSvar: ");
+                         "\n---" +
+                         "\nDitt val: ");
                         string answer = Console.ReadLine();
 
                         switch (answer)
@@ -145,7 +349,7 @@ namespace BankApp_GroupProject
         // Skriver ut alla spärra kunder i listan
         public void PrintBlockedCustomers()
         {
-            var blockedCustomers = _users.FindAll(c => c.IsBlocked);
+            var blockedCustomers = _customers.FindAll(c => c.IsBlocked);
 
             Console.WriteLine("Lista över spärrade användare" +
                       "\n-----------------------------");
@@ -162,7 +366,7 @@ namespace BankApp_GroupProject
         // Metod för att spärra en kund
         public void BlockCustomer(User customer)
         {
-            if (_users.Contains(customer))
+            if (_customers.Contains(customer))
             {
                 customer.Block();
                 Console.Write("\nFör många felaktiga försök har genomförts" +
@@ -178,15 +382,20 @@ namespace BankApp_GroupProject
         }
 
         // Metod för att kontrollera att varje användarnamn är unikt.
-        public bool IsUsernameUnique(string username)
+        public bool IsUsernameTaken(string username)
         {
-            return UsernameExistsInList(username);
+            return _customers.Exists(user => user.Username == username);
         }
 
         // Metod som kollar om en användares användarnamn stämmer överens med lösenordet i listan
         public bool ConfirmUserLogin(string username, string password)
         {
-            if (_users.Exists(user => user.Username == username && user.CheckPassword(password)))
+            if (_admin.Username == username && _admin.CheckPassword(password))
+            {
+                return true;
+            }
+
+            if (_customers.Exists(customer => customer.Username == username && customer.CheckPassword(password)))
             {
                 return true;
             }
@@ -196,23 +405,34 @@ namespace BankApp_GroupProject
         // Metod för att returnera en User, returnerar en "tom" användare för att programmet inte skall krascha
         public User GetUserByUsername(string username)
         {
+            if (_admin.Username == username)
+            {
+                return _admin;
+            }
+
             if (!UsernameExistsInList(username))
             {
                 return new User("n/a", "n/a"); // returnerar en tom användare som inte kommer kunna logga in
             }
-            return _users.Find(user => user.Username == username);
+
+            return _customers.Find(user => user.Username == username);
         }
 
         // Metod för att kolla om ett användarnamn stämmer överens med ett av de användarnamnen i listan
         private bool UsernameExistsInList(string username)
         {
-            return _users.Exists(user => user.Username == username);
+            return _customers.Exists(user => user.Username == username);
         }
 
         // Metod för att returnera ett objekt av Customer-klassen
         public Customer GetCustomer(string username)
         {
-            return _users.OfType<Customer>().FirstOrDefault(c => c.Username == username);
+            return _customers.FirstOrDefault(c => c.Username == username);
+        }
+
+        public Admin GetAdmin()
+        {
+            return _admin;
         }
     }
 }
