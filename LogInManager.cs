@@ -26,7 +26,7 @@ namespace BankApp_GroupProject
                 };
         }
 
-
+        // en metod som lägger till nya användare samt kolla om de finns redan
         public void NewUser()
         {
             Console.WriteLine("Ange förnamn");
