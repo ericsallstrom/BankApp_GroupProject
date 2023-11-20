@@ -108,7 +108,7 @@
                                 "\n[1] Visa konton" +
                                 "\n[2] Öppna nytt bankkonto" +
                                 "\n[3] Föra över pengar" +
-                                "\n[4] Ta ut pengar" +
+                                "\n[4] Ta ut pengar" + 
                                 "\n[5] Låna pengar av banken" +
                                 "\n[6] Se tidigare transaktioner" +
                                 "\n-----------------" +
@@ -132,7 +132,7 @@
                         DisplayAccountMenu();
                         break;
                     case "3":
-                        // Anropa metod för att föra över pengar!
+                        // Anropa metod för att föra över pengar!                     
                         break;
                     case "4":
                         // Anropa metod för att ta ut pengar!

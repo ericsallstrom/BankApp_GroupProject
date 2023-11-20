@@ -6,36 +6,42 @@
         public int InterestTime { get; set; }
         public string Months { get; set; }
 
-        public void InterestChoice()
+        public void InterestChoice()        
         {
-            Console.WriteLine("Välj räntan för ditt sparkonto");
-            Console.WriteLine("1: 3% ränta bundet på 3 månader");
-            Console.WriteLine("2: 5% ränta bundet på 1 år");
-
-            if (int.TryParse(Console.ReadLine(), out int choice))
+            do
             {
-                switch (choice)
+                Console.WriteLine("Välj räntan för ditt sparkonto");
+                Console.WriteLine("1: 3% ränta bundet på 3 månader");
+                Console.WriteLine("2: 5% ränta bundet på 1 år");
+
+                if (int.TryParse(Console.ReadLine(), out int choice))
                 {
-                    case 1:
-                        Interest = 0.03; //3% interest
-                        InterestTime = 3; //3 months time period
-                        Months = "3 månander";
-                        break;
-                    case 2:
-                        Interest = 0.05; //5% interest
-                        InterestTime = 12; //12 months time period
-                        Months = "1 år";
-                        break;
+                    switch (choice)
+                    {
+                        case 1:
+                            Interest = 0.03; //3% interest
+                            InterestTime = 3; //3 months time period
+                            Months = "3 månander";
+                            break;
+                        case 2:
+                            Interest = 0.05; //5% interest
+                            InterestTime = 12; //12 months time period
+                            Months = "1 år";
+                            break;
 
-                    default:
-                        Console.WriteLine("ogiltigt val");
-                        break;
+                        default:
+                            Console.Clear();
+                            Console.WriteLine("ogiltigt val");                        
+                            break;
+                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("ogiltig inmatning");
-            }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("ogiltig inmatning. Försök igen");
+                }
+            } while (Interest == 0);
+
             Console.WriteLine($"Du har valt att skapa ett sparkonto med {Interest * 100}% ränta");
         }
         public override decimal MakeDeposit()
