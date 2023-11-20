@@ -146,14 +146,23 @@ namespace BankApp_GroupProject
         // Method to loan money from the bank.
         public void TakeLoan()
         {
-            // Decimal that saves the total balance of the accounts.
-            decimal totalBalance = 0;
-            decimal interest = 0.0848M;
+            // Using double so Math.Pow will work.
+            // double that saves the total balance of the accounts.
+            double totalBalance = 0;
+            double interest = 0.0848;
+            // double that will be set in the while loop. Total loan.
+            double loanMoney = 0;
+            // double that will be set in the while loop. Total loan time.
+            double loanTime = 0;
+            // double that will save a formula for total debt and monthly debt.
+            double totalDebt = 0;
+            double monthlyDebt = 0;
+
             // Clear console for design purpose.
             Console.Clear();
             Console.WriteLine("Lånaeavdelningen");
             Console.WriteLine("*****************************");
-            Console.WriteLine("Välkommen till låneavdelningen. Vi erbjuder just nu lån till 8,48% ränta.\n");
+            Console.WriteLine("Välkommen till låneavdelningen. Vi erbjuder just nu annuitetslån till 8,48% ränta.\n");
             // Check to see if the customer have an account.
             if (UserAccounts.Any() != true)
             {
@@ -170,7 +179,7 @@ namespace BankApp_GroupProject
                     Console.WriteLine("**************************************************");
                     Console.WriteLine($"{item.AccountNumber}\t{item.Balance}\t{item.Currency}");
                     // See if currency is foreign, and if so convert to SEK.
-                    if(item.Currency == "USD")
+                    if (item.Currency == "USD")
                     {
                         // KOD FÖR ATT KONVERTERA USD - SEK
                     }
@@ -179,30 +188,20 @@ namespace BankApp_GroupProject
                         // KOD FÖR ATT KONVERTERA EUR - SEK
                     }
                     // Add all accounts balance to the totalBalance decimal.
-                    totalBalance = item.Balance++;
+                    totalBalance = totalBalance + Convert.ToDouble(item.Balance);
                 }
 
-            // decimal that will be set in the while loop.
-            decimal loanMoney = 0;
             // while loop for exception handling while input loan 
             while (true)
             {
                 // Print out total balance and how much customer can loan (max 5 times the amount of total balance). 
                 Console.WriteLine("\nDitt totala saldo är " + totalBalance + "kr" +
                 "\nDu kan låna max " + totalBalance * 5 + "kr" +
-                "\nHur mycket vill du låna?");
+                "\n\nHur mycket vill du låna?");
                 // User input.
                 loanMoney = int.Parse(Console.ReadLine());
-                int loanTime = 0;
-                // Calculate total debt and monthly debt.
-                decimal totalDebt = (loanMoney * interest * loanTime) + loanMoney;
-                decimal monthlyDebt = (loanMoney * interest / 12) + (loanMoney / loanTime * 12);
-                // See if customer can loan that amount of money or not.
-                if (loanMoney > totalBalance * 5)
-                {
-                    Console.WriteLine("Du kan inte låna så mycket pengar. Vänligen försök med en lägre summa.");
-                }
-                else
+                // See if customer can loan that amount of money or not. Also make sure it isnt possible to type in negative number.
+                if (loanMoney <= totalBalance * 5 && loanMoney > 0)
                 {
                     Console.WriteLine("Du har valt att låna " + loanMoney + "kr. till 8,48% ränta.");
                     // While loop for exception handling when input loan time.
@@ -212,6 +211,10 @@ namespace BankApp_GroupProject
                         loanTime = int.Parse(Console.ReadLine());
                         if (loanTime <= 10)
                         {
+                            double totalPayments = loanTime * 12;
+                            double interestRate = interest / 12;
+                            monthlyDebt = (loanMoney * interestRate) / (1 - Math.Pow(1 + interestRate, totalPayments * -1));
+                            totalDebt = monthlyDebt * totalPayments;
                             break;
                         }
                         else
@@ -222,6 +225,10 @@ namespace BankApp_GroupProject
                     Console.WriteLine("Din totala skuld är " + Math.Round(totalDebt, 2) + "kr och din månadskostnad kommer bli " + Math.Round(monthlyDebt, 2) + "kr.");
                     break;
                 }
+                else
+                {
+                    Console.WriteLine("Du kan inte låna så mycket pengar. Vänligen försök med en lägre summa.");
+                }
 
             }
 
@@ -229,7 +236,7 @@ namespace BankApp_GroupProject
 
             Console.WriteLine("Tryck för att gå tillbaka");
             Console.ReadKey();
-            
+
         }
     }
 }
