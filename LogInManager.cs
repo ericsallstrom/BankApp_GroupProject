@@ -12,7 +12,6 @@ namespace BankApp_GroupProject
 
         public LogInManager()
         {
-            // Fyll på med användare här
             _users = new List<User>()
                 {
                     new("admin", "Password1@") {IsAdmin = true},
@@ -56,6 +55,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Metod för att ta bort spärren från en kund
         public void UnblockCustomer()
         {
             Console.Clear();
@@ -114,6 +114,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Skriver ut alla spärra kunder i listan
         public void PrintBlockedCustomers()
         {
             var blockedCustomers = _users.FindAll(c => c.IsBlocked);
@@ -130,6 +131,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Metod för att spärra en kund
         public void BlockCustomer(User customer)
         {
             if (_users.Contains(customer))
@@ -153,6 +155,7 @@ namespace BankApp_GroupProject
             return UsernameExistsInList(username);
         }
 
+        // Metod som kollar om en användares användarnamn stämmer överens med lösenordet i listan
         public bool ConfirmUserLogin(string username, string password)
         {
             if (_users.Exists(user => user.Username == username && user.CheckPassword(password)))
@@ -162,6 +165,7 @@ namespace BankApp_GroupProject
             return false;
         }
 
+        // Metod för att returnera en User, returnerar en "tom" användare för att programmet inte skall krascha
         public User GetUserByUsername(string username)
         {
             if (!UsernameExistsInList(username))
@@ -171,11 +175,13 @@ namespace BankApp_GroupProject
             return _users.Find(user => user.Username == username);
         }
 
+        // Metod för att kolla om ett användarnamn stämmer överens med ett av de användarnamnen i listan
         private bool UsernameExistsInList(string username)
         {
             return _users.Exists(user => user.Username == username);
         }
 
+        // Metod för att returnera ett objekt av Customer-klassen
         public Customer GetCustomer(string username)
         {
             return _users.OfType<Customer>().FirstOrDefault(c => c.Username == username);

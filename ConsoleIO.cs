@@ -3,7 +3,6 @@
     public class ConsoleIO
     {
         private readonly LogInManager LogInManager = new();
-
         private Customer inloggedCustomer;
         private User user;
 
