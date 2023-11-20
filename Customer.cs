@@ -122,9 +122,9 @@ namespace BankApp_GroupProject
         {
             Console.Clear();
             Console.WriteLine($"\n\nGrattis! Ett nytt {account.AccType} är skapat:" +
-                $"\n\nKonto nr\tSaldo\tValuta\tSkapat" +
+                $"\n\nKonto nr\tKontotyp\tSaldo\tValuta\tSkapat" +
                 "\n****************************************************" +
-                $"\n{account.AccountNumber}\t{account.Balance}\t{account.Currency}\t{account.DateCreated}");
+                $"\n{account.AccountNumber}\t{account.AccType}\t{account.Balance}\t{account.Currency}\t{account.DateCreated}");
         }
 
         //Skriver ut kundens alla konton
@@ -138,12 +138,12 @@ namespace BankApp_GroupProject
             } 
             else
             {
-                Console.WriteLine($"Konto nr\tSaldo\tValuta\tSkapat");
+                Console.WriteLine($"Konto nr\tKontotyp\tSaldo\tValuta\tSkapat");
                 Console.WriteLine("**************************************************");
 
                 foreach (var item in UserAccounts)
                 {
-                    Console.WriteLine($"{item.AccountNumber}\t{item.Balance}\t{item.Currency}\t{item.DateCreated}");
+                    Console.WriteLine($"{item.AccountNumber}\t{item.AccType}\t{item.Balance}\t{item.Currency}\t{item.DateCreated}");
                 }
             }
             Console.WriteLine("\nTryck för att gå tillbaka");
