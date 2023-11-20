@@ -105,8 +105,9 @@ namespace BankApp_GroupProject
                 }
             }
         }
-
-        public void CreateNewUser()
+      
+        // en metod som lägger till nya användare samt kolla om de finns redan
+        public void CreateNewUser()    
         {
             Console.Clear();
             string heading = "Du kommer nu att få skapa en ny användare genom att fylla i kundens" +

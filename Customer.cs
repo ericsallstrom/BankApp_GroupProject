@@ -27,18 +27,38 @@ namespace BankApp_GroupProject
             Account account = new();
             Console.WriteLine("Skapa nytt konto");
             
-            Account checkingAccount = new Account();
+            Account checkingAccount = new();
             checkingAccount.AccType = "Lönekonto";
 
             UserAccounts.Add(checkingAccount);
             PrintAccountSuccess(checkingAccount);
             DoYouWantToDeposit(checkingAccount);
         }
+        //skapa nytt sparkonto
+        public void NewSavingsAccount()
+        {
+
+            SavingsAccount savingsAccount = new();
+            Console.WriteLine("Skapa nytt sparkonto");
+            Console.Clear();
+            savingsAccount.InterestChoice();
+            savingsAccount.AccType = "Sparkonto";
+            UserAccounts.Add(savingsAccount);
+            
+            DoYouWantToDeposit(savingsAccount);
+            PrintAccountSuccess(savingsAccount);
+            savingsAccount.IsSavingsAccount = true; //kollar om savingsAccount
+            Console.WriteLine();
+            savingsAccount.CalcInterest();
+            Console.WriteLine("tryck på valfri tangent för att gå tillbaka");
+
+
+        }
 
         //Skapa Utlandskontot
         public void NewGlobalAccount()
         {
-            Account globalAccount = new Account();
+            Account globalAccount = new();
             globalAccount.AccType = "Utlandskonto";
 
             Console.WriteLine("Skapa nytt utlandskonto");
@@ -68,7 +88,7 @@ namespace BankApp_GroupProject
                         globalAccount.SetCurency("USD");
                         break;
                     }
-                    if (result == 0 || result > 3)
+                    else
                     {
                         Console.WriteLine("Ogiltigt val. Prova igen");
                     }
@@ -87,13 +107,13 @@ namespace BankApp_GroupProject
         //Frågar om man vill göra en deposit
         public void DoYouWantToDeposit(Account account)
         {
-            Console.WriteLine("\nTryck [j] göra en insättning på kontot.");
+            Console.WriteLine("\n\nTryck [j] göra en insättning på kontot.");
             Console.WriteLine("Annars tryck valfri tangent för att gå tillbaka");
 
             string x = Console.ReadLine();
             if (x.ToLower() == "j")
             {
-                account.MakeDeposit();
+                account.MakeDeposit();          
             }
         }
 
@@ -110,21 +130,23 @@ namespace BankApp_GroupProject
         //Skriver ut kundens alla konton
         public void PrintAccounts()
         {
+            Console.Clear();
             if (UserAccounts.Any() != true)
             {
                 Console.WriteLine("Du har inga konton än.\n");
 
-            } else
-
-            Console.WriteLine($"Konto nr\tSaldo\tValuta\tSkapat");
-            Console.WriteLine("**************************************************");
-
-            foreach (var item in UserAccounts)
+            } 
+            else
             {
-                Console.WriteLine($"{item.AccountNumber}\t{item.Balance}\t{item.Currency}\t{item.DateCreated}");
-            }
+                Console.WriteLine($"Konto nr\tSaldo\tValuta\tSkapat");
+                Console.WriteLine("**************************************************");
 
-            Console.WriteLine("Tryck för att gå tillbaka");
+                foreach (var item in UserAccounts)
+                {
+                    Console.WriteLine($"{item.AccountNumber}\t{item.Balance}\t{item.Currency}\t{item.DateCreated}");
+                }
+            }
+            Console.WriteLine("\nTryck för att gå tillbaka");
             Console.ReadKey();
         }
 
