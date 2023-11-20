@@ -54,4 +54,5 @@
             Console.WriteLine($"Med en räntesats på {Interest * 100}%, skulle du få " +
                 $"{interestAmount} i värdeökning");
         }
+    }
 }

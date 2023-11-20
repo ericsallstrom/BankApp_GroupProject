@@ -243,7 +243,8 @@
                         //LogInManager.AddUser();
                         break;
                     case "2":
-                        //LogInManager.PrintUsers();
+                        LogInManager.PrintUsers();
+                        DisplayAdminMenu();
                         break;
                     case "3":
                         //LogInManager.DeleteUser();
