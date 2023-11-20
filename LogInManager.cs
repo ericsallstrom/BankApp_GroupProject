@@ -26,6 +26,34 @@ namespace BankApp_GroupProject
                 };
         }
 
+
+        public void NewUser()
+        {
+            Console.WriteLine("Ange förnamn");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("Ange efternamn");
+            string lastName = Console.ReadLine();
+            Console.WriteLine($"Hej och välkommen {firstName} {lastName}");
+            Console.WriteLine("Ange användarnamn");
+            string username = Console.ReadLine();
+            Console.WriteLine("ange lösenord");
+            string password = Console.ReadLine();
+
+            if (IsUsernameUnique(username))
+            {
+                Console.WriteLine("användarnamnet existerar redan");
+
+            }
+            else
+            {
+                _users.Add(new Customer(username, password, firstName, lastName));
+                Console.WriteLine($"användare {username} har lagts till");
+            }
+
+
+
+        }
+
         // Publik metod som lägger till en användare i listan.
         public void AddUser(User user)
         {
