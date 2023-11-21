@@ -26,6 +26,24 @@ namespace BankApp_GroupProject
                     new Customer("hans", "Hej123@", "Hans", "Elofsson") { IsBlocked = true },
                     new Customer("karin", "Hej123@", "Karin", "Andersson") { IsBlocked = true }
                 };
+
+            InitUserAccounts();
+        }
+
+        //Tilldelar alla users ett lönekonto och ett random saldo
+        public void InitUserAccounts()
+        {
+            Random random = new();
+
+            decimal initialBalance = random.Next(100, 30001);
+
+            foreach (var customer in _customers) 
+            {
+                Account checkingAccount = new();
+                checkingAccount.AutoDeposit(initialBalance);
+
+                customer.UserAccounts.Add(checkingAccount);
+            }
         }
 
         public void DeleteExistingCustomer()
