@@ -131,7 +131,11 @@ namespace BankApp_GroupProject
             if (selectdAccount != null)
             {
                 selectdAccount.MakeDeposit();
-                PrintAccountSuccess(selectdAccount);
+                Console.Clear();
+                Console.WriteLine($"\n\nDin insättning till ditt {selectdAccount.AccType}: {selectdAccount.AccountNumber} är klar. {account.DateCreated}" +
+                    $"\n\nDItt nya saldo är: {selectdAccount.Balance} {selectdAccount.Currency}");
+
+                Console.WriteLine();
                 Console.WriteLine("Tryck på valrfri tanget för att gå tillbaka");
                 Console.ReadKey();
                 
