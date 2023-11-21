@@ -108,7 +108,7 @@
                                 "\n[1] Visa konton" +
                                 "\n[2] Öppna nytt bankkonto" +
                                 "\n[3] Föra över pengar" +
-                                "\n[4] Ta ut pengar" + 
+                                "\n[4] Insättning av pengar" + 
                                 "\n[5] Låna pengar av banken" +
                                 "\n[6] Se tidigare transaktioner" +
                                 "\n-----------------" +
@@ -135,7 +135,18 @@
                         // Anropa metod för att föra över pengar!                     
                         break;
                     case "4":
-                        // Anropa metod för att ta ut pengar!
+                        // Anropa metod för att sätta in pengar på ett konto!                    
+                        // Skicka med ett konto från inloggad kundens konton
+                        if (inloggedCustomer.UserAccounts.Any()) //kollar om det finns konton
+                        {
+                            Account selectedAccount = inloggedCustomer.UserAccounts[0]; // Du kan välja det första kontot som ett exempel
+                            inloggedCustomer.AccountDeposit(selectedAccount);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du har inga konton att göra insättning på.");
+                        }
+                            DisplayCustomerMenu();
                         break;
                     case "5":
                         // Anropa metod för att låna pengar!
