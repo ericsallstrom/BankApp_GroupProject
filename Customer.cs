@@ -34,6 +34,7 @@ namespace BankApp_GroupProject
             PrintAccountSuccess(checkingAccount);
             DoYouWantToDeposit(checkingAccount);
         }
+
         //skapa nytt sparkonto
         public void NewSavingsAccount()
         {
@@ -51,8 +52,6 @@ namespace BankApp_GroupProject
             Console.WriteLine();
             savingsAccount.CalcInterest();
             Console.WriteLine("tryck på valfri tangent för att gå tillbaka");
-
-
         }
 
         //Skapa Utlandskontot
