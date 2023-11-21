@@ -15,6 +15,7 @@ namespace BankApp_GroupProject
         //Dictionary som håller valutorna, även där vi sätter växelkurs
         public decimal Deposit { get; set; }
 
+      
         public Account()
         {
             AccountNumber = GenerateAccountNumber();
@@ -23,6 +24,7 @@ namespace BankApp_GroupProject
             AccountHistory = new List<Transaction>();
             Deposit = 0;
             Currency = "SEK";
+
         }
         protected string GenerateAccountNumber()
         {
@@ -42,7 +44,7 @@ namespace BankApp_GroupProject
             return generatedNumber;
         }
 
-        public void SetCurency(string currency)
+    public void SetCurency(string currency)
         {
             Currency = currency;
         }

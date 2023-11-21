@@ -112,8 +112,36 @@ namespace BankApp_GroupProject
             string x = Console.ReadLine();
             if (x.ToLower() == "j")
             {
-                account.MakeDeposit();          
+                account.MakeDeposit();
             }
+        }
+        //frågar om man vill göra en insättning till befintligt konto
+        public void AccountDeposit(Account account)
+        {
+            Console.Clear();
+            //visar konton       
+            PrintAccounts(false); //false för att inte skriva ut tillbaka
+        
+            Console.WriteLine();
+            Console.Write("Ange kontonummer för det konto du vill sätta in pengar på: ");
+            string accountNumberToDeposit = Console.ReadLine().Trim();
+
+            Account selectdAccount = UserAccounts.FirstOrDefault(account => account.AccountNumber.Trim() == accountNumberToDeposit);
+
+            if (selectdAccount != null)
+            {
+                selectdAccount.MakeDeposit();
+                PrintAccountSuccess(selectdAccount);
+                Console.WriteLine("Tryck på valrfri tanget för att gå tillbaka");
+                Console.ReadKey();
+                
+            }                 
+            else
+            {
+                Console.WriteLine("Ogiltigt kontonummer. Tryck på valfri tangent för att gå tillbaka");
+                Console.ReadKey();
+            }
+
         }
 
         //Skriver ut Grattis och kontoöversikt
@@ -127,7 +155,7 @@ namespace BankApp_GroupProject
         }
 
         //Skriver ut kundens alla konton
-        public void PrintAccounts()
+        public void PrintAccounts(bool displayGoBackMessage =true)
         {
             Console.Clear();
             if (UserAccounts.Any() != true)
@@ -145,8 +173,11 @@ namespace BankApp_GroupProject
                     Console.WriteLine($"{item.AccountNumber}\t{item.AccType}\t{item.Balance}\t{item.Currency}\t{item.DateCreated}");
                 }
             }
-            Console.WriteLine("\nTryck för att gå tillbaka");
-            Console.ReadKey();
+            if (displayGoBackMessage)
+            {
+                Console.WriteLine("\nTryck för att gå tillbaka");
+                Console.ReadKey();
+            }       
         }
 
         //Metod för att göra överföringar mellan egna konton
