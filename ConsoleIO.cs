@@ -265,6 +265,7 @@
                         break;
                     case "5":
                         // Sätt växelkurs
+                        ExchangeManager.Exchange.SetCurrencies();
                         break;
                     case "9":
                         inloggedAdmin.ChangePassword();
