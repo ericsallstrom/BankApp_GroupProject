@@ -17,6 +17,7 @@ namespace BankApp_GroupProject
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<Account> UserAccounts { get; set; }
+        private LogInManager LogInManager { get; set; }
 
         public Customer(string username, string password, string firstname, string lastname)
             : base(username, password)
@@ -25,7 +26,12 @@ namespace BankApp_GroupProject
             LastName = lastname;
             IsAdmin = false;
             IsBlocked = false;
-            UserAccounts = new List<Account>();
+            UserAccounts = new List<Account>();            
+        }    
+
+        public Account GetCheckingAccount()
+        {
+            return _checkingAccount;
         }
 
         //Skapa Lönekontot

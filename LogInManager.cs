@@ -10,7 +10,7 @@ namespace BankApp_GroupProject
     public class LogInManager
     {
         private readonly List<Customer> _customers;
-        private readonly Admin _admin;
+        private readonly Admin _admin;        
 
         public LogInManager()
         {
@@ -39,9 +39,8 @@ namespace BankApp_GroupProject
 
             foreach (var customer in _customers)
             {
-                Account checkingAccount = new() { AccType = "Lönekonto" };
+                Account checkingAccount = customer.GetCheckingAccount();
                 checkingAccount.Deposit(initialBalance);
-
                 customer.UserAccounts.Add(checkingAccount);
             }
         }
@@ -447,6 +446,11 @@ namespace BankApp_GroupProject
         public Customer GetCustomer(string username)
         {
             return _customers.FirstOrDefault(c => c.Username == username);
+        }
+
+        public List<Customer> GetCustomers()
+        {
+            return _customers;
         }
 
         public Admin GetAdmin()
