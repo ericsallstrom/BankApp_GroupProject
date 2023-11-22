@@ -450,8 +450,7 @@ namespace BankApp_GroupProject
         // Metod för att låna pengar från banken.
         public void TakeLoan(Account account)
         {
-            // Använder double så Math.Pow ska funka.
-            
+            // Använder double så Math.Pow ska funka.          
             double totalBalance = 0;
             double interest = 0.0848;
             // double som ska in i whileloop. Total loan.
@@ -522,9 +521,14 @@ namespace BankApp_GroupProject
 
             }
 
-            // Här plusas summan på lånade pengar tillsammans med pengarna som fanns redan i lönekontot
+            //konvertera double till decimal
+            decimal loan = Convert.ToDecimal(loanMoney);
 
-            account.Balance += Convert.ToDecimal(loanMoney);
+            // Logg för kontohistorik
+            Transaction t1 = new(account, loan, false);
+
+            // Här plusas summan på lånade pengar tillsammans med pengarna som fanns redan i lönekontot
+            account.Balance += Convert.ToDecimal(loan);
             Console.WriteLine($"totalsumman på ditt lönekonto är {account.Balance}");
 
 
