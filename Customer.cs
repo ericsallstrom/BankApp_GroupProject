@@ -10,9 +10,9 @@ namespace BankApp_GroupProject
 {
     public class Customer : User
     {
-        private readonly Account _checkingAccount = new();
-        private readonly Account _globalAccount = new();
-        private readonly SavingsAccount _savingsAccount = new();
+        private readonly Account _checkingAccount = new() { AccType = "Lönekonto" };
+        private readonly Account _globalAccount = new() { AccType = "Utlandskonto" };
+        private readonly SavingsAccount _savingsAccount = new() { AccType = "Sparkonto" };
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -31,8 +31,7 @@ namespace BankApp_GroupProject
         //Skapa Lönekontot
         public void NewCheckingAccount()
         {
-            Console.Clear();
-            _checkingAccount.AccType = "Lönekonto";
+            Console.Clear();            
 
             if (!UserAccounts.Contains(_checkingAccount))
             {
@@ -61,8 +60,7 @@ namespace BankApp_GroupProject
         //skapa nytt sparkonto
         public void NewSavingsAccount()
         {
-            Console.Clear();
-            _savingsAccount.AccType = "Sparkonto";
+            Console.Clear();            
 
             if (!UserAccounts.Contains(_savingsAccount))
             {
@@ -96,10 +94,9 @@ namespace BankApp_GroupProject
         //Skapa Utlandskontot
         public void NewGlobalAccount()
         {
-            Console.Clear();
-            _globalAccount.AccType = "Utlandskonto";
             bool currencySet = false;
-
+            Console.Clear();            
+            
             if (!UserAccounts.Contains(_globalAccount))
             {
                 int answer = ProceedCreatingAccount(_globalAccount);
@@ -202,7 +199,7 @@ namespace BankApp_GroupProject
             Console.Clear();
             //visar konton       
             PrintAccounts(false); //false för att inte skriva ut tillbaka
-        
+
             Console.WriteLine();
             Console.Write("Ange kontonummer för det konto du vill sätta in pengar på: ");
             string accountNumberToDeposit = Console.ReadLine().Trim();
@@ -219,8 +216,8 @@ namespace BankApp_GroupProject
                 Console.WriteLine();
                 Console.WriteLine("Tryck på valrfri tanget för att gå tillbaka");
                 Console.ReadKey();
-                
-            }                 
+
+            }
             else
             {
                 Console.WriteLine("Ogiltigt kontonummer. Tryck på valfri tangent för att gå tillbaka");
@@ -243,7 +240,7 @@ namespace BankApp_GroupProject
         }
 
         //Skriver ut kundens alla konton
-        public void PrintAccounts(bool displayGoBackMessage =true)
+        public void PrintAccounts(bool displayGoBackMessage = true)
         {
             Console.Clear();
             if (UserAccounts.Any() != true)
