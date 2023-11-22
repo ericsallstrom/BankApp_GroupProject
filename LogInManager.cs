@@ -448,11 +448,6 @@ namespace BankApp_GroupProject
             return _customers.FirstOrDefault(c => c.Username == username);
         }
 
-        public List<Customer> GetCustomers()
-        {
-            return _customers;
-        }
-
         public Admin GetAdmin()
         {
             return _admin;
