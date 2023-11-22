@@ -151,9 +151,19 @@
                         }
                             DisplayCustomerMenu();
                         break;
+
                     case "5":
-                        // Anropa metod för att låna pengar!
-                        inloggedCustomer.TakeLoan();
+                        // Anropa metod för att sätta in pengar på ett konto!                    
+                        // Skicka med ett konto från inloggad kundens konton
+                        if (inloggedCustomer.UserAccounts.Any()) //kollar om det finns konton
+                        {
+                            Account selectedAccount = inloggedCustomer.UserAccounts[0]; // Du kan välja det första kontot som ett exempel
+                            inloggedCustomer.TakeLoan(selectedAccount);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du har inga konton att göra insättning på.");
+                        }
                         DisplayCustomerMenu();
                         break;
                     case "6":

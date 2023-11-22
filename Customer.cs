@@ -443,68 +443,54 @@ namespace BankApp_GroupProject
 
         }
 
-        // Method to loan money from the bank.
-        public void TakeLoan()
+        // Metod för att låna pengar från banken.
+        public void TakeLoan(Account account)
         {
-            // Using double so Math.Pow will work.
-            // double that saves the total balance of the accounts.
+            // Använder double så Math.Pow ska funka.
+            
             double totalBalance = 0;
             double interest = 0.0848;
-            // double that will be set in the while loop. Total loan.
+            // double som ska in i whileloop. Total loan.
             double loanMoney = 0;
-            // double that will be set in the while loop. Total loan time.
+            // double som ska vara i while loop. Total loan time.
             double loanTime = 0;
-            // double that will save account formula for total debt and monthly debt.
+            // double som sparar hur mycket blir total lånet samt månad betaldvis.
             double totalDebt = 0;
             double monthlyDebt = 0;
 
-            // Clear console for design purpose.
+
+            // Clear console så att designen blir finare.
             Console.Clear();
             Console.WriteLine("Lånaeavdelningen");
             Console.WriteLine("*****************************");
             Console.WriteLine("Välkommen till låneavdelningen. Vi erbjuder just nu annuitetslån till 8,48% ränta.\n");
-            // Check to see if the customer have an account.
-            if (UserAccounts.Any() != true)
-            {
-                Console.WriteLine("Du har inga konton än.\n");
-                Console.WriteLine("Tryck för att gå tillbaka");
-                Console.ReadKey();
-                return;
-            }
-            else
-                // Print out all of customers accounts and balance
+           
+         
+                // skriver ut alla konton och hur mycket summa det finns på de.
                 foreach (var item in UserAccounts)
                 {
                     Console.WriteLine($"Konto nr\tSaldo\tValuta\tSkapat");
                     Console.WriteLine("****************************************************");
                     Console.WriteLine($"{item.AccountNumber}\t{item.Balance}\t{item.Currency}");
-                    // See if currency is foreign, and if so convert to SEK.
-                    if (item.Currency == "USD")
-                    {
-                        // KOD FÖR ATT KONVERTERA USD - SEK
-                    }
-                    else if (item.Currency == "EUR")
-                    {
-                        // KOD FÖR ATT KONVERTERA EUR - SEK
-                    }
-                    // Add all accounts balance to the totalBalance decimal.
+                   
+                    // adderar alla konton balans tillsammas med totalt balance.
                     totalBalance = totalBalance + Convert.ToDouble(item.Balance);
+                    
                 }
 
-            // while loop for exception handling while input loan 
+            // while loop när man hanterar input från användaren i loop. 
             while (true)
             {
-                // Print out total balance and how much customer can loan (max 5 times the amount of total balance). 
+                // Skriver ut totalbalans och hur mycket en kund kan låna pengar (max 5 gånger).
                 Console.WriteLine("\nDitt totala saldo är " + totalBalance + "kr" +
                 "\nDu kan låna max " + totalBalance * 5 + "kr" +
                 "\n\nHur mycket vill du låna?");
-                // User input.
+                // användare input
                 loanMoney = int.Parse(Console.ReadLine());
-                // See if customer can loan that amount of money or not. Also make sure it isnt possible to type in negative number.
+                // hanterar felhantering, ifall användaren vill låna mer eller mer än 5 gånger.
                 if (loanMoney <= totalBalance * 5 && loanMoney > 0)
                 {
                     Console.WriteLine("Du har valt att låna " + loanMoney + "kr. till 8,48% ränta.");
-                    // While loop for exception handling when input loan time.
                     while (true)
                     {
                         Console.WriteLine("Hur lång avbetalningstid? (1-10 år)");
@@ -532,7 +518,11 @@ namespace BankApp_GroupProject
 
             }
 
-            // HÄR SKA KOD FÖR ATT LÄGGA TILL LÅNADE PENGAR PÅ LÖNEKONTO SKRIVAS
+            // Här plusas summan på lånade pengar tillsammans med pengarna som fanns redan i lönekontot
+
+            account.Balance += Convert.ToDecimal(loanMoney);
+            Console.WriteLine($"totalsumman på ditt lönekonto är {account.Balance}");
+
 
             Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
