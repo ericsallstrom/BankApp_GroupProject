@@ -37,10 +37,9 @@ namespace BankApp_GroupProject
 
             decimal initialBalance = random.Next(100, 30001);
 
-            foreach (var customer in _customers) 
+            foreach (var customer in _customers)
             {
-                Account checkingAccount = new();
-                checkingAccount.AccType = "Lönekonto";                
+                Account checkingAccount = new() { AccType = "Lönekonto" };
                 checkingAccount.Deposit(initialBalance);
 
                 customer.UserAccounts.Add(checkingAccount);
@@ -124,9 +123,9 @@ namespace BankApp_GroupProject
                 }
             }
         }
-      
+
         // en metod som lägger till nya användare samt kolla om de finns redan
-        public void CreateNewUser()    
+        public void CreateNewUser()
         {
             Console.Clear();
             string heading = "Du kommer nu att få skapa en ny användare genom att fylla i kundens" +
