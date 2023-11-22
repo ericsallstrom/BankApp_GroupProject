@@ -487,7 +487,7 @@ namespace BankApp_GroupProject
                 // Skriver ut totalbalans och hur mycket en kund kan låna pengar (max 5 gånger).
                 Console.WriteLine("\nDitt totala saldo är " + totalBalance + " kr" +
                 "\nDu kan låna max " + totalBalance * 5 + " kr" +
-                "\n\nHur mycket vill du låna?");
+                "\n\nHur mycket vill du låna? (Skriv 0 för att inte låna några pengar och gå tillbaka)");
                 // användare input
                 string userInput = Console.ReadLine();
                 Console.WriteLine();
@@ -516,6 +516,11 @@ namespace BankApp_GroupProject
                     Console.WriteLine("Din totala skuld är " + Math.Round(totalDebt, 2) + " kr och din månadskostnad kommer bli " + Math.Round(monthlyDebt, 2) + " kr/månad.");
                     break;
                 }
+                else if ((double.TryParse(userInput, out loanMoney) && loanMoney == 0))
+                {
+                    Console.WriteLine("Du har valt att inte långa några pengar.");
+                    break;
+                }
                 else
                 {
                     Console.WriteLine("Du kan inte låna så mycket pengar. Vänligen försök med en lägre summa.");
@@ -534,7 +539,7 @@ namespace BankApp_GroupProject
             Console.WriteLine($"totalsumman på ditt lönekonto är {account.Balance} kr.");
 
 
-            Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+            Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
         }
 
