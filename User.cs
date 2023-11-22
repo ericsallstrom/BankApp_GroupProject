@@ -12,7 +12,6 @@ namespace BankApp_GroupProject
         private string Password { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsBlocked { get; set; }
-        private LogInManager LogInManager { get; set; }        
 
         public User(string username, string password)
         {
@@ -51,10 +50,14 @@ namespace BankApp_GroupProject
         {
             string newPassword;
             string oldPassword;
+            string heading = "Ditt nya lösenord måste vara mellan 6-30 tecken långt och " +
+                           "\ninnehålla minst en stor bokstav, en siffra och ett specialtecken." +
+                           "\nDet nya lösenordet får heller inte vara samma som ditt gamla lösenord.\n";
 
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(heading);
 
                 Console.Write("Skriv in ditt gamla lösenord: ");
                 oldPassword = Console.ReadLine();
@@ -80,15 +83,13 @@ namespace BankApp_GroupProject
                 {
                     Password = newPassword;
                     break;
-                }                
+                }
                 else
                 {
-                    Console.Write("\nOgiltigt lösenord. Lösenordet måste vara mellan 6-30 tecken långt" +
-                                  "\noch innehålla minst en stor bokstav, en siffra och ett specialtecken." +
-                                  "\nDitt nya lösenord får heller inte vara samma som ditt gamla." +
-                                  "\nTryck \"ENTER\" och försök igen.");
+                    Console.Write("\nOgiltigt lösenord! Tryck \"ENTER\" och försök igen.");
                     Console.ReadKey();
                     Console.Clear();
+                    Console.WriteLine(heading);
                 }
             }
             Console.Write("\nDitt lösenord har nu ändrats!" +

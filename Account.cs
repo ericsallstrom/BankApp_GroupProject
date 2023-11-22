@@ -2,18 +2,18 @@
 
 namespace BankApp_GroupProject
 {
+
     public class Account
     {
         //Lade till denna för att särskilja alla konton
         public string AccType { get; set; }
-        //Ändrat Number till AccountNumber för att jag tycker att det passar sammanhanget bättre
         public string AccountNumber { get; set; }
         public Decimal Balance { get; set; }
         public DateTime DateCreated { get; set; }
         public string Currency { get; set; }
-        public List<Transaction> AccountHistory { get; set; }
-        //Dictionary som håller valutorna, även där vi sätter växelkurs
-        public decimal Deposit { get; set; }
+        private List<Transaction> AccountHistory { get; set; }
+        public decimal _Deposit { get; set; }
+        public bool IsSavingsAccount { get; set; }
 
       
         public Account()
@@ -22,7 +22,7 @@ namespace BankApp_GroupProject
             Balance = 0.0m;
             DateCreated = DateTime.Now;
             AccountHistory = new List<Transaction>();
-            Deposit = 0;
+            _Deposit = 0;
             Currency = "SEK";
 
         }
@@ -30,9 +30,9 @@ namespace BankApp_GroupProject
         {
             //Förslag på att implementera ett random kontonummer, kan uvecklas vidare
             //Tanken är att man behöver anropa metoden när man skapar ett nytt konto i en annan klass
-           
 
-            Random random = new Random();
+
+            Random random = new();
             //use of const because its a set value and wont be changed in the future
             const string chars = "0123456789";
             //Generating random number based on chars of a maximum value of 10
@@ -50,26 +50,52 @@ namespace BankApp_GroupProject
         }
 
         public decimal GetBalance()
-        {
-            //Skriv kod för att hämta saldot
+        {            
             return Balance;
-          
         }
-        public bool IsSavingsAccount { get; set; }
-        public virtual decimal MakeDeposit()
 
+        public void Deposit(decimal deposit)
+        {
+            Balance = deposit;
+        }
+
+        public void Withdraw(decimal sum)
+        {
+            Balance -= sum;
+        }
+
+        public virtual decimal MakeDeposit()
         {
             string accountType = IsSavingsAccount ? "sparkonto" : "bankkonto";
             decimal deposit;
 
-            Console.Clear();
-            Console.WriteLine("Hur mycket vill du sätta in?");
-            string userInput = Console.ReadLine();
-
-            if (decimal.TryParse(userInput, out deposit) && deposit >= 1 && deposit <= 999999) //ändrat till decimal
+            while (true)
             {
-                Console.WriteLine($"Accepterar du en insättning på {deposit} till ditt {accountType}");
-                Console.WriteLine("1: för JA\n2: för NEJ");
+                Console.Clear();
+                Console.Write("Hur mycket vill du sätta in? Ange värdet i siffror." +
+                            "\nInsättning: ");
+                string userInput = Console.ReadLine();
+                Console.WriteLine();
+
+                if (decimal.TryParse(userInput, out deposit) && deposit >= 1 && deposit <= 999999) //ändrat till decimal
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Write("Ogiltig inmatning. Vänligen ange beloppet i siffror samt ett värde mellan 1-999999." +
+                                "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+            }
+
+            while (true)
+            {
+                Console.Write($"Accepterar du en insättning på {deposit:c} till ditt {accountType}?" +
+                                "\n[1] JA" +
+                                "\n[2] NEJ" +
+                                "\n---" +
+                                "\nDitt val: ");
 
                 string userChoice = Console.ReadLine();
 
@@ -78,25 +104,28 @@ namespace BankApp_GroupProject
                     if (choice == 1)
                     {
                         Balance += deposit;
-                        Deposit = deposit;
-                        Console.WriteLine($"Insättning av {deposit} accepterad. Nytt saldo: {Balance}");
+                        _Deposit = deposit;
+                        Console.Write($"\nInsättning av {deposit:c} accepterad." +
+                                      $"\nTryck \"ENTER\" för att gå vidare.");
+                        Console.ReadKey();
+                        break;
                     }
-                    else
+                    else if (choice == 2)
                     {
-                        Console.WriteLine("Insättning avbruten");
+                        Console.Write("\nInsättning avbruten." +
+                                      "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                        Console.ReadKey();
                         return 0;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Ogiltigt val. Vänligen välj 1 för JA eller 2 för NEJ");
+                    Console.Write("\nOgiltigt val. Vänligen välj 1 för JA eller 2 för NEJ." +
+                                  "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                    Console.Clear();
                 }
             }
-            else
-            {
-                Console.WriteLine("Ogiltig inmatning. Vänligen ange ett nummer mellan 1-999999");
-            }
-          
             return deposit;
         }
         public List<Transaction> GetTransactions()

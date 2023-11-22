@@ -125,6 +125,8 @@
                         // Anropa metod för att visa kontosaldo!
                         // Anropa metod för att visa kundens konton!
                         inloggedCustomer.PrintAccounts();
+                        Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+                        Console.ReadKey();
                         DisplayCustomerMenu();
                         break;
                     case "2":
@@ -132,7 +134,8 @@
                         DisplayAccountMenu();
                         break;
                     case "3":
-                        // Anropa metod för att föra över pengar!                     
+                        DisplayTransactionsMenu();
+                        // Anropa metod för att föra över pengar!                   
                         break;
                     case "4":
                         // Anropa metod för att sätta in pengar på ett konto!                    
@@ -164,13 +167,55 @@
                         inloggedCustomer.ChangePassword();
                         break;
                     case "0":
-                        Console.Write("\nDu loggas nu ut. Tryck \"ENTER\" för att återgå till huvudmenyn.\n" +
-                                      "\nHa en trevlig dag!");
+                        Console.Write("\nDu loggas nu ut. Ha en trevlig dag!\n" +
+                                      "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
                         Console.ReadKey();
                         DisplayMainMenu();
                         break;
                     default:
-                        Console.WriteLine("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
+                        Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
+                                        "\nTryck \"ENTER\" och försök igen.");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                }
+            }
+        }
+
+        public void DisplayTransactionsMenu()
+        {
+            string menuChoice = "";
+
+            while (menuChoice != "0")
+            {
+                Console.Clear();
+
+                Console.WriteLine("NAMN PÅ BANK\n" +
+                                "\n=================" +
+                                "\n[1] Överföra pengar mellan dina konton" +
+                                "\n[2] Överföra pengar till ett annat konto" +
+                                "\n-----------------" +
+                                "\n[0] Återgå till kontoöversikten" +
+                                "\n=================");
+
+                Console.Write("Ditt val: ");
+                menuChoice = Console.ReadLine();
+
+                switch (menuChoice)
+                {
+                    case "1":                        
+                        inloggedCustomer.InternalTransaction();
+                        break;
+                    case "2":
+                        // Anropa metod för att föra över pengar till ett annat, externt konto
+                        break;
+                    case "0":
+                        Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
+                        Console.ReadKey();
+                        DisplayCustomerMenu();
+                        break;
+                    default:
+                        Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
                                         "\nTryck \"ENTER\" och försök igen.");
                         Console.ReadKey();
                         Console.Clear();
@@ -203,18 +248,15 @@
                 {
                     case "1":
                         // Anropa metod för att skapa nytt konto!
-                        inloggedCustomer.NewCheckingAccount();
-                        DisplayCustomerMenu();
+                        inloggedCustomer.NewCheckingAccount();                        
                         break;
                     case "2":
                         // Anropa metod för att öppna ett nytt sparkonto!
-                        inloggedCustomer.NewSavingsAccount();
-                        DisplayCustomerMenu();                   
+                        inloggedCustomer.NewSavingsAccount();                                           
                         break;
                     case "3":
                         // Anropa metod för att öppna ett nytt konto med en annan valuta!
-                        inloggedCustomer.NewGlobalAccount();
-                        DisplayCustomerMenu();
+                        inloggedCustomer.NewGlobalAccount();                        
                         break;
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
@@ -222,7 +264,7 @@
                         DisplayCustomerMenu();
                         break;
                     default:
-                        Console.WriteLine("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
+                        Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
                                         "\nTryck \"ENTER\" och försök igen.");
                         Console.ReadKey();
                         Console.Clear();
@@ -286,7 +328,7 @@
                         Console.ReadKey();
                         break;
                     default:
-                        Console.WriteLine("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
+                        Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
                                         "\nTryck \"ENTER\" och försök igen.");
                         Console.ReadKey();
                         Console.Clear();
