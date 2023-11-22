@@ -29,10 +29,11 @@
                         case "1":
                             io.LogIn();
                             break;
-                        case "0":
-                            Console.Clear();
-                            Console.WriteLine("\nDu har valt att avsluta...\n" +
-                                    "\nVälkommen åter!");
+                        case "0":                            
+                            Console.Write("\nDu har valt att avsluta...");
+                            Thread.Sleep(2000);
+                            Console.Write("\nVälkommen åter!");
+                            Thread.Sleep(1500);
                             runApp = false;
                             break;
                         default:

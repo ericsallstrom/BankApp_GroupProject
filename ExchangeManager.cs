@@ -39,24 +39,24 @@ namespace BankApp_GroupProject
         public void SetCurrencies()
         {
             Console.Clear();
-            Console.WriteLine("Nuvarande växlingskurser" +
-                            "\n=========================" +
-                            $"\nEUR:\t {Currencies["EUR"]}" +
-                            $"\nUSD:\t {Currencies["USD"]}");
-            
-            Console.Write("\nSkriv in nytt värde för EUR: ");
-            Currencies["EUR"] = GetUserDecimalInput();
+            string currentCurrencies = "Nuvarande växlingskurser" +
+                                     "\n=========================" +
+                                    $"\nEUR:\t {Currencies["EUR"]}" +
+                                    $"\nUSD:\t {Currencies["USD"]}";
+            string setCurrencyEur = "\nSkriv in nytt värde för EUR: ";
+            string setCurrencyUsd = "\nSkriv in nytt värde för USD: ";
 
-            Console.Write("\nSkriv in nytt värde för USD: ");
-            Currencies["USD"] = GetUserDecimalInput();
+            Currencies["EUR"] = GetUserDecimalInput(setCurrencyEur, currentCurrencies);
+
+            Currencies["USD"] = GetUserDecimalInput(setCurrencyUsd, currentCurrencies);
 
             Console.Clear();
             Console.WriteLine("Växelkurser uppdaterade" +
-                "\n=========================" +
-                $"\nEUR:\t {Currencies["EUR"]}" +
-                $"\nUSD:\t {Currencies["USD"]}");
+                            "\n=========================" +
+                           $"\nEUR:\t {Currencies["EUR"]}" +
+                           $"\nUSD:\t {Currencies["USD"]}");
 
-            Console.WriteLine("\nTryck för att gå tillbaka");
+            Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
         }
 
@@ -87,10 +87,13 @@ namespace BankApp_GroupProject
             Console.WriteLine($"Resultat: {result}");
         }
 
-        public decimal GetUserDecimalInput()
+        public decimal GetUserDecimalInput(string question, string currentCurrencies)
         {
             while (true)
             {
+                Console.Clear();
+                Console.WriteLine(currentCurrencies);
+                Console.Write(question);
                 string userInput = Console.ReadLine();
 
                 if (decimal.TryParse(userInput, out decimal newRate) && newRate > 1.0m && newRate < 20.0m)
@@ -99,7 +102,9 @@ namespace BankApp_GroupProject
                 }
                 else
                 {
-                    Console.WriteLine("Ange en rimlig växelkurs!");
+                    Console.Write("\nOgiltig växelkurs! Ange växelkursen endast i siffror." +
+                                  "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
                 }
             }
         }
