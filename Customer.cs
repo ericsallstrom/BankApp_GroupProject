@@ -303,7 +303,7 @@ namespace BankApp_GroupProject
                             else
                             {
                                 Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
-                                    $"\nTryck \"ENTER\" och försök igen.");
+                                              $"\nTryck \"ENTER\" och försök igen.");
                                 Console.ReadKey();
                             }
                             break;
