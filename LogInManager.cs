@@ -40,6 +40,7 @@ namespace BankApp_GroupProject
             foreach (var customer in _customers) 
             {
                 Account checkingAccount = new();
+                checkingAccount.AccType = "Lönekonto";                
                 checkingAccount.Deposit(initialBalance);
 
                 customer.UserAccounts.Add(checkingAccount);
