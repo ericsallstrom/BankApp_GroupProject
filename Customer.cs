@@ -196,6 +196,38 @@ namespace BankApp_GroupProject
                 account.MakeDeposit();
             }
         }
+        //frågar om man vill göra en insättning till befintligt konto
+        public void AccountDeposit(Account account)
+        {
+            Console.Clear();
+            //visar konton       
+            PrintAccounts(false); //false för att inte skriva ut tillbaka
+        
+            Console.WriteLine();
+            Console.Write("Ange kontonummer för det konto du vill sätta in pengar på: ");
+            string accountNumberToDeposit = Console.ReadLine().Trim();
+
+            Account selectdAccount = UserAccounts.FirstOrDefault(account => account.AccountNumber.Trim() == accountNumberToDeposit);
+
+            if (selectdAccount != null)
+            {
+                selectdAccount.MakeDeposit();
+                Console.Clear();
+                Console.WriteLine($"\n\nDin insättning till ditt {selectdAccount.AccType}: {selectdAccount.AccountNumber} är klar. {account.DateCreated}" +
+                    $"\n\nDItt nya saldo är: {selectdAccount.Balance} {selectdAccount.Currency}");
+
+                Console.WriteLine();
+                Console.WriteLine("Tryck på valrfri tanget för att gå tillbaka");
+                Console.ReadKey();
+                
+            }                 
+            else
+            {
+                Console.WriteLine("Ogiltigt kontonummer. Tryck på valfri tangent för att gå tillbaka");
+                Console.ReadKey();
+            }
+
+        }
 
         //Skriver ut Grattis och kontoöversikt
         public void PrintAccountSuccess(Account account)
@@ -211,7 +243,7 @@ namespace BankApp_GroupProject
         }
 
         //Skriver ut kundens alla konton
-        public void PrintAccounts()
+        public void PrintAccounts(bool displayGoBackMessage =true)
         {
             Console.Clear();
             if (UserAccounts.Any() != true)
