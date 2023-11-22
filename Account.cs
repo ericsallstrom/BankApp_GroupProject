@@ -105,7 +105,7 @@ namespace BankApp_GroupProject
                     {
                         Balance += deposit;
                         _Deposit = deposit;
-                        Console.Write($"\nInsättning av {deposit:c} accepterad." +
+                        Console.Write($"\nInsättning av {deposit:c} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
                         Console.ReadKey();
                         break;
