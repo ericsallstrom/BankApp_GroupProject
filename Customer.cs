@@ -16,8 +16,7 @@ namespace BankApp_GroupProject
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<Account> UserAccounts { get; set; }
-        private LogInManager LogInManager { get; set; }
+        public List<Account> UserAccounts { get; set; }        
 
         public Customer(string username, string password, string firstname, string lastname)
             : base(username, password)
