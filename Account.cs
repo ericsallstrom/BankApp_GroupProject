@@ -107,6 +107,7 @@ namespace BankApp_GroupProject
                         _Deposit = deposit;
                         Console.Write($"\nInsättning av {deposit:c} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
+                        Transaction t1 = new(this, deposit, false);
                         Console.ReadKey();
                         break;
                     }
@@ -128,9 +129,10 @@ namespace BankApp_GroupProject
             }
             return deposit;
         }
+
+        //Hämtar listan med transaktionshistoriken
         public List<Transaction> GetAccountHistory()
         {
-            //Skriv kod för att hämta transaktionshistoriken
             return AccountHistory;
         }
 
