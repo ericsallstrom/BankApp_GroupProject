@@ -107,6 +107,7 @@ namespace BankApp_GroupProject
                         _Deposit = deposit;
                         Console.Write($"\nInsättning av {deposit:c} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
+                        Transaction t1 = new(this, deposit, false);
                         Console.ReadKey();
                         break;
                     }
