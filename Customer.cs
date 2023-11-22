@@ -411,8 +411,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
-                        Transaction f1 = new(transferAccount, transferSum, true);
-                        Transaction t1 = new(accountFirstIndex, transferSum, false);
+                        Transaction f1 = new(transferAccount, transferSum, "Överföring", true);
+                        Transaction t1 = new(accountFirstIndex, transferSum, "Överföring", false);
                         break;
                     case "2":
                         var accountSecondIndex = UserAccounts.ElementAt(1);
@@ -421,8 +421,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
-                        Transaction f2 = new(transferAccount, transferSum, true);
-                        Transaction t2 = new(accountSecondIndex, transferSum, false);
+                        Transaction f2 = new(transferAccount, transferSum, "Överföring", true);
+                        Transaction t2 = new(accountSecondIndex, transferSum, "Överföring", false);
                         break;
                     default:
                         Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
@@ -525,7 +525,7 @@ namespace BankApp_GroupProject
             decimal loan = Convert.ToDecimal(loanMoney);
 
             // Logg för kontohistorik
-            Transaction t1 = new(account, loan, false);
+            Transaction t1 = new(account, loan, "Lån", false);
 
             // Här plusas summan på lånade pengar tillsammans med pengarna som fanns redan i lönekontot
             account.Balance += Convert.ToDecimal(loan);
@@ -544,18 +544,19 @@ namespace BankApp_GroupProject
         public void PrintAllTransactions()
         {
             Console.Clear();
-            Console.WriteLine($"{FirstName} {FirstName} kontohistorik" +
+            Console.WriteLine($"{FirstName} {LastName}: Kontohistorik" +
                                                 "\n=================");
-
+            
             foreach (var account in UserAccounts)
             {
-                Console.WriteLine($"\n{account.AccType}");
-                Console.WriteLine($"===================================================");
+                //Console.WriteLine($"\n{account.AccType}");
+                Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tTyp\t\tDatum");
+                Console.WriteLine($"==========================================================================");
                 account.PrintAccountHistory();
             }
 
-            Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
-            Console.ReadKey();
+            Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
+            Console.ReadKey();            
         }
     }
 }

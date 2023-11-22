@@ -12,24 +12,24 @@ namespace BankApp_GroupProject
         public string SourceAccNumber { get; set; }
         public string SourceAcc { get; set; }
         public decimal TransactionAmount { get; set; }
-        public DateTime TransactionDate { get; set; }
+        public string TransactionType { get; set; }
+        public string TransactionDate { get; set; }
         public bool IsDebet { get; set; }
 
-        public Transaction(Account sourceAccount, decimal transactionAmount, bool isDebet)
+        //
+        public Transaction(Account sourceAccount, decimal transactionAmount,
+            string transactionType, bool isDebet)
         {
             if (isDebet) { transactionAmount *= -1; }
 
             SourceAcc = sourceAccount?.AccType ?? "Unknown";
             SourceAccNumber = sourceAccount.AccountNumber;
             TransactionAmount = transactionAmount;
-            TransactionDate = DateTime.Now;
+            TransactionType = transactionType;
+            TransactionDate = DateTime.Now.ToString("yyyy/mm/dd");
 
             // Loggar transaktionen till AccountHistory
             sourceAccount.GetAccountHistory().Add(this);
-        }
-
-        public void LogTransaction()
-        {
         }
     }
 }

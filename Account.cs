@@ -107,7 +107,7 @@ namespace BankApp_GroupProject
                         _Deposit = deposit;
                         Console.Write($"\nInsättning av {deposit:c} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
-                        Transaction t1 = new(this, deposit, false);
+                        Transaction t1 = new(this, deposit, "Insättning", false);
                         Console.ReadKey();
                         break;
                     }
@@ -138,9 +138,17 @@ namespace BankApp_GroupProject
 
         public void PrintAccountHistory()
         {
-            foreach (var item in AccountHistory)
+            if (AccountHistory.Any() != true)
             {
-                Console.WriteLine($"{item.SourceAccNumber}\t{item.SourceAcc}\t{item.TransactionAmount}\t{item.TransactionDate}");
+                Console.WriteLine("\nInga kontohändelser finns.\n");
+            }
+            else
+            {
+                foreach (var item in AccountHistory)
+                {
+                    Console.WriteLine($"{item.SourceAcc}\t{item.SourceAccNumber}\t{item.TransactionAmount}" +
+                        $"\t\t{item.TransactionType}\t{item.TransactionDate}");
+                }
             }
         }
     }
