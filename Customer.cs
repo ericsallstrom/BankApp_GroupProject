@@ -411,6 +411,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
+                        Transaction f1 = new(transferAccount, transferSum, true);
+                        Transaction t1 = new(accountFirstIndex, transferSum, false);
                         break;
                     case "2":
                         var accountSecondIndex = UserAccounts.ElementAt(1);
@@ -419,6 +421,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
+                        Transaction f2 = new(transferAccount, transferSum, true);
+                        Transaction t2 = new(accountSecondIndex, transferSum, false);
                         break;
                     default:
                         Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
@@ -533,6 +537,28 @@ namespace BankApp_GroupProject
             }
 
             // HÄR SKA KOD FÖR ATT LÄGGA TILL LÅNADE PENGAR PÅ LÖNEKONTO SKRIVAS
+
+            Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+            Console.ReadKey();
+        }
+
+        public List<Account> GetUserAccounts()
+        {
+            return UserAccounts;
+        }
+
+        public void PrintAllTransactions()
+        {
+            Console.Clear();
+            Console.WriteLine($"{FirstName} {FirstName} kontohistorik" +
+                                                "\n=================");
+
+            foreach (var account in UserAccounts)
+            {
+                Console.WriteLine($"\n{account.AccType}");
+                Console.WriteLine($"===================================================");
+                account.PrintAccountHistory();
+            }
 
             Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();

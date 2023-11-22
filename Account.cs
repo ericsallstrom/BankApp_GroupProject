@@ -128,9 +128,10 @@ namespace BankApp_GroupProject
             }
             return deposit;
         }
+
+        //Hämtar listan med transaktionshistoriken
         public List<Transaction> GetAccountHistory()
         {
-            //Skriv kod för att hämta transaktionshistoriken
             return AccountHistory;
         }
 

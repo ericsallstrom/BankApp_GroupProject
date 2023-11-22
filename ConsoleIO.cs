@@ -158,6 +158,7 @@
                         break;
                     case "6":
                         // Anropa metod för att se tidigare transaktioner!
+                        inloggedCustomer.PrintAllTransactions();
                         break;
                     case "7":
                         // Anropa metod för att visa kundens konton!
