@@ -31,7 +31,7 @@ namespace BankApp_GroupProject
         //Skapa Lönekontot
         public void NewCheckingAccount()
         {
-            Console.Clear();            
+            Console.Clear();
 
             if (!UserAccounts.Contains(_checkingAccount))
             {
@@ -60,7 +60,7 @@ namespace BankApp_GroupProject
         //skapa nytt sparkonto
         public void NewSavingsAccount()
         {
-            Console.Clear();            
+            Console.Clear();
 
             if (!UserAccounts.Contains(_savingsAccount))
             {
@@ -95,8 +95,8 @@ namespace BankApp_GroupProject
         public void NewGlobalAccount()
         {
             bool currencySet = false;
-            Console.Clear();            
-            
+            Console.Clear();
+
             if (!UserAccounts.Contains(_globalAccount))
             {
                 int answer = ProceedCreatingAccount(_globalAccount);
@@ -404,7 +404,7 @@ namespace BankApp_GroupProject
                         transferAccount.Withdraw(transferSum);
                         accountFirstIndex.Deposit(transferSum);
                         Console.Clear();
-                        Console.WriteLine($"\nÖverföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
+                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
                         break;
                     case "2":
@@ -412,7 +412,7 @@ namespace BankApp_GroupProject
                         transferAccount.Withdraw(transferSum);
                         accountSecondIndex.Deposit(transferSum);
                         Console.Clear();
-                        Console.WriteLine($"\nÖverföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
+                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
                         break;
                     default:
@@ -422,7 +422,7 @@ namespace BankApp_GroupProject
                 }
             }
             UserAccounts.Add(transferAccount);
-            Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+            Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
         }
 
