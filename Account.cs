@@ -27,9 +27,9 @@ namespace BankApp_GroupProject
 
         }
         protected string GenerateAccountNumber()
-        {
             //Förslag på att implementera ett random kontonummer, kan uvecklas vidare
             //Tanken är att man behöver anropa metoden när man skapar ett nytt konto i en annan klass
+        {
 
 
             Random random = new();
@@ -128,10 +128,18 @@ namespace BankApp_GroupProject
             }
             return deposit;
         }
-        public List<Transaction> GetTransactions()
+        public List<Transaction> GetAccountHistory()
         {
             //Skriv kod för att hämta transaktionshistoriken
             return AccountHistory;
+        }
+
+        public void PrintAccountHistory()
+        {
+            foreach (var item in AccountHistory)
+            {
+                Console.WriteLine($"{item.SourceAccNumber}\t{item.SourceAcc}\t{item.TransactionAmount}\t{item.TransactionDate}");
+            }
         }
     }
 }
