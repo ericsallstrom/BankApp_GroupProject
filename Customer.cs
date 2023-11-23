@@ -431,8 +431,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
-                        Transaction f1 = new(transferAccount, transferSum, "Överföring", true);
-                        Transaction t1 = new(accountFirstIndex, transferSum, "Överföring", false);
+                        Transaction f1 = new(transferAccount, transferAmount, "Överföring", true);
+                        Transaction t1 = new(accountFirstIndex, transferAmount, "Överföring", false);
                         break;
                     case "2":
                         var accountSecondIndex = UserAccounts.ElementAtOrDefault(1);
@@ -441,8 +441,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
-                        Transaction f2 = new(transferAccount, transferSum, "Överföring", true);
-                        Transaction t2 = new(accountSecondIndex, transferSum, "Överföring", false);
+                        Transaction f2 = new(transferAccount, transferAmount, "Överföring", true);
+                        Transaction t2 = new(accountSecondIndex, transferAmount, "Överföring", false);
                         break;
                     default:
                         Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
