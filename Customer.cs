@@ -429,7 +429,7 @@ namespace BankApp_GroupProject
 
                         if (transferAccount.Currency != accountFirstIndex.Currency)
                         {
-                            transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountFirstIndex.Currency, transferSum);
+                            transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountFirstIndex.Currency, transferAmount);
                         }
                  
                         transferAccount.Withdraw(transferAmount);
@@ -445,7 +445,7 @@ namespace BankApp_GroupProject
                         var accountSecondIndex = UserAccounts.ElementAt(1);
                         if (transferAccount.Currency != accountSecondIndex.Currency)
                         {
-                           transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountSecondIndex.Currency, transferSum);
+                           transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountSecondIndex.Currency, transferAmount);
 
                         }
    
@@ -462,16 +462,16 @@ namespace BankApp_GroupProject
                         var accountThirdIndex = UserAccounts.ElementAt(2);
                         if (transferAccount.Currency != accountThirdIndex.Currency)
                         {
-                          transferSum = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountThirdIndex.Currency, transferSum);
+                          transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountThirdIndex.Currency, transferAmount);
 
                         }
-                        transferAccount.Withdraw(transferSum);
-                        accountThirdIndex.Deposit(transferSum);
+                        transferAccount.Withdraw(transferAmount);
+                        accountThirdIndex.Deposit(transferAmount);
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountThirdIndex.AccType.ToLower()}t är {accountThirdIndex.GetBalance():c}.");
                         transferComplete = true;
-                        Transaction f3 = new(transferAccount, transferSum, "Överföring", true);
-                        Transaction t3 = new(accountThirdIndex, transferSum, "Överföring", false);
+                        Transaction f3 = new(transferAccount, transferAmount, "Överföring", true);
+                        Transaction t3 = new(accountThirdIndex, transferAmount, "Överföring", false);
                         break;
 
                     default:
