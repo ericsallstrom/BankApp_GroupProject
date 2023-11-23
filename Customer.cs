@@ -431,6 +431,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
+                        Transaction f1 = new(transferAccount, transferSum, "Överföring", true);
+                        Transaction t1 = new(accountFirstIndex, transferSum, "Överföring", false);
                         break;
                     case "2":
                         var accountSecondIndex = UserAccounts.ElementAtOrDefault(1);
@@ -439,6 +441,8 @@ namespace BankApp_GroupProject
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
+                        Transaction f2 = new(transferAccount, transferSum, "Överföring", true);
+                        Transaction t2 = new(accountSecondIndex, transferSum, "Överföring", false);
                         break;
                     default:
                         Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
@@ -640,22 +644,23 @@ namespace BankApp_GroupProject
             return accountChoice;
         }
 
-        // Method to loan money from the bank.
-        public void TakeLoan()
+        // Metod för att låna pengar från banken.
+        public void TakeLoan(Account account)
         {
-            // Using double so Math.Pow will work.
-            // double that saves the total balance of the accounts.
+            // Använder double så Math.Pow ska funka.          
             double totalBalance = 0;
             double interest = 0.0848;
-            // double that will be set in the while loop. Total loan.
+            // double som ska in i whileloop. Total loan.
             double loanMoney = 0;
-            // double that will be set in the while loop. Total loan time.
+            // double som ska vara i while loop. Total loan time.
             double loanTime = 0;
-            // double that will save checkingAccount formula for total debt and monthly debt.
+
+            // double som sparar hur mycket blir total lånet samt månad betaldvis.
             double totalDebt = 0;
             double monthlyDebt = 0;
 
-            // Clear console for design purpose.
+
+            // Clear console så att designen blir finare.
             Console.Clear();
             Console.WriteLine("Lånaeavdelningen");
             Console.WriteLine("*****************************");
@@ -669,26 +674,21 @@ namespace BankApp_GroupProject
                 return;
             }
             else
-                // Print out all of customers accounts and balance
+                // Print out all of customers accounts and balance         
+         
+                // skriver ut alla konton och hur mycket summa det finns på de.
                 foreach (var item in UserAccounts)
                 {
                     Console.WriteLine($"Konto nr\tSaldo\tValuta\tSkapat");
                     Console.WriteLine("****************************************************");
                     Console.WriteLine($"{item.AccountNumber}\t{item.Balance}\t{item.Currency}");
-                    // See if currency is foreign, and if so convert to SEK.
-                    if (item.Currency == "USD")
-                    {
-                        // KOD FÖR ATT KONVERTERA USD - SEK
-                    }
-                    else if (item.Currency == "EUR")
-                    {
-                        // KOD FÖR ATT KONVERTERA EUR - SEK
-                    }
-                    // Add all accounts balance to the totalBalance decimal.
+                   
+                    // adderar alla konton balans tillsammas med totalt balance.
                     totalBalance = totalBalance + Convert.ToDouble(item.Balance);
+                    
                 }
 
-            // while loop for exception handling while input loan 
+            // while loop när man hanterar input från användaren i loop. 
             while (true)
             {
                 // Print out total balance and how much customerAccounts can loan (max 5 times the amount of total balance). 
@@ -699,14 +699,23 @@ namespace BankApp_GroupProject
                 loanMoney = int.Parse(Console.ReadLine());
                 // See if customerAccounts can loan that amount of money or not. Also make sure it isnt possible to type in negative number.
                 if (loanMoney <= totalBalance * 5 && loanMoney > 0)
+                // Skriver ut totalbalans och hur mycket en kund kan låna pengar (max 5 gånger).
+                Console.WriteLine("\nDitt totala saldo är " + totalBalance + " kr" +
+                "\nDu kan låna max " + totalBalance * 5 + " kr" +
+                "\n\nHur mycket vill du låna? (Skriv 0 för att inte låna några pengar och gå tillbaka)");
+                // användare input
+                string userInput = Console.ReadLine();
+                Console.WriteLine();
+
+                // hanterar felhantering, ifall användaren vill låna mer eller mer än 5 gånger.
+                if (double.TryParse(userInput, out loanMoney) && loanMoney <= totalBalance * 5 && loanMoney > 0)
                 {
-                    Console.WriteLine("Du har valt att låna " + loanMoney + "kr. till 8,48% ränta.");
-                    // While loop for exception handling when input loan time.
+                    Console.WriteLine("Du har valt att låna " + loanMoney + " kr. till 8,48% ränta.");
                     while (true)
                     {
                         Console.WriteLine("Hur lång avbetalningstid? (1-10 år)");
-                        loanTime = int.Parse(Console.ReadLine());
-                        if (loanTime <= 10)
+                        userInput = Console.ReadLine();
+                        if (double.TryParse(userInput, out loanTime) && loanTime <= 10)
                         {
                             double totalPayments = loanTime * 12;
                             double interestRate = interest / 12;
@@ -719,7 +728,12 @@ namespace BankApp_GroupProject
                             Console.WriteLine("Du har angett ett felaktigt antal år, prova igen...");
                         }
                     }
-                    Console.WriteLine("Din totala skuld är " + Math.Round(totalDebt, 2) + "kr och din månadskostnad kommer bli " + Math.Round(monthlyDebt, 2) + "kr.");
+                    Console.WriteLine("Din totala skuld är " + Math.Round(totalDebt, 2) + " kr och din månadskostnad kommer bli " + Math.Round(monthlyDebt, 2) + " kr/månad.");
+                    break;
+                }
+                else if ((double.TryParse(userInput, out loanMoney) && loanMoney == 0))
+                {
+                    Console.WriteLine("Du har valt att inte långa några pengar.");
                     break;
                 }
                 else
@@ -729,10 +743,42 @@ namespace BankApp_GroupProject
 
             }
 
-            // HÄR SKA KOD FÖR ATT LÄGGA TILL LÅNADE PENGAR PÅ LÖNEKONTO SKRIVAS
+            //konvertera double till decimal
+            decimal loan = Convert.ToDecimal(loanMoney);
 
-            Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+            // Logg för kontohistorik
+            Transaction t1 = new(account, loan, "Lån", false);
+
+            // Här plusas summan på lånade pengar tillsammans med pengarna som fanns redan i lönekontot
+            account.Balance += Convert.ToDecimal(loan);
+            Console.WriteLine($"totalsumman på ditt lönekonto är {account.Balance} kr.");
+
+
+            Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
+        }
+
+        public List<Account> GetUserAccounts()
+        {
+            return UserAccounts;
+        }
+
+        public void PrintAllTransactions()
+        {
+            Console.Clear();
+            Console.WriteLine($"{FirstName} {LastName}: Kontohistorik" +
+                                                "\n=================");
+            
+            foreach (var account in UserAccounts)
+            {
+                //Console.WriteLine($"\n{account.AccType}");
+                Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tTyp\t\tDatum");
+                Console.WriteLine($"==========================================================================");
+                account.PrintAccountHistory();
+            }
+
+            Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
+            Console.ReadKey();            
         }
     }
 }

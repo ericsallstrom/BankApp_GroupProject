@@ -127,7 +127,6 @@
                         inloggedCustomer.PrintAccounts();
                         Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
-                        DisplayCustomerMenu();
                         break;
                     case "2":
                         // Går till en till meny där användaren kan välja att öppna sparkonto, skapa nytt bankkonto med eller utan en annan valuta.
@@ -148,16 +147,25 @@
                         else
                         {
                             Console.WriteLine("Du har inga konton att göra insättning på.");
-                        }
-                            DisplayCustomerMenu();
+                        }                        
                         break;
+
                     case "5":
-                        // Anropa metod för att låna pengar!
-                        inloggedCustomer.TakeLoan();
-                        DisplayCustomerMenu();
+                        // Anropa metod för att sätta in pengar på ett konto!                    
+                        // Skicka med ett konto från inloggad kundens konton
+                        if (inloggedCustomer.UserAccounts.Any()) //kollar om det finns konton
+                        {
+                            Account selectedAccount = inloggedCustomer.UserAccounts[0]; // Du kan välja det första kontot som ett exempel
+                            inloggedCustomer.TakeLoan(selectedAccount);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du har inga konton att göra insättning på.");
+                        }                        
                         break;
                     case "6":
                         // Anropa metod för att se tidigare transaktioner!
+                        inloggedCustomer.PrintAllTransactions();
                         break;
                     case "7":
                         // Anropa metod för att visa kundens konton!
@@ -212,8 +220,7 @@
                         break;
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
-                        Console.ReadKey();
-                        DisplayCustomerMenu();
+                        Console.ReadKey();                        
                         break;
                     default:
                         Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
@@ -262,7 +269,6 @@
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
                         Console.ReadKey();
-                        DisplayCustomerMenu();
                         break;
                     default:
                         Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
@@ -302,20 +308,17 @@
                 {
                     case "1":
                         LogInManager.CreateNewUser();
-                        DisplayAdminMenu();
                         break;
                     case "2":
                         LogInManager.PrintUsers();
                         Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
-                        DisplayAdminMenu();
                         break;
                     case "3":
                         LogInManager.DeleteExistingCustomer();
                         break;
                     case "4":                  
                         LogInManager.UnblockCustomer();
-                        DisplayAdminMenu();
                         break;
                     case "5":
                         // Sätt växelkurs
