@@ -742,16 +742,8 @@ namespace BankApp_GroupProject
                 "\nDu kan låna max " + totalBalance * 5 + "kr" +
                 "\n\nHur mycket vill du låna?");
                 // User input.
-                loanMoney = int.Parse(Console.ReadLine());
-                // See if customerAccounts can loan that amount of money or not. Also make sure it isnt possible to type in negative number.
-                if (loanMoney <= totalBalance * 5 && loanMoney > 0)
-                // Skriver ut totalbalans och hur mycket en kund kan låna pengar (max 5 gånger).
-                Console.WriteLine("\nDitt totala saldo är " + totalBalance + " kr" +
-                "\nDu kan låna max " + totalBalance * 5 + " kr" +
-                "\n\nHur mycket vill du låna? (Skriv 0 för att inte låna några pengar och gå tillbaka)");
-                // användare input
                 string userInput = Console.ReadLine();
-                Console.WriteLine();
+
 
                 // hanterar felhantering, ifall användaren vill låna mer eller mer än 5 gånger.
                 if (double.TryParse(userInput, out loanMoney) && loanMoney <= totalBalance * 5 && loanMoney > 0)
