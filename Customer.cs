@@ -296,9 +296,7 @@ namespace BankApp_GroupProject
                         $"\n\nDitt nya saldo är: {selectedAccount.Balance} {selectedAccount.Currency}");
 
                     Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
-                    Console.ReadKey();
-                    
-
+                    Console.ReadKey();                    
                 }
                 else
                 {
