@@ -307,20 +307,17 @@
                 {
                     case "1":
                         LogInManager.CreateNewUser();
-                        DisplayAdminMenu();
                         break;
                     case "2":
                         LogInManager.PrintUsers();
                         Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
-                        DisplayAdminMenu();
                         break;
                     case "3":
                         LogInManager.DeleteExistingCustomer();
                         break;
                     case "4":                  
                         LogInManager.UnblockCustomer();
-                        DisplayAdminMenu();
                         break;
                     case "5":
                         // Sätt växelkurs
