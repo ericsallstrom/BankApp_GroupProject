@@ -4,18 +4,16 @@ namespace BankApp_GroupProject
 {
 
     public class Account
-    {
-        //Lade till denna för att särskilja alla konton
+    {           
         public string AccType { get; set; }
-        public string AccountNumber { get; set; }
+        public string AccountNumber { get; set; }   
         public Decimal Balance { get; set; }
         public DateTime DateCreated { get; set; }
         public string Currency { get; set; }
         private List<Transaction> AccountHistory { get; set; }
         public decimal _Deposit { get; set; }
-        public bool IsSavingsAccount { get; set; }
+        public bool IsSavingsAccount { get; set; }        
 
-      
         public Account()
         {
             AccountNumber = GenerateAccountNumber();
@@ -24,11 +22,11 @@ namespace BankApp_GroupProject
             AccountHistory = new List<Transaction>();
             _Deposit = 0;
             Currency = "SEK";
-
         }
-        protected string GenerateAccountNumber()
-            //Förslag på att implementera ett random kontonummer, kan uvecklas vidare
-            //Tanken är att man behöver anropa metoden när man skapar ett nytt konto i en annan klass
+
+        protected static string GenerateAccountNumber()
+        //Förslag på att implementera ett random kontonummer, kan uvecklas vidare
+        //Tanken är att man behöver anropa metoden när man skapar ett nytt konto i en annan klass
         {
 
 
@@ -44,28 +42,28 @@ namespace BankApp_GroupProject
             return generatedNumber;
         }
 
-    public void SetCurency(string currency)
+        public void SetCurency(string currency)
         {
             Currency = currency;           
         }
 
         public decimal GetBalance()
-        {            
+        {
             return Balance;
         }
 
-        public void Deposit(decimal deposit)
+        public void Deposit(decimal amount)
         {
             //if (Currency != soruceCurrency)
             //{
-            //    deposit = ExchangeManager.Exchange.CurrencyConverter(soruceCurrency, Currency, deposit);
+            //    amount = ExchangeManager.Exchange.CurrencyConverter(soruceCurrency, Currency, deposit);
             //}
-            Balance += deposit;
+            Balance += amount;
         }
 
-        public void Withdraw(decimal sum)
+        public void Withdraw(decimal amount)
         {
-            Balance -= sum;
+            Balance -= amount;
         }
 
         public virtual decimal MakeDeposit()
@@ -107,7 +105,7 @@ namespace BankApp_GroupProject
                 {
                     if (choice == 1)
                     {
-                        Balance += deposit;
+                        Deposit(deposit);                        
                         _Deposit = deposit;
                         Console.Write($"\nInsättning av {deposit:c} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");

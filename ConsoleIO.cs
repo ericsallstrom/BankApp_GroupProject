@@ -127,7 +127,6 @@
                         inloggedCustomer.PrintAccounts();
                         Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
-                        DisplayCustomerMenu();
                         break;
                     case "2":
                         // Går till en till meny där användaren kan välja att öppna sparkonto, skapa nytt bankkonto med eller utan en annan valuta.
@@ -148,8 +147,7 @@
                         else
                         {
                             Console.WriteLine("Du har inga konton att göra insättning på.");
-                        }
-                            DisplayCustomerMenu();
+                        }                        
                         break;
 
                     case "5":
@@ -163,8 +161,7 @@
                         else
                         {
                             Console.WriteLine("Du har inga konton att göra insättning på.");
-                        }
-                        DisplayCustomerMenu();
+                        }                        
                         break;
                     case "6":
                         // Anropa metod för att se tidigare transaktioner!
@@ -219,11 +216,11 @@
                         break;
                     case "2":
                         // Anropa metod för att föra över pengar till ett annat, externt konto
+                        inloggedCustomer.ExternalTransaction();
                         break;
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
-                        Console.ReadKey();
-                        DisplayCustomerMenu();
+                        Console.ReadKey();                        
                         break;
                     default:
                         Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
@@ -272,7 +269,6 @@
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
                         Console.ReadKey();
-                        DisplayCustomerMenu();
                         break;
                     default:
                         Console.Write("\nOgiltigt menyval! Var god välj ett alternativ från menyn." +
@@ -312,20 +308,17 @@
                 {
                     case "1":
                         LogInManager.CreateNewUser();
-                        DisplayAdminMenu();
                         break;
                     case "2":
                         LogInManager.PrintUsers();
                         Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
-                        DisplayAdminMenu();
                         break;
                     case "3":
                         LogInManager.DeleteExistingCustomer();
                         break;
                     case "4":                  
                         LogInManager.UnblockCustomer();
-                        DisplayAdminMenu();
                         break;
                     case "5":
                         // Sätt växelkurs
