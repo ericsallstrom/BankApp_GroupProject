@@ -30,12 +30,12 @@ namespace BankApp_GroupProject
         public void NewCheckingAccount(Customer customer)
         {
             Console.Clear();
-            
+
             Account checkingAccount = new(AccountType.Checking, customer);
 
             checkingAccount.SetCurency("SEK");
- 
-             if (!customer.CustomerAccounts.Any(a => a.Type == AccountType.Checking))
+
+            if (!customer.CustomerAccounts.Any(a => a.Type == AccountType.Checking))
             {
                 int answer = ProceedCreatingAccount(checkingAccount);
 
@@ -296,7 +296,7 @@ namespace BankApp_GroupProject
                         $"\n\nDitt nya saldo är: {selectedAccount.Balance} {selectedAccount.Currency}");
 
                     Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
-                    Console.ReadKey();                    
+                    Console.ReadKey();
                 }
                 else
                 {
@@ -353,7 +353,7 @@ namespace BankApp_GroupProject
 
                 if (selectedAccount != null)
                 {
-                    selectedAccount.Deposit(transferAmount);
+                    selectedAccount.MakeDeposit(transferAmount);
                     transferAccount.Withdraw(transferAmount);
                     Console.Write($"\nÖverföringen lyckades! Tryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
@@ -422,23 +422,24 @@ namespace BankApp_GroupProject
                         if (transferAccount.Currency != accountFirstIndex.Currency)
                         {
                             transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountFirstIndex.Currency, originalTransferAmount);
-                        }                        
+                        }
                         else
                         {
-                            transferAmount = originalTransferAmount;                         
+                            transferAmount = originalTransferAmount;
                         }
-                        
+
                         transferAccount.Withdraw(originalTransferAmount);
-                        accountFirstIndex.Deposit(transferAmount);
+                        accountFirstIndex.MakeDeposit(transferAmount);
 
                         Console.Clear();
-                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");                        
+                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.GetAccountType(accountFirstIndex).ToLower()}t " +
+                                          $"är {accountFirstIndex.GetBalance():c}.");
                         Transaction f1 = new(transferAccount, originalTransferAmount, "Överföring", true);
                         Transaction t1 = new(accountFirstIndex, originalTransferAmount, "Överföring", false);
                         transferComplete = true;
                         break;
                     case "2":
-                        var accountSecondIndex = CustomerAccounts.ElementAt(1);                                                                                 
+                        var accountSecondIndex = CustomerAccounts.ElementAt(1);
 
                         if (transferAccount.Currency != accountSecondIndex.Currency)
                         {
@@ -448,18 +449,19 @@ namespace BankApp_GroupProject
                         {
                             transferAmount = originalTransferAmount;
                         }
-                        
+
                         transferAccount.Withdraw(originalTransferAmount);
-                        accountSecondIndex.Deposit(transferAmount);
+                        accountSecondIndex.MakeDeposit(transferAmount);
 
                         Console.Clear();
-                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");                        
+                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.GetAccountType(accountSecondIndex).ToLower()}t " +
+                                          $"är {accountSecondIndex.GetBalance():c}.");
                         Transaction f2 = new(transferAccount, originalTransferAmount, "Överföring", true);
                         Transaction t2 = new(accountSecondIndex, originalTransferAmount, "Överföring", false);
                         transferComplete = true;
                         break;
                     case "3":
-                        var accountThirdIndex = CustomerAccounts.ElementAt(2);                                                                
+                        var accountThirdIndex = CustomerAccounts.ElementAt(2);
 
                         if (transferAccount.Currency != accountThirdIndex.Currency)
                         {
@@ -470,10 +472,11 @@ namespace BankApp_GroupProject
                             transferAmount = originalTransferAmount;
                         }
                         transferAccount.Withdraw(originalTransferAmount);
-                        accountThirdIndex.Deposit(transferAmount);
+                        accountThirdIndex.MakeDeposit(transferAmount);
 
                         Console.Clear();
-                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountThirdIndex.AccType.ToLower()}t är {accountThirdIndex.GetBalance():c}.");                        
+                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountThirdIndex.GetAccountType(accountThirdIndex).ToLower()}t " +
+                                          $"är {accountThirdIndex.GetBalance():c}.");
                         Transaction f3 = new(transferAccount, originalTransferAmount, "Överföring", true);
                         Transaction t3 = new(accountThirdIndex, originalTransferAmount, "Överföring", false);
                         transferComplete = true;

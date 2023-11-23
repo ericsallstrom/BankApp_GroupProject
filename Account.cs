@@ -20,17 +20,15 @@ namespace BankApp_GroupProject
         private List<Transaction> AccountHistory { get; set; }
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
         public string AccountUsername { get; set; }
-
-        public string AccType { get; set; }
-        public decimal _Deposit { get; set; }
-        public bool IsSavingsAccount { get; set; }
+        public decimal Deposit { get; set; }
 
         public Account(AccountType type, Customer customer)
         {
             AccountNumber = GenerateAccountNumber();
             Balance = 0.0m;
-            DateCreated = DateTime.Now;            
+            DateCreated = DateTime.Now;
             Currency = "SEK";
+            Deposit = 0.0m;
             Type = type;
             Customer = customer;
             AccountHistory = new List<Transaction>();
@@ -64,9 +62,9 @@ namespace BankApp_GroupProject
             return Balance;
         }
 
-        public void Deposit(decimal amount)
+        public void MakeDeposit(decimal amount)
         {
-          
+
             Balance += amount;
         }
 
@@ -129,8 +127,8 @@ namespace BankApp_GroupProject
                 {
                     if (choice == 1)
                     {
-                        Deposit(deposit);
-                        _Deposit = deposit;
+                        MakeDeposit(deposit);
+                        Deposit = deposit;
                         Console.Write($"\nInsättning av {deposit} {Currency} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
                         Transaction t1 = new(this, deposit, "Insättning", false);

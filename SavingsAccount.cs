@@ -49,7 +49,7 @@
         public void CalcInterest()
         {
             double selectedInterestRate = Interest;
-            decimal interestAmount = _Deposit * (decimal)selectedInterestRate * InterestTime / 12;
+            decimal interestAmount = Deposit * (decimal)selectedInterestRate * InterestTime / 12;
 
             if (interestAmount >= 1)
             {
