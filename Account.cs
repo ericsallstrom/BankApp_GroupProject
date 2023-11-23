@@ -46,7 +46,7 @@ namespace BankApp_GroupProject
 
     public void SetCurency(string currency)
         {
-            Currency = currency;
+            Currency = currency;           
         }
 
         public decimal GetBalance()
@@ -56,7 +56,11 @@ namespace BankApp_GroupProject
 
         public void Deposit(decimal deposit)
         {
-            Balance = deposit;
+            //if (Currency != soruceCurrency)
+            //{
+            //    deposit = ExchangeManager.Exchange.CurrencyConverter(soruceCurrency, Currency, deposit);
+            //}
+            Balance += deposit;
         }
 
         public void Withdraw(decimal sum)

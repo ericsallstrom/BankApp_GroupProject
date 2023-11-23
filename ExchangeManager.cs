@@ -5,13 +5,13 @@ namespace BankApp_GroupProject
     {
         //Statisk så vi kommer åt metoderna överallt utan att behöva göra nya instanser.
         //Det i sin tur skyddar default värdena från att bli överskrivna.
-        private static ExchangeManager _exchange;
+        public static ExchangeManager _exchange;
 
         //Dictionary som håller valutorna, även där vi sätter växelkurs.
-        private Dictionary<string, decimal> Currencies { get; set; }
+        public Dictionary<string, decimal> Currencies { get; set; }
 
         //Constructorn som bara körs en gång.
-        private ExchangeManager()
+        public ExchangeManager()
         {
             //Skapar en ny dictionary av valutor med defaultvärden för växelkurserna.
             Currencies = new Dictionary<string, decimal>()
@@ -61,7 +61,7 @@ namespace BankApp_GroupProject
         }
 
         //Valutakonvertering med return 
-        public decimal CurrencyConverter(string sourceCurrency, string targetCurrency, int userAmount)
+        public decimal CurrencyConverter(string sourceCurrency, string targetCurrency, decimal userAmount)
         {
             decimal sourceRate = Currencies[sourceCurrency];
             decimal targetRate = Currencies[targetCurrency];
@@ -73,7 +73,7 @@ namespace BankApp_GroupProject
         }
 
         //Valutakonvertering med sumering
-        public void CurrencyConvertSummary(string sourceCurrency, string targetCurrency, int userAmount)
+        public void CurrencyConvertSummary(string sourceCurrency, string targetCurrency, decimal userAmount)
         {
             decimal sourceRate = Currencies[sourceCurrency];
             decimal targetRate = Currencies[targetCurrency];
