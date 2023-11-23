@@ -19,6 +19,11 @@ namespace BankApp_GroupProject
             Password = password;
         }
 
+        public string GetUsername()
+        {
+            return Username;
+        }
+
         public void Block()
         {
             IsBlocked = true;

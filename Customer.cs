@@ -10,13 +10,16 @@ namespace BankApp_GroupProject
 {
     public class Customer : User
     {
-        private readonly Account _checkingAccount = new() { AccType = "Lönekonto" };
-        private readonly Account _globalAccount = new() { AccType = "Utlandskonto" };
-        private readonly SavingsAccount _savingsAccount = new() { AccType = "Sparkonto" };
+        private Account _checkingAccount { get; set; }
+        private Account _globalAccount { get; set; }
+        private SavingsAccount _savingsAccount { get; set; }
+
+        private static readonly LogInManager LIM = new();
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<Account> UserAccounts { get; set; }        
+
+        public List<Account> UserAccounts = new();
 
         public Customer(string username, string password, string firstname, string lastname)
             : base(username, password)
@@ -25,12 +28,17 @@ namespace BankApp_GroupProject
             LastName = lastname;
             IsAdmin = false;
             IsBlocked = false;
-            UserAccounts = new List<Account>();            
-        }    
+            _checkingAccount = new() { AccType = "Lönekonto" };
+        }
 
         public Account GetCheckingAccount()
         {
             return _checkingAccount;
+        }
+
+        public void AddUserAccount(Account account)
+        {
+            UserAccounts.Add(account);
         }
 
         //Skapa Lönekontot
@@ -38,7 +46,7 @@ namespace BankApp_GroupProject
         {
             Console.Clear();
 
-            if (!UserAccounts.Contains(_checkingAccount))
+            if (!UserAccounts.Exists(a => a.AccType == "Lönekonto"))
             {
                 int answer = ProceedCreatingAccount(_checkingAccount);
 
@@ -66,15 +74,16 @@ namespace BankApp_GroupProject
         public void NewSavingsAccount()
         {
             Console.Clear();
+            _savingsAccount = new SavingsAccount() { AccType = "Sparkonto" };
 
-            if (!UserAccounts.Contains(_savingsAccount))
+            if (!UserAccounts.Exists(a => a.AccType == "Sparkonto"))
             {
                 int answer = ProceedCreatingAccount(_savingsAccount);
 
                 if (answer == 1)
                 {
-                    _savingsAccount.InterestChoice();
                     UserAccounts.Add(_savingsAccount);
+                    _savingsAccount.InterestChoice();
 
                     DoYouWantToDeposit(_savingsAccount);
                     PrintAccountSuccess(_savingsAccount);
@@ -84,13 +93,14 @@ namespace BankApp_GroupProject
                 }
                 else
                 {
+                    UserAccounts.Remove(_savingsAccount);
                     Console.Write("\nDu har valt att avbryta processen! Tryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
                 }
             }
             else
             {
-                Console.Write($"Du har redan ett {_checkingAccount.AccType.ToLower()}!\n" +
+                Console.Write($"Du har redan ett {_savingsAccount.AccType.ToLower()}!\n" +
                               "\nTryck \"ENTER\" för att återgå till föregående meny.");
                 Console.ReadKey();
             }
@@ -101,9 +111,11 @@ namespace BankApp_GroupProject
         {
             bool currencySet = false;
             Console.Clear();
+            _globalAccount = new Account() { AccType = "Utlandskonto" };
 
-            if (!UserAccounts.Contains(_globalAccount))
+            if (!UserAccounts.Exists(a => a.AccType == "Utlandskonto"))
             {
+                UserAccounts.Add(_globalAccount);
                 int answer = ProceedCreatingAccount(_globalAccount);
 
                 if (answer == 1)
@@ -136,12 +148,12 @@ namespace BankApp_GroupProject
                                 break;
                         }
                     }
-                    UserAccounts.Add(_globalAccount);
                     PrintAccountSuccess(_globalAccount);
                     DoYouWantToDeposit(_globalAccount);
                 }
                 else
                 {
+                    UserAccounts.Remove(_globalAccount);
                     Console.Write("\nDu har valt att avbryta processen! Tryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
                 }
@@ -198,38 +210,6 @@ namespace BankApp_GroupProject
                 account.MakeDeposit();
             }
         }
-        //frågar om man vill göra en insättning till befintligt konto
-        public void AccountDeposit(Account account)
-        {
-            Console.Clear();
-            //visar konton       
-            PrintAccounts(false); //false för att inte skriva ut tillbaka
-
-            Console.WriteLine();
-            Console.Write("Ange kontonummer för det konto du vill sätta in pengar på: ");
-            string accountNumberToDeposit = Console.ReadLine().Trim();
-
-            Account selectdAccount = UserAccounts.FirstOrDefault(account => account.AccountNumber.Trim() == accountNumberToDeposit);
-
-            if (selectdAccount != null)
-            {
-                selectdAccount.MakeDeposit();
-                Console.Clear();
-                Console.WriteLine($"\n\nDin insättning till ditt {selectdAccount.AccType}: {selectdAccount.AccountNumber} är klar. {account.DateCreated}" +
-                    $"\n\nDItt nya saldo är: {selectdAccount.Balance} {selectdAccount.Currency}");
-
-                Console.WriteLine();
-                Console.WriteLine("Tryck på valrfri tanget för att gå tillbaka");
-                Console.ReadKey();
-
-            }
-            else
-            {
-                Console.WriteLine("Ogiltigt kontonummer. Tryck på valfri tangent för att gå tillbaka");
-                Console.ReadKey();
-            }
-
-        }
 
         //Skriver ut Grattis och kontoöversikt
         public void PrintAccountSuccess(Account account)
@@ -248,9 +228,12 @@ namespace BankApp_GroupProject
         public void PrintAccounts(bool displayGoBackMessage = true)
         {
             Console.Clear();
+
             if (UserAccounts.Any() != true)
             {
-                Console.WriteLine("Du har för närvarande inga konton.\n");
+                Console.Write("Du har för närvarande inga konton.\n" +
+                    "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                Console.ReadKey();
             }
             else
             {
@@ -265,90 +248,6 @@ namespace BankApp_GroupProject
             }
         }
 
-        private void TransferFromAccount()
-        {
-            bool RunMenu = true;
-
-            if (UserAccounts.Count <= 1)
-            {
-                Console.Clear();
-                Console.Write("Du behöver minst två konton för att kunna göra en intern överföring.\n" +
-                            "\nTryck \"ENTER\" för att återgå till föregående meny.");
-                Console.ReadKey();
-            }
-            else
-            {
-                while (RunMenu)
-                {
-                    PrintAccounts();
-                    int counter = 1;
-                    Console.WriteLine("Välj ett av dina konton du vill föra över pengar från:");
-                    UserAccounts.ForEach(a => Console.Write($"[{counter++}] {a.AccType}\n"));
-                    Console.Write("---" +
-                                "\n[0] Avsluta överföringen" +
-                                "\n---" +
-                                "\nVälj konto: ");
-
-                    string accountChoice = Console.ReadLine();
-
-                    switch (accountChoice)
-                    {
-                        case "1":
-                            var accountFirstIndex = UserAccounts.ElementAt(0);
-                            if (CheckFunds(accountFirstIndex))
-                            {
-                                TransferToAccount(accountFirstIndex);
-                                RunMenu = false;
-                            }
-                            else
-                            {
-                                Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
-                                              $"\nTryck \"ENTER\" och försök igen.");
-                                Console.ReadKey();
-                            }
-                            break;
-                        case "2":
-                            var accountSecondIndex = UserAccounts.ElementAt(1);
-                            if (CheckFunds(accountSecondIndex))
-                            {
-                                TransferToAccount(accountSecondIndex);
-                                RunMenu = false;
-                            }
-                            else
-                            {
-                                Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
-                                    $"\nTryck\"ENTER\" och försök igen.");
-                                Console.ReadKey();
-                            }
-                            break;
-                        case "3":
-                            var accountThirdIndex = UserAccounts.ElementAt(2);
-                            if (CheckFunds(accountThirdIndex))
-                            {
-                                TransferToAccount(accountThirdIndex);
-                                RunMenu = false;
-                            }
-                            else
-                            {
-                                Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
-                                    $"\nTryck\"ENTER\" och försök igen.");
-                                Console.ReadKey();
-                            }
-                            break;
-                        case "0":
-                            Console.Write("\nDu har valt att avbryta processen! Tryck \"ENTER\" för att återgå till föregående meny.");
-                            Console.ReadKey();
-                            RunMenu = false;
-                            break;
-                        default:
-                            Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
-                            Console.ReadKey();
-                            break;
-                    }
-                }
-            }
-        }
-
         public bool CheckFunds(Account account)
         {
             if (account.GetBalance() > 0)
@@ -358,20 +257,78 @@ namespace BankApp_GroupProject
             return false;
         }
 
-        private void TransferToAccount(Account transferAccount)
+        public void PrintEveryCustomersAccount(bool displayGoBackMessage = true)
         {
-            bool transferComplete = false;
-            decimal transferSum = 0;
+            Console.Clear();
+
+            if (UserAccounts.Count == 0)
+            {
+                Console.WriteLine("För tillfället existerar inga kundkonton i banken.\n");
+            }
+            else
+            {
+                var customers = LIM.GetAllCustomers();
+
+                Console.WriteLine("EXTERNA KUNDKONTON" +
+                                "\n######");
+
+                foreach (var customer in customers)
+                {
+                    foreach (var acc in UserAccounts)
+                    {
+                        Console.WriteLine($"Användarnamn: {customer.Username}\tKontonr: {acc.AccountNumber}\tKontotyp: {acc.AccType}\tAntal konton i UserAccounts: {UserAccounts.Count}\n");
+                    }
+                }
+            }
+        }
+        //frågar om man vill göra en insättning till befintligt konto
+        public void AccountDeposit(Account account)
+        {
+            while (true)
+            {
+                Console.Clear();
+                //visar konton       
+                PrintAccounts(false); //false för att inte skriva ut tillbaka
+
+                Console.Write("Ange kontonummret för det konto du önskar sätta in pengar på." +
+                            "\nKontonr: ");
+
+                string accountNrToDeposit = Console.ReadLine().Trim();
+
+                Account selectedAccount = UserAccounts.FirstOrDefault(account => account.AccountNumber.Trim() == accountNrToDeposit);
+
+                if (selectedAccount != null)
+                {
+                    selectedAccount.MakeDeposit();
+                    Console.Clear();
+                    Console.WriteLine($"\n\nDin insättning till ditt {selectedAccount.AccType.ToLower()}: {selectedAccount.AccountNumber} är klar. {account.DateCreated}" +
+                        $"\n\nDitt nya saldo är: {selectedAccount.Balance} {selectedAccount.Currency}");
+
+                    Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
+                    Console.ReadKey();
+
+                }
+                else
+                {
+                    Console.Write("\nOgiltigt kontonummer! Tryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+            }
+        }
+
+        private void TransferToExternalAccount(Account transferAccount)
+        {
+            decimal transferAmount = 0;
 
             while (true)
             {
                 PrintAccounts();
-                Console.Write($"Hur mycket vill du föra över från {transferAccount.AccType.ToLower()}t?" +
-                              $"\nBelopp: ");
+                Console.Write($"Hur mycket pengar vill du föra över från ditt {transferAccount.AccType.ToLower()}?" +
+                            $"\nBelopp: ");
 
-                if (decimal.TryParse(Console.ReadLine(), out transferSum))
+                if (decimal.TryParse(Console.ReadLine(), out transferAmount))
                 {
-                    if (transferSum <= transferAccount.GetBalance())
+                    if (transferAmount <= transferAccount.GetBalance())
                     {
                         break;
                     }
@@ -390,12 +347,75 @@ namespace BankApp_GroupProject
                 }
             }
 
+            bool transferComplete = false;
+
+            while (!transferComplete)
+            {
+                PrintEveryCustomersAccount();
+
+                Console.Write("Ange kontonummret för det konto du önskar föra över pengar till." +
+                            "\nKontonr: ");
+
+                string accountNrToDeposit = Console.ReadLine();
+
+                if (UserAccounts.Exists(a => a.AccountNumber == accountNrToDeposit))
+                {
+                    var selectedAccount = UserAccounts.Find(a => a.AccountNumber == accountNrToDeposit);
+
+                    selectedAccount.Deposit(transferAmount);
+                    transferAccount.Withdraw(transferAmount);
+                    Console.Write($"\nÖverföringen lyckades! Tryck \"ENTER\" för att återgå till föregående meny.");
+                    Console.ReadKey();
+                    transferComplete = true;
+                }
+                else
+                {
+                    Console.Write("\nOgiltigt kontonummer! Tryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+            }
+        }
+
+        private void TransferToInternalAccount(Account transferAccount)
+        {
+            decimal transferAmount = 0;
+
+            while (true)
+            {
+                PrintAccounts();
+                Console.Write($"Hur mycket vill du föra över från {transferAccount.AccType.ToLower()}t?" +
+                              $"\nBelopp: ");
+
+                if (decimal.TryParse(Console.ReadLine(), out transferAmount))
+                {
+                    if (transferAmount <= transferAccount.GetBalance())
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.Write($"\nDet finns inte tillräckligt med pengar på kontot!" +
+                                        $"\nTryck \"ENTER\" och försök igen.");
+                        Console.ReadKey();
+                    }
+                }
+                else
+                {
+                    Console.Write("\nFelaktig inmatning! Ange beloppet endast i siffror." +
+                                    "\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
+            }
+
+            bool transferComplete = false;
+
             while (!transferComplete)
             {
                 UserAccounts.Remove(transferAccount);
                 PrintAccounts();
                 int counter = 1;
-                Console.WriteLine($"Välj vilket konto du vill föra över {transferSum:c} till:");
+                Console.WriteLine($"Välj det konto du vill föra över {transferAmount:c} till.\n");
+
                 UserAccounts.ForEach(a => Console.Write($"[{counter++}] {a.AccType}\n"));
                 Console.Write("---" +
                            "\nVälj konto: ");
@@ -405,17 +425,17 @@ namespace BankApp_GroupProject
                 switch (accountChoice)
                 {
                     case "1":
-                        var accountFirstIndex = UserAccounts.ElementAt(0);
-                        transferAccount.Withdraw(transferSum);
-                        accountFirstIndex.Deposit(transferSum);
+                        var accountFirstIndex = UserAccounts.ElementAtOrDefault(0);
+                        transferAccount.Withdraw(transferAmount);
+                        accountFirstIndex.Deposit(transferAmount);
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
                         break;
                     case "2":
-                        var accountSecondIndex = UserAccounts.ElementAt(1);
-                        transferAccount.Withdraw(transferSum);
-                        accountSecondIndex.Deposit(transferSum);
+                        var accountSecondIndex = UserAccounts.ElementAtOrDefault(1);
+                        transferAccount.Withdraw(transferAmount);
+                        accountSecondIndex.Deposit(transferAmount);
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
@@ -427,6 +447,7 @@ namespace BankApp_GroupProject
                 }
             }
             UserAccounts.Add(transferAccount);
+            UserAccounts.Reverse();
             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
         }
@@ -434,13 +455,189 @@ namespace BankApp_GroupProject
         //Metod för att göra överföringar mellan egna konton
         public void InternalTransaction()
         {
-            TransferFromAccount();
+            bool RunMenu = true;
+
+            if (UserAccounts.Count <= 1)
+            {
+                Console.Clear();
+                Console.Write("Du behöver minst två konton för att kunna göra en intern överföring.\n" +
+                            "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                Console.ReadKey();
+            }
+            else
+            {
+                while (RunMenu)
+                {
+                    string accountChoice = ChooseAccountForWithdraw();
+
+                    switch (accountChoice)
+                    {
+                        case "1":
+                            var accountFirstIndex = UserAccounts.ElementAtOrDefault(0);
+                            if (CheckFunds(accountFirstIndex))
+                            {
+                                TransferToInternalAccount(accountFirstIndex);
+                                RunMenu = false;
+                            }
+                            else
+                            {
+                                Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
+                                              $"\nTryck \"ENTER\" och försök igen.");
+                                Console.ReadKey();
+                            }
+                            break;
+                        case "2":
+                            var accountSecondIndex = UserAccounts.ElementAtOrDefault(1);
+                            if (CheckFunds(accountSecondIndex))
+                            {
+                                TransferToInternalAccount(accountSecondIndex);
+                                RunMenu = false;
+                            }
+                            else
+                            {
+                                Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
+                                    $"\nTryck\"ENTER\" och försök igen.");
+                                Console.ReadKey();
+                            }
+                            break;
+                        case "3":
+                            var accountThirdIndex = UserAccounts.ElementAtOrDefault(2);
+                            if (accountThirdIndex != null)
+                            {
+                                if (CheckFunds(accountThirdIndex))
+                                {
+                                    TransferToInternalAccount(accountThirdIndex);
+                                    RunMenu = false;
+                                }
+                                else
+                                {
+                                    Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
+                                        $"\nTryck\"ENTER\" och försök igen.");
+                                    Console.ReadKey();
+                                }
+                            }
+                            else
+                            {
+                                goto default;
+                            }
+                            break;
+                        case "0":
+                            Console.Write("\nDu har valt att avbryta processen! Tryck \"ENTER\" för att återgå till föregående meny.");
+                            Console.ReadKey();
+                            RunMenu = false;
+                            break;
+                        default:
+                            Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
+                            Console.ReadKey();
+                            break;
+                    }
+                }
+            }
         }
 
         //Metod för att göra överföringar mellan kunders konton
         public void ExternalTransaction()
         {
+            bool RunMenu = true;
 
+            if (UserAccounts.Count == 0)
+            {
+                Console.Clear();
+                Console.Write("Du behöver minst ett konto för att kunna göra en extern överföring.\n" +
+                            "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                Console.ReadKey();
+            }
+            else
+            {
+                while (RunMenu)
+                {
+                    string accountChoice = ChooseAccountForWithdraw();
+
+                    switch (accountChoice)
+                    {
+                        case "1":
+                            var accountFirstIndex = UserAccounts.ElementAtOrDefault(0);
+                            if (CheckFunds(accountFirstIndex))
+                            {
+                                TransferToExternalAccount(accountFirstIndex);
+                                RunMenu = false;
+                            }
+                            else
+                            {
+                                Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
+                                              $"\nTryck \"ENTER\" och försök igen.");
+                                Console.ReadKey();
+                            }
+                            break;
+                        case "2":
+                            var accountSecondIndex = UserAccounts.ElementAtOrDefault(1);
+                            if (accountSecondIndex != null)
+                            {
+                                if (CheckFunds(accountSecondIndex))
+                                {
+                                    TransferToExternalAccount(accountSecondIndex);
+                                    RunMenu = false;
+                                }
+                                else
+                                {
+                                    Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
+                                        $"\nTryck\"ENTER\" och försök igen.");
+                                    Console.ReadKey();
+                                }
+                            }
+                            else
+                            {
+                                goto default;
+                            }
+                            break;
+                        case "3":
+                            var accountThirdIndex = UserAccounts.ElementAtOrDefault(2);
+                            if (accountThirdIndex != null)
+                            {
+                                if (CheckFunds(accountThirdIndex))
+                                {
+                                    TransferToExternalAccount(accountThirdIndex);
+                                    RunMenu = false;
+                                }
+                                else
+                                {
+                                    Console.Write($"\nKontot saknar täckning. Välj ett annat konto." +
+                                        $"\nTryck\"ENTER\" och försök igen.");
+                                    Console.ReadKey();
+                                }
+                            }
+                            else
+                            {
+                                goto default;
+                            }
+                            break;
+                        case "0":
+                            Console.Write("\nDu har valt att avbryta processen! Tryck \"ENTER\" för att återgå till föregående meny.");
+                            Console.ReadKey();
+                            RunMenu = false;
+                            break;
+                        default:
+                            Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
+                            Console.ReadKey();
+                            break;
+                    }
+                }
+            }
+        }
+
+        private string ChooseAccountForWithdraw()
+        {
+            PrintAccounts();
+            int counter = 1;
+            Console.WriteLine("Välj det konto du vill föra över pengar från.\n");
+            UserAccounts.ForEach(a => Console.Write($"[{counter++}] {a.AccType}\n"));
+            Console.Write("---" +
+                        "\n[0] Avsluta överföringen" +
+                        "\n---" +
+                        "\nVälj konto: ");
+
+            string accountChoice = Console.ReadLine();
+            return accountChoice;
         }
 
         // Method to loan money from the bank.
@@ -454,7 +651,7 @@ namespace BankApp_GroupProject
             double loanMoney = 0;
             // double that will be set in the while loop. Total loan time.
             double loanTime = 0;
-            // double that will save account formula for total debt and monthly debt.
+            // double that will save checkingAccount formula for total debt and monthly debt.
             double totalDebt = 0;
             double monthlyDebt = 0;
 
@@ -463,7 +660,7 @@ namespace BankApp_GroupProject
             Console.WriteLine("Lånaeavdelningen");
             Console.WriteLine("*****************************");
             Console.WriteLine("Välkommen till låneavdelningen. Vi erbjuder just nu annuitetslån till 8,48% ränta.\n");
-            // Check to see if the customer have an account.
+            // Check to see if the customerAccounts have an checkingAccount.
             if (UserAccounts.Any() != true)
             {
                 Console.WriteLine("Du har inga konton än.\n");
@@ -494,13 +691,13 @@ namespace BankApp_GroupProject
             // while loop for exception handling while input loan 
             while (true)
             {
-                // Print out total balance and how much customer can loan (max 5 times the amount of total balance). 
+                // Print out total balance and how much customerAccounts can loan (max 5 times the amount of total balance). 
                 Console.WriteLine("\nDitt totala saldo är " + totalBalance + "kr" +
                 "\nDu kan låna max " + totalBalance * 5 + "kr" +
                 "\n\nHur mycket vill du låna?");
                 // User input.
                 loanMoney = int.Parse(Console.ReadLine());
-                // See if customer can loan that amount of money or not. Also make sure it isnt possible to type in negative number.
+                // See if customerAccounts can loan that amount of money or not. Also make sure it isnt possible to type in negative number.
                 if (loanMoney <= totalBalance * 5 && loanMoney > 0)
                 {
                     Console.WriteLine("Du har valt att låna " + loanMoney + "kr. till 8,48% ränta.");
