@@ -2,34 +2,46 @@
 
 namespace BankApp_GroupProject
 {
+    public enum AccountType
+    {
+        Checking,
+        Savings,
+        Global
+    }
 
     public class Account
-    {           
-        public string AccType { get; set; }
-        public string AccountNumber { get; set; }   
-        public Decimal Balance { get; set; }
+    {
+        public string AccountNumber { get; set; }
+        public decimal Balance { get; set; }
+        public AccountType Type { get; set; }
+        public Customer Customer { get; set; }
         public DateTime DateCreated { get; set; }
         public string Currency { get; set; }
         private List<Transaction> AccountHistory { get; set; }
-        public decimal _Deposit { get; set; }
-        public bool IsSavingsAccount { get; set; }        
+        public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
+        public string AccountUsername { get; set; }
 
-        public Account()
+        public string AccType { get; set; }
+        public decimal _Deposit { get; set; }
+        public bool IsSavingsAccount { get; set; }
+
+        public Account(AccountType type, Customer customer)
         {
             AccountNumber = GenerateAccountNumber();
             Balance = 0.0m;
-            DateCreated = DateTime.Now;
-            AccountHistory = new List<Transaction>();
-            _Deposit = 0;
+            DateCreated = DateTime.Now;            
             Currency = "SEK";
+            Type = type;
+            Customer = customer;
+            AccountHistory = new List<Transaction>();
+            AllCustomerAccounts.Add(this);
+            AccountUsername = customer.Username;
         }
 
         protected static string GenerateAccountNumber()
         //Förslag på att implementera ett random kontonummer, kan uvecklas vidare
         //Tanken är att man behöver anropa metoden när man skapar ett nytt konto i en annan klass
         {
-
-
             Random random = new();
             //use of const because its a set value and wont be changed in the future
             const string chars = "0123456789";
@@ -44,7 +56,7 @@ namespace BankApp_GroupProject
 
         public void SetCurency(string currency)
         {
-            Currency = currency;           
+            Currency = currency;
         }
 
         public decimal GetBalance()
@@ -66,9 +78,24 @@ namespace BankApp_GroupProject
             Balance -= amount;
         }
 
-        public virtual decimal MakeDeposit()
+        public string GetAccountType(Account account)
         {
-            string accountType = IsSavingsAccount ? "sparkonto" : "bankkonto";
+            if (account.Type == AccountType.Checking)
+            {
+                return "Lönekonto";
+            }
+            else if (account.Type == AccountType.Savings)
+            {
+                return "Sparkonto";
+            }
+            else
+            {
+                return "Utlandskonto";
+            }
+        }
+
+        public virtual decimal MakeDeposit(Account account)
+        {
             decimal deposit;
 
             while (true)
@@ -93,7 +120,7 @@ namespace BankApp_GroupProject
 
             while (true)
             {
-                Console.Write($"Accepterar du en insättning på {deposit:c} till ditt {accountType}?" +
+                Console.Write($"Accepterar du en insättning på {deposit:c} till ditt {GetAccountType(account).ToLower()}?" +
                                 "\n[1] JA" +
                                 "\n[2] NEJ" +
                                 "\n---" +
@@ -105,7 +132,7 @@ namespace BankApp_GroupProject
                 {
                     if (choice == 1)
                     {
-                        Deposit(deposit);                        
+                        Deposit(deposit);
                         _Deposit = deposit;
                         Console.Write($"\nInsättning av {deposit:c} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
