@@ -66,10 +66,7 @@ namespace BankApp_GroupProject
 
         public void Deposit(decimal amount)
         {
-            //if (Currency != soruceCurrency)
-            //{
-            //    amount = ExchangeManager.Exchange.CurrencyConverter(soruceCurrency, Currency, deposit);
-            //}
+          
             Balance += amount;
         }
 
@@ -134,7 +131,7 @@ namespace BankApp_GroupProject
                     {
                         Deposit(deposit);
                         _Deposit = deposit;
-                        Console.Write($"\nInsättning av {deposit:c} accepterad.\n" +
+                        Console.Write($"\nInsättning av {deposit} {Currency} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
                         Transaction t1 = new(this, deposit, "Insättning", false);
                         Console.ReadKey();
