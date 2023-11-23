@@ -418,7 +418,7 @@ namespace BankApp_GroupProject
                 UserAccounts.Remove(transferAccount);
                 PrintAccounts();
                 int counter = 1;
-                Console.WriteLine($"Välj det konto du vill föra över {originalTransferAmount:c} till.\n");
+                Console.WriteLine($"Välj det konto du vill föra över {originalTransferAmount} {transferAccount.Currency} till.\n");
 
                 UserAccounts.ForEach(a => Console.Write($"[{counter++}] {a.AccType}\n"));
                 Console.Write("---" +
