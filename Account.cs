@@ -12,8 +12,8 @@ namespace BankApp_GroupProject
         public string Currency { get; set; }
         private List<Transaction> AccountHistory { get; set; }
         public decimal _Deposit { get; set; }
-        public bool IsSavingsAccount { get; set; }        
-
+        public bool IsSavingsAccount { get; set; }
+        AsciiArt ascii = new();
         public Account()
         {
             AccountNumber = GenerateAccountNumber();
@@ -74,6 +74,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.Write("Hur mycket vill du sätta in? Ange värdet i siffror." +
                             "\nInsättning: ");
                 string userInput = Console.ReadLine();
@@ -130,6 +131,7 @@ namespace BankApp_GroupProject
                 }
             }
             return deposit;
+            
         }
 
         //Hämtar listan med transaktionshistoriken

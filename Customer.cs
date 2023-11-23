@@ -15,6 +15,7 @@ namespace BankApp_GroupProject
         private SavingsAccount _savingsAccount { get; set; }
 
         private static readonly LogInManager LIM = new();
+        AsciiArt ascii = new();
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -29,6 +30,7 @@ namespace BankApp_GroupProject
             IsAdmin = false;
             IsBlocked = false;
             _checkingAccount = new() { AccType = "Lönekonto" };
+            
         }
 
         public Account GetCheckingAccount()
@@ -45,6 +47,7 @@ namespace BankApp_GroupProject
         public void NewCheckingAccount()
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
 
             if (!UserAccounts.Exists(a => a.AccType == "Lönekonto"))
             {
@@ -74,6 +77,7 @@ namespace BankApp_GroupProject
         public void NewSavingsAccount()
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             _savingsAccount = new SavingsAccount() { AccType = "Sparkonto" };
 
             if (!UserAccounts.Exists(a => a.AccType == "Sparkonto"))
@@ -111,6 +115,7 @@ namespace BankApp_GroupProject
         {
             bool currencySet = false;
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             _globalAccount = new Account() { AccType = "Utlandskonto" };
 
             if (!UserAccounts.Exists(a => a.AccType == "Utlandskonto"))
@@ -123,6 +128,7 @@ namespace BankApp_GroupProject
                     while (!currencySet)
                     {
                         Console.Clear();
+                        Console.WriteLine(ascii.Header());
                         Console.Write("För att skapa ett utlandskonto måste du välja vilken valuta kontots värde skall stå i.\n" +
                                     "Vänligen välj valuta:" +
                                     "\n[1] EUR" +
@@ -173,6 +179,7 @@ namespace BankApp_GroupProject
             while (menuChoice != "2")
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.Write($"Vill du skapa ett nytt {account.AccType.ToLower()}?" +
                                 $"\n[1] JA" +
                                 $"\n[2] NEJ" +
@@ -215,6 +222,7 @@ namespace BankApp_GroupProject
         public void PrintAccountSuccess(Account account)
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             Console.WriteLine($"Grattis! Du har skapat ett nytt {account.AccType.ToLower()}." +
                               $"\n######" +
                               $"\nKontonummer: {account.AccountNumber}" +
@@ -228,7 +236,7 @@ namespace BankApp_GroupProject
         public void PrintAccounts(bool displayGoBackMessage = true)
         {
             Console.Clear();
-
+            Console.WriteLine(ascii.Header());
             if (UserAccounts.Any() != true)
             {
                 Console.Write("Du har för närvarande inga konton.\n" +
@@ -260,7 +268,7 @@ namespace BankApp_GroupProject
         public void PrintEveryCustomersAccount(bool displayGoBackMessage = true)
         {
             Console.Clear();
-
+            Console.WriteLine(ascii.Header());
             if (UserAccounts.Count == 0)
             {
                 Console.WriteLine("För tillfället existerar inga kundkonton i banken.\n");
@@ -287,6 +295,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 //visar konton       
                 PrintAccounts(false); //false för att inte skriva ut tillbaka
 
@@ -301,12 +310,13 @@ namespace BankApp_GroupProject
                 {
                     selectedAccount.MakeDeposit();
                     Console.Clear();
+                    Console.WriteLine(ascii.Header());
                     Console.WriteLine($"\n\nDin insättning till ditt {selectedAccount.AccType.ToLower()}: {selectedAccount.AccountNumber} är klar. {account.DateCreated}" +
                         $"\n\nDitt nya saldo är: {selectedAccount.Balance} {selectedAccount.Currency}");
 
                     Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
-
+                    break;
                 }
                 else
                 {
@@ -436,6 +446,7 @@ namespace BankApp_GroupProject
                         accountFirstIndex.Deposit(transferAmount);
 
                         Console.Clear();
+                        Console.WriteLine(ascii.Header());
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
                         Transaction f1 = new(transferAccount, transferAmount, "Överföring", true);
@@ -453,6 +464,7 @@ namespace BankApp_GroupProject
                         accountSecondIndex.Deposit(transferAmount);
 
                         Console.Clear();
+                        Console.WriteLine(ascii.Header());
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
                         Transaction f2 = new(transferAccount, transferAmount, "Överföring", true);
@@ -468,6 +480,7 @@ namespace BankApp_GroupProject
                         transferAccount.Withdraw(transferAmount);
                         accountThirdIndex.Deposit(transferAmount);
                         Console.Clear();
+                        Console.WriteLine(ascii.Header());
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountThirdIndex.AccType.ToLower()}t är {accountThirdIndex.GetBalance():c}.");
                         transferComplete = true;
                         Transaction f3 = new(transferAccount, transferAmount, "Överföring", true);
@@ -494,6 +507,7 @@ namespace BankApp_GroupProject
             if (UserAccounts.Count <= 1)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.Write("Du behöver minst två konton för att kunna göra en intern överföring.\n" +
                             "\nTryck \"ENTER\" för att återgå till föregående meny.");
                 Console.ReadKey();
@@ -577,6 +591,7 @@ namespace BankApp_GroupProject
             if (UserAccounts.Count == 0)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.Write("Du behöver minst ett konto för att kunna göra en extern överföring.\n" +
                             "\nTryck \"ENTER\" för att återgå till föregående meny.");
                 Console.ReadKey();
@@ -692,6 +707,7 @@ namespace BankApp_GroupProject
 
             // Clear console så att designen blir finare.
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             Console.WriteLine("Lånaeavdelningen");
             Console.WriteLine("*****************************");
             Console.WriteLine("Välkommen till låneavdelningen. Vi erbjuder just nu annuitetslån till 8,48% ränta.\n");
@@ -796,6 +812,7 @@ namespace BankApp_GroupProject
         public void PrintAllTransactions()
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             Console.WriteLine($"{FirstName} {LastName}: Kontohistorik" +
                                                 "\n=================");
             

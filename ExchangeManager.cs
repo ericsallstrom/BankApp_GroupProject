@@ -10,6 +10,8 @@ namespace BankApp_GroupProject
         //Dictionary som håller valutorna, även där vi sätter växelkurs.
         public Dictionary<string, decimal> Currencies { get; set; }
 
+        AsciiArt ascii = new();
+
         //Constructorn som bara körs en gång.
         public ExchangeManager()
         {
@@ -39,6 +41,7 @@ namespace BankApp_GroupProject
         public void SetCurrencies()
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             string currentCurrencies = "Nuvarande växlingskurser" +
                                      "\n=========================" +
                                     $"\nEUR:\t {Currencies["EUR"]}" +
@@ -51,6 +54,7 @@ namespace BankApp_GroupProject
             Currencies["USD"] = GetUserDecimalInput(setCurrencyUsd, currentCurrencies);
 
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             Console.WriteLine("Växelkurser uppdaterade" +
                             "\n=========================" +
                            $"\nEUR:\t {Currencies["EUR"]}" +
@@ -92,6 +96,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.WriteLine(currentCurrencies);
                 Console.Write(question);
                 string userInput = Console.ReadLine();

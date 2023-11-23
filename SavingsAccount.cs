@@ -5,12 +5,13 @@
         public double Interest { get; set; }
         public int InterestTime { get; set; }
         public string Months { get; set; }
-
+        AsciiArt ascii = new();
         public void InterestChoice()
         {
             do
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.Write("Nedan kan du välja ränta för ditt sparkonto:" +
                             "\n[1] 3% ränta bundet på 3 månader" +
                             "\n[2] 5% ränta bundet på 1 år" +

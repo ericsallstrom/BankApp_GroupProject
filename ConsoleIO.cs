@@ -7,13 +7,14 @@
         private Admin inloggedAdmin;
         private User user;
 
+        AsciiArt ascii = new();
         // Main menu
         public void DisplayMainMenu()
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
 
-            Console.WriteLine("Välkommen till NAMN PÅ BANK!" +
-                            "\n=================" +
+            Console.WriteLine("=================" +
                             "\n[1] Logga in" +
                             "\n-----------------" +
                             "\n[0] Avsluta programmet" +
@@ -29,6 +30,7 @@
             while (logginAttempts > 0)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.WriteLine("Ange ditt användarnamn och lösenord för att logga in." +
                                 "\nEfter tre misslyckade försök spärras ditt konto av säkerhetsskäl.\n");
 
@@ -101,9 +103,9 @@
             while (menuChoice != "0")
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
 
-                Console.WriteLine("NAMN PÅ BANK\n" +
-                               $"\nVälkommen {inloggedCustomer.FirstName} {inloggedCustomer.LastName}" +
+                Console.WriteLine($"\nVälkommen {inloggedCustomer.FirstName} {inloggedCustomer.LastName}" +
                                 "\n=================" +
                                 "\n[1] Visa konton" +
                                 "\n[2] Öppna nytt bankkonto" +
@@ -197,9 +199,9 @@
             while (menuChoice != "0")
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
 
-                Console.WriteLine("NAMN PÅ BANK\n" +
-                                "\n=================" +
+                Console.WriteLine("===========================" +
                                 "\n[1] Överföra pengar mellan dina konton" +
                                 "\n[2] Överföra pengar till ett annat konto" +
                                 "\n-----------------" +
@@ -239,9 +241,9 @@
             while (menuChoice != "0")
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
 
-                Console.WriteLine("NAMN PÅ BANK\n" +
-                                "\n=================" +
+                Console.WriteLine("===========================" +
                                 "\n[1] Skapa nytt lönekonto" +
                                 "\n[2] Skapa nytt sparkonto" +
                                 "\n[3] Skapa nytt konto med en annan valuta" +
@@ -287,10 +289,10 @@
             while (menuChoice != "0")
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
 
-                Console.WriteLine("NAMN PÅ BANK\n" +
-                                "\nDu är inloggad som admin" +
-                                "\n=================" +
+                Console.WriteLine("Du är inloggad som admin" +
+                                "\n===========================" +
                                 "\n[1] Lägg till ny användare" +
                                 "\n[2] Visa alla användare" +
                                 "\n[3] Radera en användare" +
