@@ -425,9 +425,16 @@ namespace BankApp_GroupProject
                 switch (accountChoice)
                 {
                     case "1":
-                        var accountFirstIndex = UserAccounts.ElementAtOrDefault(0);
+                        var accountFirstIndex = UserAccounts.ElementAt(0);
+
+                        if (transferAccount.Currency != accountFirstIndex.Currency)
+                        {
+                            transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountFirstIndex.Currency, transferSum);
+                        }
+                 
                         transferAccount.Withdraw(transferAmount);
                         accountFirstIndex.Deposit(transferAmount);
+
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.AccType.ToLower()}t är {accountFirstIndex.GetBalance():c}.");
                         transferComplete = true;
@@ -435,15 +442,38 @@ namespace BankApp_GroupProject
                         Transaction t1 = new(accountFirstIndex, transferAmount, "Överföring", false);
                         break;
                     case "2":
-                        var accountSecondIndex = UserAccounts.ElementAtOrDefault(1);
+                        var accountSecondIndex = UserAccounts.ElementAt(1);
+                        if (transferAccount.Currency != accountSecondIndex.Currency)
+                        {
+                           transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountSecondIndex.Currency, transferSum);
+
+                        }
+   
                         transferAccount.Withdraw(transferAmount);
                         accountSecondIndex.Deposit(transferAmount);
+
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.AccType.ToLower()}t är {accountSecondIndex.GetBalance():c}.");
                         transferComplete = true;
                         Transaction f2 = new(transferAccount, transferAmount, "Överföring", true);
                         Transaction t2 = new(accountSecondIndex, transferAmount, "Överföring", false);
                         break;
+                    case "3":
+                        var accountThirdIndex = UserAccounts.ElementAt(2);
+                        if (transferAccount.Currency != accountThirdIndex.Currency)
+                        {
+                          transferSum = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountThirdIndex.Currency, transferSum);
+
+                        }
+                        transferAccount.Withdraw(transferSum);
+                        accountThirdIndex.Deposit(transferSum);
+                        Console.Clear();
+                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountThirdIndex.AccType.ToLower()}t är {accountThirdIndex.GetBalance():c}.");
+                        transferComplete = true;
+                        Transaction f3 = new(transferAccount, transferSum, "Överföring", true);
+                        Transaction t3 = new(accountThirdIndex, transferSum, "Överföring", false);
+                        break;
+
                     default:
                         Console.Write("\nOgiltigt val! Tryck \"ENTER\" och försök igen.");
                         Console.ReadKey();
