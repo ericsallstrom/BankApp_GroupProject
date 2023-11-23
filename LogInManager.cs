@@ -10,11 +10,11 @@ namespace BankApp_GroupProject
     public class LogInManager
     {
         private readonly List<Customer> _customers;
-        private readonly Admin _admin;
+        private readonly Admin _admin;        
 
         public LogInManager()
         {
-            _admin = new Admin("admin", "Password1@");
+            _admin = new Admin("admin", "Password1@");            
 
             _customers = new List<Customer>()
                 {
@@ -25,7 +25,7 @@ namespace BankApp_GroupProject
                     new Customer("hany", "Hej123@", "Hany", "Alhabboby"),
                     new Customer("hans", "Hej123@", "Hans", "Elofsson") { IsBlocked = true },
                     new Customer("karin", "Hej123@", "Karin", "Andersson") { IsBlocked = true }
-                };           
+                };
 
             InitUserAccounts();
         }
@@ -33,16 +33,14 @@ namespace BankApp_GroupProject
         //Tilldelar alla users ett lönekonto och ett random saldo
         public void InitUserAccounts()
         {
-            Random random = new();
-
-            decimal initialBalance = random.Next(100, 30001);
+            Random random = new();           
 
             foreach (var customer in _customers)
             {
-                Account checkingAccount = new();                
-                checkingAccount = customer.GetCheckingAccount();
+                decimal initialBalance = random.Next(100, 30001);
+                Account checkingAccount = new(AccountType.Checking, customer);
                 checkingAccount.Deposit(initialBalance);
-                customer.AddUserAccount(checkingAccount);
+                customer.CustomerAccounts.Add(checkingAccount);
             }
         }
 
@@ -100,7 +98,7 @@ namespace BankApp_GroupProject
                     if (answer == "1")
                     {
                         var customerToRemove = _customers.Find(c => c.Username == username);
-                        DeleteCustomer(customerToRemove);                        
+                        DeleteCustomer(customerToRemove);
                         Console.Write($"\nAnvändaren {username} är nu borttagen från systemet." +
                           $"\nTryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();

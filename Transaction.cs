@@ -11,6 +11,7 @@ namespace BankApp_GroupProject
     {
         public string SourceAccNumber { get; set; }
         public string SourceAcc { get; set; }
+        public AccountType Type { get; set; }
         public decimal TransactionAmount { get; set; }
         public string TransactionType { get; set; }
         public string TransactionDate { get; set; }
@@ -22,7 +23,7 @@ namespace BankApp_GroupProject
         {
             if (isDebet) { transactionAmount *= -1; }
 
-            SourceAcc = sourceAccount?.AccType ?? "Unknown";
+            SourceAcc = sourceAccount.GetAccountType(sourceAccount);
             SourceAccNumber = sourceAccount.AccountNumber;
             TransactionAmount = transactionAmount;
             TransactionType = transactionType;
