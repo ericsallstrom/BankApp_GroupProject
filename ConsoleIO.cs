@@ -216,6 +216,7 @@
                         break;
                     case "2":
                         // Anropa metod för att föra över pengar till ett annat, externt konto
+                        inloggedCustomer.ExternalTransaction();
                         break;
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
