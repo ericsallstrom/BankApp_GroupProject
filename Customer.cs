@@ -299,7 +299,7 @@ namespace BankApp_GroupProject
                 //visar konton       
                 PrintAccounts(false); //false för att inte skriva ut tillbaka
 
-                Console.Write("Ange kontonummret för det konto du önskar sätta in pengar på." +
+                Console.Write("Ange kontonummret för det konto du önskar sätta in pengar på. (Skriv 0 för att avbryta och gå tillbak)" +
                             "\nKontonr: ");
 
                 string accountNrToDeposit = Console.ReadLine().Trim();
@@ -316,6 +316,10 @@ namespace BankApp_GroupProject
 
                     Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
+                    break;
+                }
+                else if (accountNrToDeposit == "0")
+                {
                     break;
                 }
                 else
