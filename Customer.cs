@@ -196,7 +196,7 @@ namespace BankApp_GroupProject
             string answer = Console.ReadLine();
             if (answer.ToLower() == "j")
             {
-                account.MakeDeposit(account);
+                account.MakeADeposit(account);
             }
         }
 
@@ -252,12 +252,15 @@ namespace BankApp_GroupProject
             Console.WriteLine("EXTERNA KUNDKONTON" +
                                "\n######");
 
+
             if (Account.AllCustomerAccounts.Count == 0)
             {
                 Console.WriteLine("För tillfället existerar inga kundkonton i banken.\n");
             }
             else
             {
+                Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tTyp\t\tDatum" +
+                    $"\n==========================================================================");                
                 foreach (var account in Account.AllCustomerAccounts)
                 {
                     if (account.AccountUsername != inloggedCustomer.Username)
@@ -290,19 +293,18 @@ namespace BankApp_GroupProject
 
                 if (selectedAccount != null)
                 {
-                    selectedAccount.MakeDeposit(selectedAccount);
-                    Console.Clear();
-                    Console.WriteLine($"\n\nDin insättning till ditt {selectedAccount.GetAccountType(selectedAccount).ToLower()}: {selectedAccount.AccountNumber} är klar." +
-                        $"\n\nDitt nya saldo är: {selectedAccount.Balance} {selectedAccount.Currency}");
+                    selectedAccount.MakeADeposit(selectedAccount);
+                    Console.WriteLine($"\n\nDin insättning till ditt {selectedAccount.GetAccountType(selectedAccount).ToLower()}: {selectedAccount.AccountNumber} har gått igenom." +
+                                      $"\nDitt nya saldo är: {selectedAccount.Balance} {selectedAccount.Currency}.");
 
                     Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
+                    break;
                 }
                 else
                 {
                     Console.Write("\nOgiltigt kontonummer! Tryck \"ENTER\" och försök igen.");
-                    Console.ReadKey();
-                    break;
+                    Console.ReadKey();                    
                 }
             }
         }
@@ -353,7 +355,7 @@ namespace BankApp_GroupProject
 
                 if (selectedAccount != null)
                 {
-                    selectedAccount.MakeDeposit(transferAmount);
+                    selectedAccount.Deposit(transferAmount);
                     transferAccount.Withdraw(transferAmount);
                     Console.Write($"\nÖverföringen lyckades! Tryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
@@ -429,7 +431,7 @@ namespace BankApp_GroupProject
                         }
 
                         transferAccount.Withdraw(originalTransferAmount);
-                        accountFirstIndex.MakeDeposit(transferAmount);
+                        accountFirstIndex.Deposit(transferAmount);
 
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.GetAccountType(accountFirstIndex).ToLower()}t " +
@@ -451,7 +453,7 @@ namespace BankApp_GroupProject
                         }
 
                         transferAccount.Withdraw(originalTransferAmount);
-                        accountSecondIndex.MakeDeposit(transferAmount);
+                        accountSecondIndex.Deposit(transferAmount);
 
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.GetAccountType(accountSecondIndex).ToLower()}t " +
@@ -472,7 +474,7 @@ namespace BankApp_GroupProject
                             transferAmount = originalTransferAmount;
                         }
                         transferAccount.Withdraw(originalTransferAmount);
-                        accountThirdIndex.MakeDeposit(transferAmount);
+                        accountThirdIndex.Deposit(transferAmount);
 
                         Console.Clear();
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountThirdIndex.GetAccountType(accountThirdIndex).ToLower()}t " +
@@ -808,8 +810,7 @@ namespace BankApp_GroupProject
                                                 "\n=================");
 
             foreach (var account in CustomerAccounts)
-            {
-                //Console.WriteLine($"\n{account.AccType}");
+            {                
                 Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tTyp\t\tDatum");
                 Console.WriteLine($"==========================================================================");
                 account.PrintAccountHistory();

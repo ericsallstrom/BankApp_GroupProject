@@ -39,7 +39,7 @@ namespace BankApp_GroupProject
             {
                 decimal initialBalance = random.Next(100, 30001);
                 Account checkingAccount = new(AccountType.Checking, customer);
-                checkingAccount.MakeDeposit(initialBalance);
+                checkingAccount.Deposit(initialBalance);
                 customer.CustomerAccounts.Add(checkingAccount);
             }
         }

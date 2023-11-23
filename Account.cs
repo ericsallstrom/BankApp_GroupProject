@@ -20,7 +20,7 @@ namespace BankApp_GroupProject
         private List<Transaction> AccountHistory { get; set; }
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
         public string AccountUsername { get; set; }
-        public decimal Deposit { get; set; }
+        protected decimal _deposit { get; set; }
 
         public Account(AccountType type, Customer customer)
         {
@@ -28,7 +28,7 @@ namespace BankApp_GroupProject
             Balance = 0.0m;
             DateCreated = DateTime.Now;
             Currency = "SEK";
-            Deposit = 0.0m;
+            _deposit = 0.0m;
             Type = type;
             Customer = customer;
             AccountHistory = new List<Transaction>();
@@ -62,7 +62,7 @@ namespace BankApp_GroupProject
             return Balance;
         }
 
-        public void MakeDeposit(decimal amount)
+        public void Deposit(decimal amount)
         {
 
             Balance += amount;
@@ -89,7 +89,7 @@ namespace BankApp_GroupProject
             }
         }
 
-        public virtual decimal MakeDeposit(Account account)
+        public decimal MakeADeposit(Account account)
         {
             decimal deposit;
 
@@ -99,7 +99,6 @@ namespace BankApp_GroupProject
                 Console.Write("Hur mycket vill du sätta in? Ange värdet i siffror." +
                             "\nInsättning: ");
                 string userInput = Console.ReadLine();
-                Console.WriteLine();
 
                 if (decimal.TryParse(userInput, out deposit) && deposit >= 1 && deposit <= 999999) //ändrat till decimal
                 {
@@ -115,6 +114,7 @@ namespace BankApp_GroupProject
 
             while (true)
             {
+                Console.Clear();
                 Console.Write($"Accepterar du en insättning på {deposit:c} till ditt {GetAccountType(account).ToLower()}?" +
                                 "\n[1] JA" +
                                 "\n[2] NEJ" +
@@ -127,8 +127,8 @@ namespace BankApp_GroupProject
                 {
                     if (choice == 1)
                     {
-                        MakeDeposit(deposit);
-                        Deposit = deposit;
+                        Deposit(deposit);
+                        _deposit = deposit;
                         Console.Write($"\nInsättning av {deposit} {Currency} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
                         Transaction t1 = new(this, deposit, "Insättning", false);
@@ -164,7 +164,7 @@ namespace BankApp_GroupProject
         {
             if (AccountHistory.Any() != true)
             {
-                Console.WriteLine("\nInga kontohändelser finns.\n");
+                Console.WriteLine("\nDu har för närvarande inga genomförda kontohändelser.\n");
             }
             else
             {
