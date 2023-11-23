@@ -44,11 +44,6 @@ namespace BankApp_GroupProject
             }
         }
 
-        public List<Customer> GetAllCustomers()
-        {
-            return _customers;
-        }
-
         public void DeleteExistingCustomer()
         {
             string username;
