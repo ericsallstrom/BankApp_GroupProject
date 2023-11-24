@@ -53,12 +53,16 @@
         // Method that's calculating the interest based on the choice from the customer. 
         public void CalcInterest()
         {
+            Console.Clear();
+            Console.WriteLine(ascii.Header());
+
             double selectedInterestRate = Interest;
             decimal interestAmount = _deposit * (decimal)selectedInterestRate * InterestTime / 12;
 
             if (interestAmount >= 1)
             {
-                Console.WriteLine($"\nMed en räntesats på {Interest * 100}%, skulle du få " +
+                Console.WriteLine();
+                Console.WriteLine($"Med en räntesats på {Interest * 100}%, skulle du få " +
                                     $"{interestAmount:c} i värdeökning över {Months}.");
             }
             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");

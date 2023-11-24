@@ -874,52 +874,51 @@ namespace BankApp_GroupProject
             return accountChoice;
         }
 
-        // Metod för att låna pengar från banken.
+        // Method that allows the customer to take a loan from the bank.
         public void TakeLoan(Account account)
-        {
-            // Använder double så Math.Pow ska funka.          
+        {            
             double totalBalance = 0;
             double interest = 0.0848;
-            // double som ska in i whileloop. Total loan.
-            double loanAmount = 0;
-            // double som ska vara i while loop. Total loan time.
+            double loanAmount = 0;            
             double loanTime = 0;
-            decimal exchangeCurrency = 0;
-            // double som sparar hur mycket blir total lånet samt månad betaldvis.
+            decimal exchangeCurrency = 0;          
             double totalDebt = 0;
             double monthlyDebt = 0;
             bool loanCompleted = false;
 
             ExchangeManager exchange = new();
-
-
-            // Clear console så att designen blir finare.
+            
             Console.Clear();
             Console.WriteLine(ascii.Header());
             Console.WriteLine("Låneavdelningen");
             Console.WriteLine("===============");
-            Console.WriteLine($"\nVälkommen {FirstName} {LastName}! Vi erbjuder just nu annuitetslån till 8,48% ränta.\n");
-            // Check to see if the customerAccounts have an checkingAccount.
-            if (CustomerAccounts.Any() != true)
-            {
-                Console.WriteLine("Du har för närvarande inga aktiva konton.\n");
-                Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+            Console.Write($"\nVälkommen {FirstName} {LastName}! Vi erbjuder just nu annuitetslån till 8,48% ränta.\n" +
+                          $"\nTryck \"ENTER\" för att förhandla om ett lån med oss.");
+            Console.ReadKey();
+
+            // Checks whether the customer have checking account.
+            if (!CustomerAccounts.Any(a => a.Type == AccountType.Checking))
+            {                
+                Console.Write("Du har för närvarande inget aktivt lönekonto. Du kan öppna ett nytt konto i din startmeny.\n" +
+                            "\nTryck \"ENTER\" för att återgå till föregående meny.");
                 Console.ReadKey();
                 return;
             }
-            else
-                // Print out all of customers accounts and balance
-
-                // while loop när man hanterar input från användaren i loop.
+            else                
                 while (true)
                 {
                     Console.Clear();
                     Console.WriteLine(ascii.Header());
+
                     Console.WriteLine("Kontonr.\tSaldo\t\tValuta\tLåneskuld" +
                         "\n=================================================");
-                    // skriver ut alla konton och hur mycket summa det finns på de.
+
+                    // Here are the customers accounts being displayed along with details for the 
+                    // account number, balance, currency and if they already have a debt to the bank.
                     foreach (var item in CustomerAccounts)
-                    {                        
+                    {
+                        totalBalance = 0;
+
                         if (item.Debt == 0)
                         {
                             Console.Write($"{item.AccountNumber}\t{item.Balance}\t\t{item.Currency}\t{item.Debt:-}");
@@ -936,31 +935,43 @@ namespace BankApp_GroupProject
                             }
                         }
                         Console.WriteLine();
+
+                        // Checks whether a account have a different currency and if so, 
+                        // the balance of that account is then converted into SEK.
                         if (item.Currency == "USD")
                         {
+                            // Converts dollar to SEK.
                             exchangeCurrency = exchange.CurrencyConverter("USD", "SEK", item.Balance);
-                            // adderar alla konton balans tillsammas med totalt balance.
+
+                            // Every balance from each account is added together and assigned to totalBalance.
                             totalBalance = totalBalance + Convert.ToDouble(exchangeCurrency) - Convert.ToDouble(item.Debt);
                         }
                         else if (item.Currency == "EUR")
                         {
+                            // Converts euro to SEK.
                             exchangeCurrency = exchange.CurrencyConverter("EUR", "SEK", item.Balance);
+
+                            // Every balance from each account is added together and assigned to totalBalance.
                             totalBalance = totalBalance + Convert.ToDouble(exchangeCurrency) - Convert.ToDouble(item.Debt);
                         }
                         else
                         {
                             exchangeCurrency = 0;
+
+                            // Every balance from each account is added together and assigned to totalBalance.
                             totalBalance = totalBalance + Convert.ToDouble(item.Balance) - Convert.ToDouble(item.Debt);
                         }
-
                     }
+
                     Console.WriteLine("=================================================");
-                    // Print out total balance and how much customerAccounts can loan (max 5 times the amount of total balance). 
+
+                    // The customers total balance is printed out along with how much money 
+                    // the customer can loan (max five times the amount of total balance). 
                     Console.Write($"\nDitt totala saldo exklusive lån är {totalBalance} kr." +
                                   $"\nDetta betyder att du max kan låna {totalBalance * 5} kr." +
                                   "\n\nHur mycket vill du låna? Skriv in 0 för att avbryta processen." +
                                   "\nDitt belopp: ");
-                    // User input.
+                    
                     string userInput = Console.ReadLine();
 
                     if (userInput == "0")
@@ -972,8 +983,8 @@ namespace BankApp_GroupProject
                     }
                     else if (double.TryParse(userInput, out loanAmount))
                     {
-                        // hanterar felhantering, ifall användaren vill låna mer eller mer än 5 gånger.
-                        if (loanAmount <= totalBalance * 5 && loanAmount > 0)
+                        // Checks whether the amount don't exceed the allowed loan limit.
+                        if (loanAmount <= totalBalance * 5 && loanAmount != 0)
                         {
                             while (!loanCompleted)
                             {
@@ -981,16 +992,24 @@ namespace BankApp_GroupProject
                                 Console.WriteLine(ascii.Header());
                                 Console.WriteLine($"Du har valt att låna {loanAmount:c} till 8,48% ränta.");
 
-                                Console.Write("Hur lång avbetalningstid vill du ha? (1-10 år)." +
-                                            "\nAntal år: ");
+                                // The customer is prompted to decide how long the 
+                                // time for installment should be (max 10 years).
+                                Console.Write("\nHur lång avbetalningstid vill du ha? (1-10 år)." +
+                                              "\nAntal år: ");
                                 userInput = Console.ReadLine();
 
+                                // Checks whether the customer entered the right value. If so the loan have been completed.
                                 if (double.TryParse(userInput, out loanTime) && loanTime <= 10)
                                 {
                                     double totalPayments = loanTime * 12;
                                     double interestRate = interest / 12;
+
+                                    // Installment per month.
                                     monthlyDebt = (loanAmount * interestRate) / (1 - Math.Pow(1 + interestRate, totalPayments * -1));
+
+                                    // Total debt.
                                     totalDebt = monthlyDebt * totalPayments;
+
                                     loanCompleted = true;
                                 }
                                 else
@@ -1003,21 +1022,25 @@ namespace BankApp_GroupProject
 
                             Console.Clear();
                             Console.WriteLine(ascii.Header());
+
+                            // The loan have been cleared and info regarding the payment plan is displayed.
                             Console.WriteLine("Grattis! Ditt lån har blivit godkänt och pengarna har förts över till ditt lönekonto.\n" +
                                 "\nDin totala skuld är " + Math.Round(totalDebt, 2) + " kr." +
                                 "\nDin totala månadskostnad kommer att vara " + Math.Round(monthlyDebt, 2) + " kr/månad i " + loanTime * 12 + " månader.");
-
-                            //konvertera double till decimal
+                           
                             decimal loan = Convert.ToDecimal(loanAmount);
 
-                            // Logg för kontohistorik
+                            // The transactions for the loan is being logged.
                             Transaction t1 = new(account, loan, "Lån", false);
-
-                            // Här plusas summan på lånade pengar tillsammans med pengarna som fanns redan i lönekontot
+                           
+                            // The loan is stored in the property Debt.
                             account.Debt += Convert.ToDecimal(loanAmount);
 
+                            // The total amount the bank is loaning the customer 
+                            // is being deposit in the customers bank account.
                             account.Deposit(loan);
 
+                            // This message shows the customer the total sum of their account on which the loan is being deposit.
                             Console.WriteLine($"Totalsumman på ditt lönekonto: {account.Balance} kr.");
 
                             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
