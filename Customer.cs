@@ -453,7 +453,7 @@ namespace BankApp_GroupProject
                         accountFirstIndex.Deposit(transferAmount);
 
                         Console.Clear();
-                        Console.WriteLine(ascii.Header());                        =======
+                        Console.WriteLine(ascii.Header());
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.GetAccountType(accountFirstIndex).ToLower()}t " +
                                           $"är {accountFirstIndex.GetBalance():c}.");
                         Transaction f1 = new(transferAccount, originalTransferAmount, "Överföring", true);
