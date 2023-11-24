@@ -74,6 +74,13 @@ CheckValidChar(string input): Checks if a given input contains specific special 
 
 ----------
 
+Admin Class
+
+Admin is inheriting from the base User class. It simply holds a constructor that sets IsAdmin to true.
+It's used inside ConsoleIO for gaining acces to all admin related stuff.
+
+----------
+
 Customer Class
 
 The Customer class is inheriting from the base User class. The class encapsulates customer information, such as first and last name, and manages various banking functionalities. The purpose of this class is to facilitate customer interactions with the banking system, including creating accounts, managing transactions, and accessing account information.
@@ -126,3 +133,20 @@ Transaction Class
 The Transaction class is responsible for keeping a records of all transactions for every corresponding account, and saves them in a unique list. It encapsulates details such as transaction type, amount, date, balance, currency. The IsDebet property is used to indicate whether the transaction is a debit (true) or credit (false).
 
 Whenever a transaction is happening in the application, the constructor is run and takes source account, transaction amount and IsDebet as argument. Once instantiated, the transaction(object) gets added to the AccountHistory list.
+
+----------
+
+AsciiArt Class
+
+Holds the header/logo
+
+----------
+
+Program Class
+
+The Program class initialises the app and loads the login method.
+Also makes an instance of ConsoleIO
+
+
+
+
