@@ -16,6 +16,8 @@ namespace BankApp_GroupProject
         public string TransactionType { get; set; }
         public string TransactionDate { get; set; }
         public bool IsDebet { get; set; }
+        public decimal SourceAccBalance {  get; set; }
+        public string SourceCurrency {  get; set; }
 
         //
         public Transaction(Account sourceAccount, decimal transactionAmount,
@@ -28,6 +30,8 @@ namespace BankApp_GroupProject
             TransactionAmount = transactionAmount;
             TransactionType = transactionType;
             TransactionDate = DateTime.Now.ToShortDateString().ToString();
+            SourceAccBalance = sourceAccount.Balance;
+            SourceCurrency = sourceAccount.Currency;
 
             // Loggar transaktionen till AccountHistory
             sourceAccount.GetAccountHistory().Add(this);
