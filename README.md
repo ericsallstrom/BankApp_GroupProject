@@ -25,6 +25,27 @@ CalcInterest(): Calculates and displays interest increases.
 
 ----------
 
+User Class
+
+The User class encompassing essential features related to account access and security. The class facilitates user authentication, password management, and security-related functionalities within the application.
+
+Key Methods:
+GetUsername(): Returns the username of the user.
+
+Block()/Unblock(): Sets the IsBlocked property to true, blocking the user, or false allowing the user to access the system.
+
+VerifyNewUsername(string username): Verifies if a new username meets specific criteria, such as length and absence of certain characters.
+
+ChangePassword(): Used to change the user password.
+
+VerifyNewPassword(string password): Verifies if a new password meets specific criteria, such as length, uppercase letters, digits, and special characters.
+
+CheckPassword(string password): Checks if the provided password matches the user's current password.
+
+CheckValidChar(string input): Checks if a given input contains specific special characters.
+
+----------
+
 Customer Class
 
 The Customer class is inheriting from the base User class. The class encapsulates customer information, such as first and last name, and manages various banking functionalities. The purpose of this class is to facilitate customer interactions with the banking system, including creating accounts, managing transactions, and accessing account information.
