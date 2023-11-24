@@ -68,3 +68,11 @@ Converts and summarizes the conversion of an amount between source and target cu
 
 GetUserDecimalInput():
 Prompts users for valid decimal input within a specified range, ensuring accurate exchange rates are provided for currency conversion.
+
+----------
+
+Transaction Class
+
+The Transaction class is responsible for keeping a records of all transactions for every corresponding account, and saves them in a unique list. It encapsulates details such as transaction type, amount, date, balance, currency. The IsDebet property is used to indicate whether the transaction is a debit (true) or credit (false).
+
+Whenever a transaction is happening in the application, the constructor is run and takes source account, transaction amount and IsDebet as argument. Once instantiated, the transaction(object) gets added to the AccountHistory list.
