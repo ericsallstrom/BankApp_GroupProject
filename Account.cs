@@ -10,7 +10,7 @@ namespace BankApp_GroupProject
     }
 
     public class Account
-    {        
+    {
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
         public AccountType Type { get; set; }
@@ -20,10 +20,11 @@ namespace BankApp_GroupProject
         private List<Transaction> AccountHistory { get; set; }
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
         public string CustomerName { get; set; }
-        protected decimal _deposit;
         public decimal Debt { get; set; }
-      
-        AsciiArt ascii = new();
+
+        protected decimal _deposit;
+
+        readonly AsciiArt ascii = new();
 
         public Account(AccountType type, Customer customer)
         {
