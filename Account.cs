@@ -176,8 +176,8 @@ namespace BankApp_GroupProject
             {
                 foreach (var item in AccountHistory)
                 {
-                    Console.WriteLine($"{item.SourceAcc}\t{item.SourceAccNumber}\t{item.TransactionAmount}" +
-                        $"\t\t{item.TransactionType}\t{item.TransactionDate}");
+                    Console.WriteLine($"{item.SourceAcc}\t{item.SourceCurrency}\t{item.TransactionAmount}" +
+                        $"\t\t{item.TransactionType}\t{item.SourceAccBalance}\t\t{item.TransactionDate}");
                 }
             }
         }

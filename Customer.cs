@@ -381,6 +381,11 @@ namespace BankApp_GroupProject
                 {
                     selectedAccount.Deposit(transferAmount);
                     transferAccount.Withdraw(transferAmount);
+
+                    //Logg till kontohändelser/AccountHistory
+                    Transaction f1 = new(transferAccount, transferAmount, "Överföring", true); //Debet
+                    Transaction t2 = new(selectedAccount, transferAmount, "Överföring", false); //Kredit
+
                     Console.Write($"\nÖverföringen lyckades! Tryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
                     transferComplete = true;
@@ -866,8 +871,8 @@ namespace BankApp_GroupProject
 
             foreach (var account in CustomerAccounts)
             {
-                Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tHändelse\tDatum");
-                Console.WriteLine($"==========================================================================");
+                Console.WriteLine($"\nKonto\t\tValuta\tBelopp\t\tHändelse\tSaldo\t\tDatum");
+                Console.WriteLine($"===================================================================================");
                 account.PrintAccountHistory();
             }
 
