@@ -22,3 +22,24 @@ Inheriting from the Account class, the SavingsAccount specifically represents sa
 Key Methods for SavingsAccount:
 InterestChoice(): Allows users to choose the interest rate.
 CalcInterest(): Calculates and displays interest increases.
+
+----------
+
+Customer Class
+The Customer class is inheriting from the base User class. The class encapsulates customer information, such as first and last name, and manages various banking functionalities. The purpose of this class is to facilitate customer interactions with the banking system, including creating accounts, managing transactions, and accessing account information.
+
+Key Features and Methods:
+Account Creation:
+The class allows customers to create different types of accounts, such as checking, savings, and global accounts. Methods like NewCheckingAccount, NewSavingsAccount, and NewGlobalAccount guide customers through the account creation process, including setting currency and handling potential duplicate accounts.
+
+Transaction Handling:
+Customers can perform various transactions, including making deposits (DoYouWantToDeposit), viewing account information (PrintAccounts), and making internal transfers (InternalTransaction) between their own accounts.
+
+The class supports external transactions (ExternalTransaction) for transferring funds from the customer's account to another customer's account. This involves checking account balances, validating user input, and executing the transfer.
+
+Loan Management:
+Customers can take loans from the bank using the TakeLoan method. This involves specifying the loan amount, choosing a repayment period, calculating interest, and updating account balances.
+
+Account Information and History:
+Methods like GetUserAccounts provide a list of all accounts associated with the customer, and PrintAllTransactions displays the transaction history for each account, offering a comprehensive overview of the customer's financial activities.
+
