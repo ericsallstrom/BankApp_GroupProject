@@ -10,7 +10,8 @@ namespace BankApp_GroupProject
     public class LogInManager
     {
         private readonly List<Customer> _customers;
-        private readonly Admin _admin;        
+        private readonly Admin _admin;
+        AsciiArt ascii = new();
 
         public LogInManager()
         {
@@ -53,8 +54,9 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 PrintUsers();
-
+                
                 Console.WriteLine(heading);
                 Console.Write("Användarnamn: ");
                 username = Console.ReadLine();
@@ -74,6 +76,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 PrintUsers();
 
                 Console.Write($"{heading}" +
@@ -126,6 +129,7 @@ namespace BankApp_GroupProject
         public void CreateNewUser()
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             string heading = "Du kommer nu att få skapa en ny användare genom att fylla i kundens" +
                            "\nförnamn, efternamn samt ange ett användarnamn och ett lösenord.\n";
             string username;
@@ -135,6 +139,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.WriteLine($"{heading}" +
                                 $"\nFörnamn: {firstName} " +
                                 $"\nEfternamn: {lastName}");
@@ -170,6 +175,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.WriteLine($"{heading}" +
                        $"\nFörnamn: {firstName} " +
                        $"\nEfternamn: {lastName}" +
@@ -202,10 +208,12 @@ namespace BankApp_GroupProject
         public static string VerifyLastName(string heading, string firstName)
         {
             string verifiedLastName;
+            AsciiArt ascii = new();
 
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.WriteLine(heading);
                 Console.WriteLine($"Förnamn: {firstName}");
 
@@ -231,10 +239,12 @@ namespace BankApp_GroupProject
         public static string VerifyFirstName(string heading)
         {
             string verifiedFirstName;
+            AsciiArt ascii = new();
 
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.WriteLine(heading);
 
                 Console.Write("Förnamn: ");
@@ -272,7 +282,7 @@ namespace BankApp_GroupProject
         public void PrintUsers()
         {
             Console.Clear();
-
+            Console.WriteLine(ascii.Header());
             if (_customers.Count == 0)
             {
                 Console.WriteLine("För tillfället finns inga användare i banken.\n");
@@ -319,6 +329,7 @@ namespace BankApp_GroupProject
         public void UnblockCustomer()
         {
             Console.Clear();
+            Console.WriteLine(ascii.Header());
             bool isRunning = true;
             var blockedCustomers = _customers.FindAll(c => c.IsBlocked);
 
@@ -327,7 +338,7 @@ namespace BankApp_GroupProject
                 while (isRunning)
                 {
                     Console.Clear();
-
+                    Console.WriteLine(ascii.Header());
                     PrintBlockedCustomers();
 
                     Console.Write("Skriv in användarnamnet på den användare du önskar återställa från listan ovan." +
