@@ -44,3 +44,27 @@ Customers can take loans from the bank using the TakeLoan method. This involves 
 Account Information and History:
 Methods like GetUserAccounts provide a list of all accounts associated with the customer, and PrintAllTransactions displays the transaction history for each account, offering a comprehensive overview of the customer's financial activities.
 
+----------
+
+ExchangeManager Class
+
+The ExchangeManager class is used for managing currency exchange rates and handles currency conversion. It maintains a dictionary of currencies and their corresponding exchange rates, allowing the admin to set and update these rates. The class implements a singleton pattern to ensure a single instance throughout the application.
+
+Key Methods:
+ExchangeManager():
+The constructor sets the default exchange rates for EUR, USD, and SEK, when the application starts.
+
+Exchange (property):
+Singleton property providing access to the ExchangeManager instance, creating it if it doesn't exist.
+
+SetCurrencies():
+Allows admin to update the exchange rates for EUR and USD.
+
+CurrencyConverter():
+Converts a specified amount from a source currency to a target currency based on stored exchange rates.
+
+CurrencyConvertSummary():
+Converts and summarizes the conversion of an amount between source and target currencies, displaying exchange rates and the result.
+
+GetUserDecimalInput():
+Prompts users for valid decimal input within a specified range, ensuring accurate exchange rates are provided for currency conversion.
