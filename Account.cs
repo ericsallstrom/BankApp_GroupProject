@@ -19,11 +19,11 @@ namespace BankApp_GroupProject
         public string Currency { get; set; }
         private List<Transaction> AccountHistory { get; set; }
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
-        public string CustomerName { get; set; }        
-
-        readonly AsciiArt ascii = new();
-
+        public string CustomerName { get; set; }
         protected decimal _deposit;
+        public decimal Debt { get; set; }
+      
+        AsciiArt ascii = new();
 
         public Account(AccountType type, Customer customer)
         {
