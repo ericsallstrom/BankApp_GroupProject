@@ -73,6 +73,7 @@ ExchangeManager Class
 The ExchangeManager class is used for managing currency exchange rates and handles currency conversion. It maintains a dictionary of currencies and their corresponding exchange rates, allowing the admin to set and update these rates. The class implements a singleton pattern to ensure a single instance throughout the application.
 
 Key Methods:
+
 ExchangeManager():
 The constructor sets the default exchange rates for EUR, USD, and SEK, when the application starts.
 
