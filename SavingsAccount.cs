@@ -6,7 +6,7 @@
         public int InterestTime { get; set; }
         public string Months { get; set; }
 
-        AsciiArt ascii = new();
+        readonly AsciiArt ascii = new();
 
         public SavingsAccount(AccountType type, Customer customer) 
             : base(type, customer)

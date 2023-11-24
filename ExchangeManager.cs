@@ -10,7 +10,7 @@ namespace BankApp_GroupProject
         //Dictionary som håller valutorna, även där vi sätter växelkurs.
         public Dictionary<string, decimal> Currencies { get; set; }
 
-        AsciiArt ascii = new();
+        readonly AsciiArt ascii = new();
 
         //Constructorn som bara körs en gång.
         public ExchangeManager()

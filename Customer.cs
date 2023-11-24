@@ -15,7 +15,7 @@ namespace BankApp_GroupProject
         public static List<Customer> AllCustomers { get; } = new List<Customer>();
         public List<Account> CustomerAccounts { get; set; }
 
-        AsciiArt ascii = new();
+        readonly AsciiArt ascii = new();
 
         public Customer(string username, string password, string firstname, string lastname)
             : base(username, password)
@@ -288,6 +288,7 @@ namespace BankApp_GroupProject
                 }
             }
         }
+
         //frågar om man vill göra en insättning till befintligt konto
         public void AccountDeposit()
         {
@@ -298,7 +299,8 @@ namespace BankApp_GroupProject
                   
                 PrintAccounts(false); //false för att inte skriva ut tillbaka
 
-                Console.Write("Ange kontonummret för det konto du önskar sätta in pengar på. (Skriv 0 för att avbryta processen och gå tillbaka)." +
+                Console.Write("Ange kontonummret för det konto du önskar sätta in pengar på. " +
+                            "\n(Skriv 0 för att avbryta processen och gå tillbaka)." +
                             "\nKontonr: ");
 
                 string accountNrToDeposit = Console.ReadLine().Trim();
@@ -318,6 +320,9 @@ namespace BankApp_GroupProject
                 }
                 else if (accountNrToDeposit == "0")
                 {
+                    Console.WriteLine("\nDu har valt att avslutat processen att sätta in pengar." +
+                                      "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                    Console.ReadKey();
                     break;
                 }
                 else

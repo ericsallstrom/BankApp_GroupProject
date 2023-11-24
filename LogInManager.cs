@@ -11,7 +11,8 @@ namespace BankApp_GroupProject
     {
         private readonly List<Customer> _customers;
         private readonly Admin _admin;
-        AsciiArt ascii = new();
+
+        readonly AsciiArt ascii = new();
 
         public LogInManager()
         {

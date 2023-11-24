@@ -7,7 +7,7 @@
         private Admin inloggedAdmin;
         private User user;
 
-        AsciiArt ascii = new();
+        readonly AsciiArt ascii = new();
         // Main menu
         public void DisplayMainMenu()
         {

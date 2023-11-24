@@ -10,19 +10,20 @@ namespace BankApp_GroupProject
     }
 
     public class Account
-    {
+    {        
         public string AccountNumber { get; set; }
         public decimal Balance { get; set; }
         public AccountType Type { get; set; }
         public Customer Customer { get; set; }
         public DateTime DateCreated { get; set; }
         public string Currency { get; set; }
-        private List<Transaction> AccountHistory { get; set; }        
+        private List<Transaction> AccountHistory { get; set; }
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
-        public string CustomerName { get; set; }
-        protected decimal _deposit { get; set; }
-      
-        AsciiArt ascii = new();
+        public string CustomerName { get; set; }        
+
+        readonly AsciiArt ascii = new();
+
+        protected decimal _deposit;
 
         public Account(AccountType type, Customer customer)
         {
@@ -118,7 +119,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
-                Console.Write($"Accepterar du en insättning på {deposit:c} till ditt {GetAccountType(account).ToLower()}?" +
+                Console.Write($"Accepterar du en insättning på {deposit} {Currency} till ditt {GetAccountType(account).ToLower()}?" +
                                 "\n[1] JA" +
                                 "\n[2] NEJ" +
                                 "\n---" +
@@ -155,7 +156,7 @@ namespace BankApp_GroupProject
                 }
             }
             return deposit;
-            
+
         }
 
         //Hämtar listan med transaktionshistoriken
