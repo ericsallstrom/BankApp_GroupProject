@@ -54,10 +54,11 @@ namespace BankApp_GroupProject
         public void ChangePassword()
         {
             string newPassword;
-            string oldPassword;
+            string oldPassword = "";
             string heading = "Ditt nya lösenord måste vara mellan 6-30 tecken långt och " +
                            "\ninnehålla minst en stor bokstav, en siffra och ett specialtecken." +
-                           "\nDet nya lösenordet får heller inte vara samma som ditt gamla lösenord.\n";
+                           "\nDet nya lösenordet får heller inte vara samma som ditt gamla lösenord." +
+                           "\nMata in \"0\" för att avbryta processen.\n";
 
             while (true)
             {
@@ -67,7 +68,14 @@ namespace BankApp_GroupProject
                 Console.Write("Skriv in ditt gamla lösenord: ");
                 oldPassword = Console.ReadLine();
 
-                if (CheckPassword(oldPassword))
+                if (oldPassword == "0")
+                {
+                    Console.Write("\nDu har valt att avsluta processen!" +
+                        "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                    Console.ReadKey();
+                    break;
+                }
+                else if (CheckPassword(oldPassword))
                 {
                     break;
                 }
@@ -79,7 +87,7 @@ namespace BankApp_GroupProject
                 }
             }
 
-            while (true)
+            while (oldPassword != "0")
             {
                 Console.Write("Skriv in ditt nya lösenord: ");
                 newPassword = Console.ReadLine();
@@ -87,6 +95,10 @@ namespace BankApp_GroupProject
                 if (VerifyNewPassword(newPassword) && newPassword != oldPassword)
                 {
                     Password = newPassword;
+
+                    Console.Write("\nDitt lösenord har nu ändrats!" +
+                         "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                    Console.ReadKey();
                     break;
                 }
                 else
@@ -97,9 +109,6 @@ namespace BankApp_GroupProject
                     Console.WriteLine(heading);
                 }
             }
-            Console.Write("\nDitt lösenord har nu ändrats!" +
-                          "\nTryck \"ENTER\" för att återgå till föregående meny.");
-            Console.ReadKey();
         }
 
         // Verifierar en användares lösenord.
