@@ -21,6 +21,7 @@ namespace BankApp_GroupProject
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
         public string CustomerName { get; set; }
         protected decimal _deposit { get; set; }
+        public decimal Debt { get; set; }
       
         AsciiArt ascii = new();
 
