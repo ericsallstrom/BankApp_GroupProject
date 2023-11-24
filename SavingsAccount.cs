@@ -1,11 +1,18 @@
 ﻿namespace BankApp_GroupProject
 {
     public class SavingsAccount : Account
-    {
+    {   
         public double Interest { get; set; }
         public int InterestTime { get; set; }
         public string Months { get; set; }
+
         AsciiArt ascii = new();
+
+        public SavingsAccount(AccountType type, Customer customer) 
+            : base(type, customer)
+        {
+        }
+
         public void InterestChoice()
         {
             do
@@ -40,16 +47,12 @@
 
             Console.Write($"\nDu har valt att skapa ett sparkonto med {Interest * 100}% ränta.\n");
         }
-        public override decimal MakeDeposit()
-        {
-            IsSavingsAccount = true; // Clearifing that its a savings account
-            return base.MakeDeposit(); // Calling the base method
-        }
+
         //metod för att räkna ut räntan
         public void CalcInterest()
         {
             double selectedInterestRate = Interest;
-            decimal interestAmount = _Deposit * (decimal)selectedInterestRate * InterestTime / 12;
+            decimal interestAmount = _deposit * (decimal)selectedInterestRate * InterestTime / 12;
 
             if (interestAmount >= 1)
             {

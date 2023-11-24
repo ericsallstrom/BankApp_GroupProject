@@ -127,7 +127,7 @@
                         // Anropa metod för att visa kontosaldo!
                         // Anropa metod för att visa kundens konton!
                         inloggedCustomer.PrintAccounts();
-                        Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+                        Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
                         break;
                     case "2":
@@ -141,10 +141,10 @@
                     case "4":
                         // Anropa metod för att sätta in pengar på ett konto!                    
                         // Skicka med ett konto från inloggad kundens konton
-                        if (inloggedCustomer.UserAccounts.Any()) //kollar om det finns konton
+                        if (inloggedCustomer.CustomerAccounts.Any()) //kollar om det finns konton
                         {
-                            Account selectedAccount = inloggedCustomer.UserAccounts[0]; // Du kan välja det första kontot som ett exempel
-                            inloggedCustomer.AccountDeposit(selectedAccount);
+                            Account selectedAccount = inloggedCustomer.CustomerAccounts[0]; // Du kan välja det första kontot som ett exempel
+                            inloggedCustomer.AccountDeposit();
                         }
                         else
                         {
@@ -155,9 +155,9 @@
                     case "5":
                         // Anropa metod för att sätta in pengar på ett konto!                    
                         // Skicka med ett konto från inloggad kundens konton
-                        if (inloggedCustomer.UserAccounts.Any()) //kollar om det finns konton
+                        if (inloggedCustomer.CustomerAccounts.Any()) //kollar om det finns konton
                         {
-                            Account selectedAccount = inloggedCustomer.UserAccounts[0]; // Du kan välja det första kontot som ett exempel
+                            Account selectedAccount = inloggedCustomer.CustomerAccounts[0]; // Du kan välja det första kontot som ett exempel
                             inloggedCustomer.TakeLoan(selectedAccount);
                         }
                         else
@@ -214,11 +214,11 @@
                 switch (menuChoice)
                 {
                     case "1":                        
-                        inloggedCustomer.InternalTransaction();
+                        inloggedCustomer.InternalTransaction(inloggedCustomer);
                         break;
                     case "2":
                         // Anropa metod för att föra över pengar till ett annat, externt konto
-                        inloggedCustomer.ExternalTransaction();
+                        inloggedCustomer.ExternalTransaction(inloggedCustomer);
                         break;
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");
@@ -258,15 +258,15 @@
                 {
                     case "1":
                         // Anropa metod för att skapa nytt konto!
-                        inloggedCustomer.NewCheckingAccount();                        
+                        inloggedCustomer.NewCheckingAccount(inloggedCustomer);                        
                         break;
                     case "2":
                         // Anropa metod för att öppna ett nytt sparkonto!
-                        inloggedCustomer.NewSavingsAccount();                                           
+                        inloggedCustomer.NewSavingsAccount(inloggedCustomer);                                           
                         break;
                     case "3":
                         // Anropa metod för att öppna ett nytt konto med en annan valuta!
-                        inloggedCustomer.NewGlobalAccount();                        
+                        inloggedCustomer.NewGlobalAccount(inloggedCustomer);                        
                         break;
                     case "0":
                         Console.Write("\nTryck \"ENTER\" för att återgå till kontoöversikten.");

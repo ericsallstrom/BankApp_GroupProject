@@ -12,9 +12,10 @@ namespace BankApp_GroupProject
         private readonly List<Customer> _customers;
         private readonly Admin _admin;
         AsciiArt ascii = new();
+
         public LogInManager()
         {
-            _admin = new Admin("admin", "Password1@");
+            _admin = new Admin("admin", "Password1@");            
 
             _customers = new List<Customer>()
                 {
@@ -25,7 +26,7 @@ namespace BankApp_GroupProject
                     new Customer("hany", "Hej123@", "Hany", "Alhabboby"),
                     new Customer("hans", "Hej123@", "Hans", "Elofsson") { IsBlocked = true },
                     new Customer("karin", "Hej123@", "Karin", "Andersson") { IsBlocked = true }
-                };           
+                };
 
             InitUserAccounts();
         }
@@ -33,22 +34,15 @@ namespace BankApp_GroupProject
         //Tilldelar alla users ett lönekonto och ett random saldo
         public void InitUserAccounts()
         {
-            Random random = new();
-
-            decimal initialBalance = random.Next(100, 30001);
+            Random random = new();           
 
             foreach (var customer in _customers)
             {
-                Account checkingAccount = new();                
-                checkingAccount = customer.GetCheckingAccount();
+                decimal initialBalance = random.Next(100, 30001);
+                Account checkingAccount = new(AccountType.Checking, customer);
                 checkingAccount.Deposit(initialBalance);
-                customer.AddUserAccount(checkingAccount);
+                customer.CustomerAccounts.Add(checkingAccount);
             }
-        }
-
-        public List<Customer> GetAllCustomers()
-        {
-            return _customers;
         }
 
         public void DeleteExistingCustomer()
@@ -102,7 +96,7 @@ namespace BankApp_GroupProject
                     if (answer == "1")
                     {
                         var customerToRemove = _customers.Find(c => c.Username == username);
-                        DeleteCustomer(customerToRemove);                        
+                        DeleteCustomer(customerToRemove);
                         Console.Write($"\nAnvändaren {username} är nu borttagen från systemet." +
                           $"\nTryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
@@ -295,27 +289,39 @@ namespace BankApp_GroupProject
             }
             else
             {
-                Console.WriteLine("Lista över användare:" +
-                          "\n---------------------");
+                Console.WriteLine($"ANVÄNDARE\n" +
+                    $"\nNamn\t\t\t\tAnvändarnamn\t\tKontostatus" +
+                    $"\n===================================================================");                
 
                 foreach (var user in _customers)
                 {
                     if (user is Customer c)
                     {
-                        if (c.IsBlocked)
+                        if (c.FirstName.Length + c.LastName.Length >= 15)
                         {
-                            Console.Write($"Namn: {c.FirstName} {c.LastName}" +
-                                        $"\nAnvändarnamn: {c.Username}" +
-                                        $"\nKontot är för närvarande spärrat.\n");
-                        }
+                            if (c.IsBlocked)
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t{c.Username}\t\t\tSpärrat\n");
+                            }
+                            else
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t{c.Username}\n");
+                            }
+                        }    
                         else
                         {
-                            Console.Write($"Namn: {c.FirstName} {c.LastName}" +
-                                        $"\nAnvändarnamn: {c.Username}\n");
+                            if (c.IsBlocked)
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t\t{c.Username}\t\t\tSpärrat\n");
+                            }
+                            else
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t\t{c.Username}\n");
+                            }
                         }
-                        Console.WriteLine();
                     }
                 }
+                Console.WriteLine("\n");
             }
         }
 
