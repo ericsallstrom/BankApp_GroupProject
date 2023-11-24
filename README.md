@@ -26,6 +26,7 @@ CalcInterest(): Calculates and displays interest increases.
 ----------
 
 Customer Class
+
 The Customer class is inheriting from the base User class. The class encapsulates customer information, such as first and last name, and manages various banking functionalities. The purpose of this class is to facilitate customer interactions with the banking system, including creating accounts, managing transactions, and accessing account information.
 
 Key Features and Methods:
