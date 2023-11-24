@@ -16,13 +16,15 @@ namespace BankApp_GroupProject
         public string TransactionType { get; set; }
         public string TransactionDate { get; set; }
         public bool IsDebet { get; set; }
-        public decimal SourceAccBalance {  get; set; }
-        public string SourceCurrency {  get; set; }
+        public decimal SourceAccBalance { get; set; }
+        public string SourceCurrency { get; set; }
 
-        //
+        // Constructor for the Transaction-class 
         public Transaction(Account sourceAccount, decimal transactionAmount,
-            string transactionType, bool isDebet)
+                           string transactionType, bool isDebet)
         {
+            // When a new transaction is being logged from a account, 
+            // the debit shows the amount of money with a minus sign.
             if (isDebet) { transactionAmount *= -1; }
 
             SourceAcc = sourceAccount.GetAccountType(sourceAccount);
@@ -33,7 +35,7 @@ namespace BankApp_GroupProject
             SourceAccBalance = sourceAccount.Balance;
             SourceCurrency = sourceAccount.Currency;
 
-            // Loggar transaktionen till AccountHistory
+            // Logs the transaction to AccountHistory.
             sourceAccount.GetAccountHistory().Add(this);
         }
     }

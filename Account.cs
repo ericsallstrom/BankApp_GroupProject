@@ -2,6 +2,8 @@
 
 namespace BankApp_GroupProject
 {
+    // Public enum, that holds the types of the three 
+    // different account types a customer can have.
     public enum AccountType
     {
         Checking,
@@ -11,13 +13,15 @@ namespace BankApp_GroupProject
 
     public class Account
     {
-        public string AccountNumber { get; set; }
-        public decimal Balance { get; set; }
-        public AccountType Type { get; set; }
+        public string AccountNumber { get; private set; }
+        public decimal Balance { get; private set; }
+        public AccountType Type { get; }
         public Customer Customer { get; set; }
         public DateTime DateCreated { get; set; }
         public string Currency { get; set; }
         private List<Transaction> AccountHistory { get; set; }
+
+        // Public static list of accounts that automatically stores every customers accounts upon creation.
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
         public string CustomerName { get; set; }
         public decimal Debt { get; set; }
@@ -26,8 +30,10 @@ namespace BankApp_GroupProject
 
         readonly AsciiArt ascii = new();
 
+        // Constructor for the Account-class. Takes a enum AccountType and a Customer as in-parameters.
         public Account(AccountType type, Customer customer)
         {
+            // Every unique account is assigned a random generated account number.
             AccountNumber = GenerateAccountNumber();
             Balance = 0.0m;
             DateCreated = DateTime.Now;
@@ -35,48 +41,61 @@ namespace BankApp_GroupProject
             _deposit = 0.0m;
             Type = type;
             Customer = customer;
-            AccountHistory = new List<Transaction>();
-            AllCustomerAccounts.Add(this);
             CustomerName = customer.FirstName + " " + customer.LastName;
+
+            // A list of the accounts transactions is instantiated when a new account is created.
+            AccountHistory = new List<Transaction>();
+
+            // AllCustomerAccounts.list adds the current instance of the Account-class to its list. 
+            AllCustomerAccounts.Add(this);            
         }
 
-        protected static string GenerateAccountNumber()
-        //Förslag på att implementera ett random kontonummer, kan uvecklas vidare
-        //Tanken är att man behöver anropa metoden när man skapar ett nytt konto i en annan klass
+        // Private method for generating and returning a random account number to every account. 
+        private static string GenerateAccountNumber()
         {
             Random random = new();
-            //use of const because its a set value and wont be changed in the future
+
+            // The keyword const is applied to the variabel chars, because
+            // it is a set value and shouldn't be changed in the future.
             const string chars = "0123456789";
-            //Generating random number based on chars of a maximum value of 10
-            string generatedNumber = new string(Enumerable.Repeat(chars, 10)
+
+            // Generating a random number based on the variabel chars, of a maximum value of 10 characters.
+            string generatedNumber = new(Enumerable.Repeat(chars, 10)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
-            //Adding a hypfen(-) after the forth number to simulate a realistic account number
+
+            // Adding a hyphen (-) after the forth number to simulate a realistic account number.
             generatedNumber = generatedNumber.Insert(4, "-");
 
             return generatedNumber;
         }
 
-        public void SetCurency(string currency)
+        // Method for assigning a type of currency to the property Currency.
+        public void SetCurrency(string currency)
         {
             Currency = currency;
         }
 
+        // Method that returns the decimal value of a accounts balance.
         public decimal GetBalance()
         {
             return Balance;
         }
 
+        // Method for making a deposit to a account.
         public void Deposit(decimal amount)
         {
 
             Balance += amount;
         }
 
+        // Method to withdraw a certain amount from a account.
         public void Withdraw(decimal amount)
         {
             Balance -= amount;
         }
 
+        // Method that checks if a account is of a certain type. 
+        // Returns a string-value based on which type of account it is.
         public string GetAccountType(Account account)
         {
             if (account.Type == AccountType.Checking)
@@ -93,6 +112,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Method that allows a customer to make a deposit.
         public decimal MakeADeposit(Account account)
         {
             decimal deposit;
@@ -105,7 +125,8 @@ namespace BankApp_GroupProject
                             "\nInsättning: ");
                 string userInput = Console.ReadLine();
 
-                if (decimal.TryParse(userInput, out deposit) && deposit >= 1 && deposit <= 999999) //ändrat till decimal
+                // If the userInput is a correct value, and not smaller than 1 and larger than 9999999...
+                if (decimal.TryParse(userInput, out deposit) && deposit >= 1 && deposit <= 999999)
                 {
                     break;
                 }
@@ -121,6 +142,8 @@ namespace BankApp_GroupProject
             {
                 Console.Clear();
                 Console.WriteLine(ascii.Header());
+              
+                 // Asking the customer if they accept a deposit of a certain amount to be placed in a specific account.
                 Console.Write($"Accepterar du en insättning på {deposit} {Currency} till ditt {GetAccountType(account).ToLower()}?" +
                                 "\n[1] JA" +
                                 "\n[2] NEJ" +
@@ -133,10 +156,15 @@ namespace BankApp_GroupProject
                 {
                     if (choice == 1)
                     {
+                        // Adds the amount to the account balance.
                         Deposit(deposit);
+
+                        // Assigns the amount to _deposit for further calculations.
                         _deposit = deposit;
                         Console.Write($"\nInsättning av {deposit} {Currency} accepterad.\n" +
                                       $"\nTryck \"ENTER\" för att gå vidare.");
+
+                        // The transaction is then stored in the object t1.
                         Transaction t1 = new(this, deposit, "Insättning", false);
                         Console.ReadKey();
                         break;
@@ -161,12 +189,13 @@ namespace BankApp_GroupProject
 
         }
 
-        //Hämtar listan med transaktionshistoriken
+        // Returns the list of transactions for a specific account.
         public List<Transaction> GetAccountHistory()
         {
             return AccountHistory;
         }
 
+        // Method that prints out every transaction made in every account for a customer, if there are any.
         public void PrintAccountHistory()
         {
             if (AccountHistory.Any() != true)
