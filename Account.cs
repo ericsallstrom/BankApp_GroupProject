@@ -141,8 +141,9 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
-
-                // Asking the customer if they accept a deposit of a certain amount to be placed in a specific account.
+                Console.WriteLine(ascii.Header());
+              
+                 // Asking the customer if they accept a deposit of a certain amount to be placed in a specific account.
                 Console.Write($"Accepterar du en insättning på {deposit} {Currency} till ditt {GetAccountType(account).ToLower()}?" +
                                 "\n[1] JA" +
                                 "\n[2] NEJ" +
