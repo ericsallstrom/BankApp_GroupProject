@@ -9,33 +9,41 @@ namespace BankApp_GroupProject
 {
     public class LogInManager
     {
+        // Private field that holds a list of customers.
         private readonly List<Customer> _customers;
+
+        // Private field that holds a object from the Admin-class.
         private readonly Admin _admin;
 
         readonly AsciiArt ascii = new();
 
+        // Constructor for the LogInManager. When the program starts the bank
+        // already holds a number of users (one admin and seven customers).        
         public LogInManager()
         {
-            _admin = new Admin("admin", "Password1@");            
+            // Creates a new admin upon execution with already set username and password.
+            _admin = new Admin("admin", "Password1@");
 
+            // Adds seven customers to the list upon execution with already set username, password and name.
             _customers = new List<Customer>()
                 {
-                    new Customer("olov", "Hej123@", "Olov", "Olsson"),
-                    new Customer("olof", "Hej123@", "Olof", "Nordin"),
-                    new Customer("eric", "Hej123@", "Eric", "Sällström"),
-                    new Customer("patrik", "Hej123@", "Patrik", "Petterson"),
-                    new Customer("hany", "Hej123@", "Hany", "Alhabboby"),
-                    new Customer("hans", "Hej123@", "Hans", "Elofsson") { IsBlocked = true },
-                    new Customer("karin", "Hej123@", "Karin", "Andersson") { IsBlocked = true }
+                    new("olov", "Hej123@", "Olov", "Olsson"),
+                    new("olof", "Hej123@", "Olof", "Nordin"),
+                    new("eric", "Hej123@", "Eric", "Sällström"),
+                    new("patrik", "Hej123@", "Patrik", "Petterson"),
+                    new("hany", "Hej123@", "Hany", "Alhabboby"),
+                    new("hans", "Hej123@", "Hans", "Elofsson") { IsBlocked = true }, // This customer is blocked from start.
+                    new("karin", "Hej123@", "Karin", "Andersson") { IsBlocked = true } // This customer is blocked from start.
                 };
 
+            // This method is called upon execution.
             InitUserAccounts();
         }
 
-        //Tilldelar alla users ett lönekonto och ett random saldo
-        public void InitUserAccounts()
+        // Method for assigning every customer a checking account and a balance with a random value.
+        private void InitUserAccounts()
         {
-            Random random = new();           
+            Random random = new();
 
             foreach (var customer in _customers)
             {
@@ -46,6 +54,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Method that allows admin to delete an already existing customer.
         public void DeleteExistingCustomer()
         {
             string username;
@@ -57,18 +66,19 @@ namespace BankApp_GroupProject
                 Console.Clear();
                 Console.WriteLine(ascii.Header());
                 PrintUsers();
-                
+
                 Console.WriteLine(heading);
                 Console.Write("Användarnamn: ");
                 username = Console.ReadLine();
 
+                // Checks if the customer is registered in the system.
                 if (UsernameExistsInList(username))
                 {
                     break;
                 }
                 else
                 {
-                    Console.Write("\nFelaktig inamtning! Användaren finns inte i systemet.\n" +
+                    Console.Write("\nFelaktig inmatning! Användaren finns inte i systemet.\n" +
                                     "Tryck \"ENTER\" och försök igen.");
                     Console.ReadKey();
                 }
@@ -85,6 +95,7 @@ namespace BankApp_GroupProject
                               $"\nAnge ditt lösenord: ");
                 string adminPassword = Console.ReadLine();
 
+                // To execute the process of deleting a customer, the admin has to enter its password.
                 if (_admin.CheckPassword(adminPassword))
                 {
                     Console.Write($"\nÄr du säker på att du vill ta bort användaren {username}?" +
@@ -96,6 +107,7 @@ namespace BankApp_GroupProject
 
                     if (answer == "1")
                     {
+                        // The customer is located in the list through its username and is then deleted.
                         var customerToRemove = _customers.Find(c => c.Username == username);
                         DeleteCustomer(customerToRemove);
                         Console.Write($"\nAnvändaren {username} är nu borttagen från systemet." +
@@ -126,7 +138,10 @@ namespace BankApp_GroupProject
             }
         }
 
-        // en metod som lägger till nya användare samt kolla om de finns redan
+        // Method that allows admin to create a new customer by entering the
+        // customers full name, username and assigning it a password. Both
+        // the username and password are being verified before they are being 
+        // assigned to the new customer. Also, the username has to be unique.        
         public void CreateNewUser()
         {
             Console.Clear();
@@ -150,6 +165,7 @@ namespace BankApp_GroupProject
                       "\nAnvändarnamn: ");
                 username = Console.ReadLine();
 
+                // Checks if a username already exists in the system.
                 if (IsUsernameTaken(username))
                 {
                     Console.Write($"\nEtt konto med användarnamnet {username} existerar redan. " +
@@ -159,6 +175,7 @@ namespace BankApp_GroupProject
                 }
                 else
                 {
+                    // Verifies the new username.
                     if (User.VerifyNewUsername(username))
                     {
                         break;
@@ -188,8 +205,10 @@ namespace BankApp_GroupProject
                               "\nLösenord: ");
                 string password = Console.ReadLine();
 
+                // Verifies the new password.
                 if (User.VerifyNewPassword(password))
                 {
+                    // The new customer is then added to the list.
                     AddCustomer(new Customer(username, password, firstName, lastName));
                     break;
                 }
@@ -206,6 +225,7 @@ namespace BankApp_GroupProject
             Console.ReadKey();
         }
 
+        // Method that ensures that a last name is being entered by the admin and returns the verified name.
         public static string VerifyLastName(string heading, string firstName)
         {
             string verifiedLastName;
@@ -237,6 +257,7 @@ namespace BankApp_GroupProject
             return verifiedLastName;
         }
 
+        // Method that ensures that a first name is being entered by the admin and returns the verified name.
         public static string VerifyFirstName(string heading)
         {
             string verifiedFirstName;
@@ -267,23 +288,25 @@ namespace BankApp_GroupProject
             return verifiedFirstName;
         }
 
-        // Publik metod som lägger till en användare i listan.
-        public void AddCustomer(Customer customer)
+        // Method for adding a new customer the list.
+        private void AddCustomer(Customer customer)
         {
             _customers.Add(customer);
         }
 
-        // Här kan man ta bort användare från listan
-        public void DeleteCustomer(Customer customer)
+        // Method for removing a customer from the list.
+        private void DeleteCustomer(Customer customer)
         {
             _customers.Remove(customer);
         }
 
-        //Skapade en metod som visar alla användare
+        // Prints every customer in the system out to console.
         public void PrintUsers()
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
+
+            // Checking if there are any customers registered.
             if (_customers.Count == 0)
             {
                 Console.WriteLine("För tillfället finns inga användare i banken.\n");
@@ -292,14 +315,18 @@ namespace BankApp_GroupProject
             {
                 Console.WriteLine($"ANVÄNDARE\n" +
                     $"\nNamn\t\t\t\tAnvändarnamn\t\tKontostatus" +
-                    $"\n===================================================================");                
+                    $"\n===================================================================");
 
                 foreach (var user in _customers)
                 {
+                    // Checking if a user is of type customer.
                     if (user is Customer c)
                     {
+                        // For a nicer formatting, customers whose name is as long or longer than
+                        // 15 characters have a different format when printing to console.
                         if (c.FirstName.Length + c.LastName.Length >= 15)
                         {
+                            // If a customer is blocked, its marked with the word "Spärrat" (= blocked).
                             if (c.IsBlocked)
                             {
                                 Console.Write($"{c.FirstName} {c.LastName}\t\t{c.Username}\t\t\tSpärrat\n");
@@ -308,7 +335,7 @@ namespace BankApp_GroupProject
                             {
                                 Console.Write($"{c.FirstName} {c.LastName}\t\t{c.Username}\n");
                             }
-                        }    
+                        }
                         else
                         {
                             if (c.IsBlocked)
@@ -326,14 +353,19 @@ namespace BankApp_GroupProject
             }
         }
 
-        // Metod för att ta bort spärren från en kund
+        // Method for allowing admin to unblock a customer, which means 
+        // that the customer in question now is able to log in again.
         public void UnblockCustomer()
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
+
             bool isRunning = true;
+
+            // Every blocked customer in the _customer-list is stored in a new list, "blockedCustomers".
             var blockedCustomers = _customers.FindAll(c => c.IsBlocked);
 
+            // If blockedCustomers-list is not empty.
             if (blockedCustomers.Count > 0)
             {
                 while (isRunning)
@@ -358,23 +390,34 @@ namespace BankApp_GroupProject
                     }
                     else
                     {
-                        Console.Write($"\nAnvändaren finns inte registrerad i banken." +
-                         "\nVill du försöka igen?" +
-                         "\n[1] Ja" +
-                         "\n[2] Nej" +
-                         "\n---" +
-                         "\nDitt val: ");
-                        string answer = Console.ReadLine();
-
-                        switch (answer)
+                        bool tryAgain = false;
+                        while (!tryAgain)
                         {
-                            case "2":
-                                isRunning = false;
-                                break;
-                            default:
-                                Console.Write("\nOgiltigt menyval! Tryck \"ENTER\" två gånger för att återkomma till menyn.");
-                                Console.ReadKey();
-                                break;
+                            Console.Clear();
+                            Console.WriteLine(ascii.Header());
+                            Console.Write($"Användaren finns inte registrerad i banken." +
+                                           "\nVill du försöka igen?" +
+                                           "\n[1] Ja" +
+                                           "\n[2] Nej" +
+                                           "\n---" +
+                                           "\nDitt val: ");
+                            string answer = Console.ReadLine();
+
+                            switch (answer)
+                            {
+                                case "1":
+                                    tryAgain = true;
+                                    break;
+                                case "2":                                           
+                                    Console.Write("\nDu har valt att avsluta processen. " +
+                                        "\nTryck \"ENTER\" för att återgå till föregående meny.");
+                                    Console.ReadKey();
+                                    return;                                    
+                                default:
+                                    Console.Write("\nOgiltigt menyval! Tryck \"ENTER\" och försök igen.");
+                                    Console.ReadKey();
+                                    break;
+                            }
                         }
                     }
                 }

@@ -8,48 +8,74 @@ using System.Transactions;
 
 namespace BankApp_GroupProject
 {
+    // The User-class is inherited by the Customer-class.
     public class Customer : User
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        // Public static list of customers that automatically stores every customer upon creation.
         public static List<Customer> AllCustomers { get; } = new List<Customer>();
+
+        // Public list that stores the accounts of a customer.
         public List<Account> CustomerAccounts { get; set; }
 
         readonly AsciiArt ascii = new();
 
-        public Customer(string username, string password, string firstname, string lastname)
+        // Constructor for the Customer-class. Other than the two inherited variables from
+        // the User-class, it takes two other arguments: firstName and lastName. Also,
+        // inside the constructor the IsAdmin and IsBlocked is false upon execution.  
+        public Customer(string username, string password, string firstName, string lastName)
             : base(username, password)
         {
-            FirstName = firstname;
-            LastName = lastname;
+            FirstName = firstName;
+            LastName = lastName;
             IsAdmin = false;
             IsBlocked = false;
+
+            // A list of the accounts is instantiated when a new customer is created.
             CustomerAccounts = new List<Account>();
+
+            // AllCustomers-list adds the current instance of the Customer-class to its list. 
             AllCustomers.Add(this);
         }
 
-        //Skapa Lönekontot
+        // Method for creating a new checking account.
         public void NewCheckingAccount(Customer customer)
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
 
+            // A new account is instantiated with the account-type of 
+            // Checking and the customer that's creating the account.
             Account checkingAccount = new(AccountType.Checking, customer);
 
-            checkingAccount.SetCurency("SEK");
+            // The account's currency is automatically set to SEK.
+            checkingAccount.SetCurrency("SEK");
 
+            // A customer can only have one checking account. If the 
+            // list of accounts doesn't contain a checking account of this
+            // specific customer, they can create a new checking account.
             if (!customer.CustomerAccounts.Any(a => a.Type == AccountType.Checking))
             {
+                // Asking the customer if they still wants to open a new checking account.
                 int answer = ProceedCreatingAccount(checkingAccount);
 
+                // If they do...
                 if (answer == 1)
                 {
+                    // ... the account is then added to the customers list of accounts.
                     customer.CustomerAccounts.Add(checkingAccount);
+
+                    // Praises the customer upon opening a new account.
                     PrintAccountSuccess(checkingAccount);
+
+                    // Asks the customer if they want to make a deposit to the new account.
                     DoYouWantToDeposit(checkingAccount);
                 }
                 else
                 {
+                    // ... else the process is terminated. 
                     Console.Write("\nDu har valt att avbryta processen! Tryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
                 }
@@ -62,28 +88,44 @@ namespace BankApp_GroupProject
             }
         }
 
-        //skapa nytt sparkonto
+        // Method for creating a new savings account.
         public void NewSavingsAccount(Customer customer)
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
 
+            // A new account is instantiated with the account-type of 
+            // Savings and the customer that's creating the account.
             SavingsAccount savingsAccount = new(AccountType.Savings, customer);
 
-            savingsAccount.SetCurency("SEK");
+            // The account's currency is automatically set to SEK.
+            savingsAccount.SetCurrency("SEK");
 
+            // A customer can only have one savings account. If the 
+            // list of accounts doesn't contain a savings account of 
+            // this specific customer, they can open a new account.
             if (!customer.CustomerAccounts.Any(a => a.Type == AccountType.Savings))
             {
+                // Asking the customer if they still wants to open a new account.
                 int answer = ProceedCreatingAccount(savingsAccount);
 
+                // If they do...
                 if (answer == 1)
                 {
+                    // ... the account is then added to the customers list of accounts.
                     customer.CustomerAccounts.Add(savingsAccount);
+
+                    // Here the customer can chose between two types of interest.
                     savingsAccount.InterestChoice();
 
-                    DoYouWantToDeposit(savingsAccount);
+                    // Praises the customer upon opening a new account.
                     PrintAccountSuccess(savingsAccount);
 
+                    // Asks the customer if they want to make a deposit to the new account.
+                    DoYouWantToDeposit(savingsAccount);
+
+                    // Calculating and presenting how much money the customer will
+                    // earn in a year based on the deposit to the savings account.
                     savingsAccount.CalcInterest();
                 }
                 else
@@ -100,26 +142,38 @@ namespace BankApp_GroupProject
             }
         }
 
-        //Skapa Utlandskontot
+        // Method for creating a new global account.
         public void NewGlobalAccount(Customer customer)
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
 
+            // currencySet is false until the customer decides which
+            // currency they want to store in their new global account.
             bool currencySet = false;
+
+            // A new account is instantiated with the account-type of 
+            // Global and the customer that's creating the account.
             Account globalAccount = new(AccountType.Global, customer);
 
+            // A customer can only have one savings account. If the 
+            // list of accounts doesn't contain a account of the type
+            // Global of this specific customer, they can open a new account.
             if (!customer.CustomerAccounts.Any(a => a.Type == AccountType.Global))
             {
+                // Asking the customer if they still wants to open a new account.
                 int answer = ProceedCreatingAccount(globalAccount);
 
+                // If they do...
                 if (answer == 1)
                 {
                     while (!currencySet)
                     {
                         Console.Clear();
                         Console.WriteLine(ascii.Header());
-                        Console.Write("För att skapa ett utlandskonto måste du välja vilken valuta kontots värde skall stå i.\n" +
+
+                        // The user is asked to chose which currency the new account should store.
+                        Console.Write("För att skapa ett utlandskonto måste du välja vilken typ av valuta kontots värde skall stå i.\n" +
                                     "Vänligen välj valuta:" +
                                     "\n[1] EUR" +
                                     "\n[2] USD" +
@@ -131,11 +185,13 @@ namespace BankApp_GroupProject
                         switch (menuChoice)
                         {
                             case "1":
-                                globalAccount.SetCurency("EUR");
+                                // The currency of the global account is set to euro.
+                                globalAccount.SetCurrency("EUR");
                                 currencySet = true;
                                 break;
                             case "2":
-                                globalAccount.SetCurency("USD");
+                                // The currency of the global account is set to dollar.
+                                globalAccount.SetCurrency("USD");
                                 currencySet = true;
                                 break;
                             default:
@@ -144,10 +200,16 @@ namespace BankApp_GroupProject
                                 break;
                         }
                     }
+                    // The account is added to the customers list of accounts.
                     customer.CustomerAccounts.Add(globalAccount);
+
+                    // Praises the customer upon opening a new account.
                     PrintAccountSuccess(globalAccount);
+
+                    // Asks the customer if they want to make a deposit to the new account.
                     DoYouWantToDeposit(globalAccount);
                 }
+                // ... else the process is terminated.
                 else
                 {
                     Console.Write("\nDu har valt att avbryta processen! Tryck \"ENTER\" för att återgå till föregående meny.");
@@ -162,6 +224,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Method that asks the customer if they want to proceed creating a new account.
         private int ProceedCreatingAccount(Account account)
         {
             string menuChoice = "";
@@ -194,7 +257,7 @@ namespace BankApp_GroupProject
             return 0;
         }
 
-        //Frågar om man vill göra en deposit
+        // Method that asks the customer if they want to make an deposit.
         public void DoYouWantToDeposit(Account account)
         {
             Console.Write("\nTryck [j] för att göra en insättning på kontot." +
@@ -205,11 +268,12 @@ namespace BankApp_GroupProject
             string answer = Console.ReadLine();
             if (answer.ToLower() == "j")
             {
+                // If yes, the deposit is stored in the balance of the specific account.
                 account.MakeADeposit(account);
             }
         }
 
-        //Skriver ut Grattis och kontoöversikt
+        // Gives praise to the customer for opening a new account and displays details of the account.
         public void PrintAccountSuccess(Account account)
         {
             Console.Clear();
@@ -223,12 +287,13 @@ namespace BankApp_GroupProject
                               $"\nSkapat:      {account.DateCreated:g}");
         }
 
-        //Skriver ut kundens alla konton
+        // Method that displays every account that a customer have. 
         public void PrintAccounts(bool displayGoBackMessage = true)
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
 
+            // Checks if the customer have any accounts.
             if (CustomerAccounts.Any() != true)
             {
                 Console.Write("Du har för närvarande inga konton.\n" +
@@ -246,6 +311,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Method that checks if a certain account have sufficient funds.
         public bool CheckFunds(Account account)
         {
             if (account.GetBalance() > 0)
@@ -255,11 +321,13 @@ namespace BankApp_GroupProject
             return false;
         }
 
-        public void PrintEveryCustomersAccount(Customer inloggedCustomer)
+        // Method that prints the username, account number and account type of every registered customer in the bank.
+        public void PrintEveryCustomersAccount(Customer loggedInCustomer)
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
 
+            // Checks whether the list is empty or not.
             if (Account.AllCustomerAccounts.Count == 0)
             {
                 Console.WriteLine("För tillfället existerar inga kundkonton i banken.\n");
@@ -271,10 +339,14 @@ namespace BankApp_GroupProject
                     $"\n=================================================================");
                 foreach (var account in Account.AllCustomerAccounts)
                 {
-                    if (account.CustomerName != inloggedCustomer.Username)
+                    // Making sure the customer trying to make an external 
+                    // transactions doesn't make one to its own account.
+                    if (account.CustomerName != loggedInCustomer.Username)
                     {
-                        if (!inloggedCustomer.CustomerAccounts.Exists(a => a.AccountNumber == account.AccountNumber) && account.Type == AccountType.Checking)
+                        // Only the account number of the customers checking account should be visible.
+                        if (!loggedInCustomer.CustomerAccounts.Exists(a => a.AccountNumber == account.AccountNumber) && account.Type == AccountType.Checking)
                         {
+                            // For formatting reasons, a name longer than 16 characters are treated differently when printed to console.
                             if (account.CustomerName.Length >= 16)
                             {
                                 Console.Write($"{account.CustomerName}\t\t{account.AccountNumber}\t\t{account.GetAccountType(account)}\n");
@@ -289,7 +361,7 @@ namespace BankApp_GroupProject
             }
         }
 
-        //frågar om man vill göra en insättning till befintligt konto
+        // Method that allows the customer to make a deposit to one of the accounts they have created.
         public void AccountDeposit()
         {
             while (true)
@@ -297,21 +369,27 @@ namespace BankApp_GroupProject
                 Console.Clear();
                 Console.WriteLine(ascii.Header());
 
-                PrintAccounts(false); //false för att inte skriva ut tillbaka
+                PrintAccounts(false);
 
-                Console.Write("Ange kontonummret för det konto du önskar sätta in pengar på. " +
-                            "\n(Skriv 0 för att avbryta processen och gå tillbaka)." +
-                            "\nKontonr: ");
+                Console.Write("Ange kontonumret för det konto du önskar sätta in pengar på. " +
+                            "\n(Skriv 0 för att avbryta processen och återgå till föregående meny)." +
+                            "\nKontonummer: ");
 
                 string accountNrToDeposit = Console.ReadLine().Trim();
 
+                // A new temporary account is instantiated based on the entered account number.
                 Account selectedAccount = CustomerAccounts.FirstOrDefault(account => account.AccountNumber.Trim() == accountNrToDeposit);
 
+                // If the new, temporary account is not null (i.e. the entered account
+                // number matched the account number of an actually account)...
                 if (selectedAccount != null)
                 {
                     Console.Clear();
-                    selectedAccount.MakeADeposit(selectedAccount);
                     Console.WriteLine(ascii.Header());
+
+                    // The customer is allowed to make a deposit to the selected account.
+                    selectedAccount.MakeADeposit(selectedAccount);
+
                     Console.WriteLine($"\n\nDin insättning till ditt {selectedAccount.GetAccountType(selectedAccount).ToLower()}: {selectedAccount.AccountNumber} har gått igenom." +
                                       $"\nDitt nya saldo är: {selectedAccount.Balance} {selectedAccount.Currency}.");
                     Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
@@ -333,20 +411,27 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Method in which the customer decides which external account number to make an external transfer to.
         private void TransferToExternalAccount(Account transferAccount, Customer customer)
         {
             decimal transferAmount = 0;
 
             while (true)
             {
+                // Displays the customers' own accounts.
                 PrintAccounts();
+
+                // Asking what amount the customer would like to transfer from their chosen account.
                 Console.Write($"Hur mycket pengar vill du föra över från ditt {transferAccount.GetAccountType(transferAccount).ToLower()}?" +
                             $"\nBelopp: ");
 
                 if (decimal.TryParse(Console.ReadLine(), out transferAmount))
                 {
+                    // Checks whether the account has sufficient funds or not.
                     if (transferAmount <= transferAccount.GetBalance())
                     {
+                        // If there's enough funds we break out of 
+                        // the while loop and go into the next one.
                         break;
                     }
                     else
@@ -368,23 +453,33 @@ namespace BankApp_GroupProject
 
             while (!transferComplete)
             {
+                // Displays the account number, and more, for every checking account from all available customers.
                 PrintEveryCustomersAccount(customer);
 
-                Console.Write("\nAnge kontonummret för det konto du önskar föra över pengar till." +
+                // The customer is prompted to enter the account number for the
+                // desired account to which they wishes to transfer the money.
+                Console.Write("\nAnge kontonumret för det konto du önskar föra över pengar till." +
                             "\nKontonr: ");
 
                 string accountNrToDeposit = Console.ReadLine();
 
+                // New temporary account is created based on the entered account number.
                 var selectedAccount = Account.AllCustomerAccounts.Find(a => a.AccountNumber == accountNrToDeposit);
 
+                // If the new, temporary account is not null (i.e. the entered
+                // account number matched the account number of an actually account)...
                 if (selectedAccount != null)
                 {
-                    selectedAccount.Deposit(transferAmount);
+
+                    // A withdraw is made to the customers own account.
                     transferAccount.Withdraw(transferAmount);
 
-                    //Logg till kontohändelser/AccountHistory
-                    Transaction f1 = new(transferAccount, transferAmount, "Överföring", true); //Debet
-                    Transaction t2 = new(selectedAccount, transferAmount, "Överföring", false); //Kredit
+                    // The selected account receives the deposit.
+                    selectedAccount.Deposit(transferAmount);
+
+                    // Both transactions (debit & credit) are logged to the list of transactions.
+                    Transaction f1 = new(transferAccount, transferAmount, "Överföring", true); // Debit
+                    Transaction t2 = new(selectedAccount, transferAmount, "Överföring", false); // Credit
 
                     Console.Write($"\nÖverföringen lyckades! Tryck \"ENTER\" för att återgå till föregående meny.");
                     Console.ReadKey();
@@ -398,6 +493,7 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Method in which the customer choses which of their account the money should be transferred to.
         private void TransferToInternalAccount(Account transferAccount)
         {
             decimal transferAmount = 0;
@@ -405,14 +501,20 @@ namespace BankApp_GroupProject
 
             while (true)
             {
+                // Displaying the customers' own accounts.
                 PrintAccounts();
+
+                // Asking what amount the customer would like to transfer from their chosen account.
                 Console.Write($"Hur mycket vill du föra över från {transferAccount.GetAccountType(transferAccount).ToLower()}t?" +
                               $"\nBelopp: ");
 
                 if (decimal.TryParse(Console.ReadLine(), out originalTransferAmount))
                 {
+                    // Checks whether the account has sufficient funds or not.
                     if (originalTransferAmount <= transferAccount.GetBalance())
                     {
+                        // If there's enough funds we break out of 
+                        // the while loop and go into the next one.
                         break;
                     }
                     else
@@ -434,11 +536,18 @@ namespace BankApp_GroupProject
 
             while (!transferComplete)
             {
+                // Removes the account from which the customer wants to transfer from.
+                // Just so it won't show up when the next accounts are displayed.                
                 CustomerAccounts.Remove(transferAccount);
+
+                // Displays the customers own accounts, except the one they want to  transfer from.
+                // That's because they shouldn't be able to transfer back the money by mistake.                
                 PrintAccounts();
                 int counter = 1;
+                // The customer is prompted to chose which account they want to transfer the money to.
                 Console.WriteLine($"Välj det konto du vill föra över {originalTransferAmount} {transferAccount.Currency} till.\n");
 
+                // A menu is presented from which the customer choses the account to transfer to.
                 CustomerAccounts.ForEach(a => Console.Write($"[{counter++}] {a.GetAccountType(a)}\n"));
                 Console.Write("---" +
                            "\nVälj konto: ");
@@ -448,8 +557,11 @@ namespace BankApp_GroupProject
                 switch (accountChoice)
                 {
                     case "1":
+                        // Selects the first account.
                         var accountFirstIndex = CustomerAccounts.ElementAt(0);
 
+                        // If the account's currency, from which the transfer is being sent from, doesn't match the
+                        // target account's currency, the transfer amount will be converted into the right currency.
                         if (transferAccount.Currency != accountFirstIndex.Currency)
                         {
                             transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountFirstIndex.Currency, originalTransferAmount);
@@ -459,20 +571,31 @@ namespace BankApp_GroupProject
                             transferAmount = originalTransferAmount;
                         }
 
+                        // A withdraw is made to the customers own account.
                         transferAccount.Withdraw(originalTransferAmount);
+
+                        // The selected account receives the deposit.
                         accountFirstIndex.Deposit(transferAmount);
 
                         Console.Clear();
                         Console.WriteLine(ascii.Header());
+
+                        // A message is displayed telling the customer the transfer have gone through. 
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountFirstIndex.GetAccountType(accountFirstIndex).ToLower()}t " +
-                                          $"är {accountFirstIndex.GetBalance():c}.");
-                        Transaction f1 = new(transferAccount, originalTransferAmount, "Överföring", true);
-                        Transaction t1 = new(accountFirstIndex, originalTransferAmount, "Överföring", false);
+                                          $"är {accountFirstIndex.GetBalance()} {accountFirstIndex.Currency}.");
+
+                        // Both transactions (debit & credit) are logged to the list of transactions.
+                        Transaction f1 = new(transferAccount, originalTransferAmount, "Överföring", true); // Debit
+                        Transaction t1 = new(accountFirstIndex, originalTransferAmount, "Överföring", false); // Credit
+
                         transferComplete = true;
                         break;
                     case "2":
+                        // Selects the second account, if it exists. 
                         var accountSecondIndex = CustomerAccounts.ElementAt(1);
 
+                        // If the account's currency, from which the transfer is being sent from, doesn't match the
+                        // target account's currency, the transfer amount will be converted into the right currency.
                         if (transferAccount.Currency != accountSecondIndex.Currency)
                         {
                             transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountSecondIndex.Currency, originalTransferAmount);
@@ -487,32 +610,15 @@ namespace BankApp_GroupProject
 
                         Console.Clear();
                         Console.WriteLine(ascii.Header());
+
+                        // A message is displayed telling the customer the transfer have gone through. 
                         Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountSecondIndex.GetAccountType(accountSecondIndex).ToLower()}t " +
-                                          $"är {accountSecondIndex.GetBalance():c}.");
-                        Transaction f2 = new(transferAccount, originalTransferAmount, "Överföring", true);
-                        Transaction t2 = new(accountSecondIndex, originalTransferAmount, "Överföring", false);
-                        transferComplete = true;
-                        break;
-                    case "3":
-                        var accountThirdIndex = CustomerAccounts.ElementAt(2);
+                                          $"är {accountSecondIndex.GetBalance()} {accountSecondIndex.Currency}.");
 
-                        if (transferAccount.Currency != accountThirdIndex.Currency)
-                        {
-                            transferAmount = ExchangeManager.Exchange.CurrencyConverter(transferAccount.Currency, accountThirdIndex.Currency, originalTransferAmount);
-                        }
-                        else
-                        {
-                            transferAmount = originalTransferAmount;
-                        }
-                        transferAccount.Withdraw(originalTransferAmount);
-                        accountThirdIndex.Deposit(transferAmount);
+                        // Both transactions (debit & credit) are logged to the list of transactions.
+                        Transaction f2 = new(transferAccount, originalTransferAmount, "Överföring", true); // Debit
+                        Transaction t2 = new(accountSecondIndex, originalTransferAmount, "Överföring", false); // Credit
 
-                        Console.Clear();
-                        Console.WriteLine(ascii.Header());
-                        Console.WriteLine($"Överföringen lyckades! Ditt nya saldo för {accountThirdIndex.GetAccountType(accountThirdIndex).ToLower()}t " +
-                                          $"är {accountThirdIndex.GetBalance():c}.");
-                        Transaction f3 = new(transferAccount, originalTransferAmount, "Överföring", true);
-                        Transaction t3 = new(accountThirdIndex, originalTransferAmount, "Överföring", false);
                         transferComplete = true;
                         break;
                     default:
@@ -521,17 +627,23 @@ namespace BankApp_GroupProject
                         break;
                 }
             }
+            // The account from which the transfer was made is added back to the list.
             CustomerAccounts.Add(transferAccount);
+
+            // The list is then reversed so that the order in which the
+            // different accounts where added to the list is restored.
             CustomerAccounts.Reverse();
+
             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
         }
 
-        //Metod för att göra överföringar mellan egna konton
-        public void InternalTransaction(Customer customer)
+        // Method for the customer to make a internal transaction between their own accounts.
+        public void InternalTransaction()
         {
             bool RunMenu = true;
 
+            // Checks whether the customer have at least two different accounts.
             if (CustomerAccounts.Count <= 1)
             {
                 Console.Clear();
@@ -544,14 +656,22 @@ namespace BankApp_GroupProject
             {
                 while (RunMenu)
                 {
+                    // The customer is prompted to chose which account to make the transfer from.
                     string accountChoice = ChooseAccountForWithdraw();
 
                     switch (accountChoice)
                     {
+                        // Based on the menu in the ChooseAccountForWithdraw()-method, the 
+                        // input from the customer determents which account they have chosen. 
                         case "1":
+                            // Selects the first account.
                             var accountFirstIndex = CustomerAccounts.ElementAtOrDefault(0);
+
+                            // Making sure there are enough funds.
                             if (CheckFunds(accountFirstIndex))
                             {
+                                // The method below is called, in which the customer
+                                // choses the account to transfer their money.
                                 TransferToInternalAccount(accountFirstIndex);
                                 RunMenu = false;
                             }
@@ -563,9 +683,14 @@ namespace BankApp_GroupProject
                             }
                             break;
                         case "2":
+                            // Selects the second account.
                             var accountSecondIndex = CustomerAccounts.ElementAtOrDefault(1);
+
+                            // Making sure there are enough funds.
                             if (CheckFunds(accountSecondIndex))
                             {
+                                // The method below is called, in which the customer
+                                // choses the account to transfer their money.
                                 TransferToInternalAccount(accountSecondIndex);
                                 RunMenu = false;
                             }
@@ -577,11 +702,17 @@ namespace BankApp_GroupProject
                             }
                             break;
                         case "3":
+                            // Selects the third account, if it exists.
                             var accountThirdIndex = CustomerAccounts.ElementAtOrDefault(2);
+
+                            // If the account exists...
                             if (accountThirdIndex != null)
                             {
+                                // ... we're making sure there are enough funds.
                                 if (CheckFunds(accountThirdIndex))
                                 {
+                                    // The method below is called, in which the customer
+                                    // choses the account to transfer their money.
                                     TransferToInternalAccount(accountThirdIndex);
                                     RunMenu = false;
                                 }
@@ -594,6 +725,7 @@ namespace BankApp_GroupProject
                             }
                             else
                             {
+                                // If the account doesn't exist the default-case is called.
                                 goto default;
                             }
                             break;
@@ -611,11 +743,12 @@ namespace BankApp_GroupProject
             }
         }
 
-        //Metod för att göra överföringar mellan kunders konton
+        // Method for the customer to make a external transaction to another customer.
         public void ExternalTransaction(Customer customer)
         {
             bool RunMenu = true;
 
+            // Checks whether the customer have at least one account to make the transfer.
             if (CustomerAccounts.Count == 0)
             {
                 Console.Clear();
@@ -628,14 +761,22 @@ namespace BankApp_GroupProject
             {
                 while (RunMenu)
                 {
+                    // The customer is prompted to chose which account to make the transfer from.
                     string accountChoice = ChooseAccountForWithdraw();
 
                     switch (accountChoice)
                     {
+                        // Based on the menu in the ChooseAccountForWithdraw()-method, the 
+                        // input from the customer determents which account they have chosen. 
                         case "1":
+                            // Selects the first account.
                             var accountFirstIndex = CustomerAccounts.ElementAtOrDefault(0);
+
+                            // Making sure there are enough funds.
                             if (CheckFunds(accountFirstIndex))
                             {
+                                // The method below is called, in which the customer
+                                // choses the account to transfer their money.
                                 TransferToExternalAccount(accountFirstIndex, customer);
                                 RunMenu = false;
                             }
@@ -647,11 +788,17 @@ namespace BankApp_GroupProject
                             }
                             break;
                         case "2":
+                            // Selects the second account, if it exists.
                             var accountSecondIndex = CustomerAccounts.ElementAtOrDefault(1);
+
+                            // If the account exists...
                             if (accountSecondIndex != null)
                             {
+                                // ... we're making sure there are enough funds.
                                 if (CheckFunds(accountSecondIndex))
                                 {
+                                    // The method below is called, in which the customer
+                                    // choses the account to transfer their money.
                                     TransferToExternalAccount(accountSecondIndex, customer);
                                     RunMenu = false;
                                 }
@@ -664,15 +811,22 @@ namespace BankApp_GroupProject
                             }
                             else
                             {
+                                // If the account doesn't exist the default-case is called.
                                 goto default;
                             }
                             break;
                         case "3":
+                            // Selects the third account, if it exists.
                             var accountThirdIndex = CustomerAccounts.ElementAtOrDefault(2);
+
+                            // If the account exists...
                             if (accountThirdIndex != null)
                             {
+                                // ... we're making sure there are enough funds.
                                 if (CheckFunds(accountThirdIndex))
                                 {
+                                    // The method below is called, in which the customer
+                                    // choses the account to transfer their money.
                                     TransferToExternalAccount(accountThirdIndex, customer);
                                     RunMenu = false;
                                 }
@@ -685,6 +839,7 @@ namespace BankApp_GroupProject
                             }
                             else
                             {
+                                // If the account doesn't exist the default-case is called.
                                 goto default;
                             }
                             break;
@@ -702,12 +857,13 @@ namespace BankApp_GroupProject
             }
         }
 
+        // Method that prompts the user to chose which account to transfer 
+        // money from. Returns a string carrying the customers answer.
         private string ChooseAccountForWithdraw()
         {
             PrintAccounts();
             int counter = 1;
-            Console.WriteLine("Välj det konto du vill föra över pengar från.\n");
-            //CustomerAccounts.ForEach(a => Console.Write($"[{counter++}] {a.AccType}\n"));
+            Console.WriteLine("Välj det konto du vill föra över pengar från.\n");            
             CustomerAccounts.ForEach(a => Console.Write($"[{counter++}] {a.GetAccountType(a)}\n"));
             Console.Write("---" +
                         "\n[0] Avsluta överföringen" +
@@ -834,7 +990,7 @@ namespace BankApp_GroupProject
 
                             // Här plusas summan på lånade pengar tillsammans med pengarna som fanns redan i lönekontot
                             account.Debt += Convert.ToDecimal(loanAmount);
-                            account.Deposit(loan);                            
+                            account.Deposit(loan);
                             Console.WriteLine($"Totalsumman på ditt lönekonto: {account.Balance} kr.");
 
                             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
@@ -858,11 +1014,7 @@ namespace BankApp_GroupProject
                 }
         }
 
-        public List<Account> GetUserAccounts()
-        {
-            return CustomerAccounts;
-        }
-
+        // Method that allows the customer to see every transaction made in their accounts.
         public void PrintAllTransactions()
         {
             Console.Clear();

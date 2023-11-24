@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BankApp_GroupProject
-{
+{    
+    // Base class for both the Customer- and the Admin-class.
     public class User
     {
+        // Username with private set to prevent outsiders to change the value.
         public string Username { get; private set; }
+        // Password is private to prevent outsiders to access the value.
         private string Password { get; set; }
-        public bool IsAdmin { get; set; }
+        public bool IsAdmin { get; protected set; }
         public bool IsBlocked { get; set; }
 
         public User(string username, string password)
@@ -19,29 +22,26 @@ namespace BankApp_GroupProject
             Password = password;
         }
 
-        public string GetUsername()
-        {
-            return Username;
-        }
-
+        // Method that blocks a user after failing to log in.
         public void Block()
         {
             IsBlocked = true;
         }
 
+        // Method that unblocks a customer, if the admin chooses to.
         public void Unblock()
         {
             IsBlocked = false;
         }
 
-        // Metod för att verifiera en användares användarnamn.
+        // Method that verifies the username when a new customer is created.
         public static bool VerifyNewUsername(string username)
         {
             byte minLength = 4;
             byte maxLength = 24;
 
-            // Användarnamn får inte vara null, innehålla färre eller mer än  
-            // 4-24 tecken eller innehålla ett eller flera specialtecken.
+            // THe username cannot be null, cannot consist of fewer OR more than
+            // 4-24 letters/numbers or contain any special symbols.
             if (username == "" || username.Length < minLength ||
                 username.Length > maxLength || CheckValidChar(username))
             {
@@ -50,7 +50,7 @@ namespace BankApp_GroupProject
             return true;
         }
 
-        // Metod som tillåter användaren att byta lösenord.
+        // Method that allows both admin and customers to change their password.
         public void ChangePassword()
         {
             string newPassword;
@@ -68,6 +68,7 @@ namespace BankApp_GroupProject
                 Console.Write("Skriv in ditt gamla lösenord: ");
                 oldPassword = Console.ReadLine();
 
+                // If the user entered a 0, the process of changing password is terminated.
                 if (oldPassword == "0")
                 {
                     Console.Write("\nDu har valt att avsluta processen!" +
@@ -75,6 +76,7 @@ namespace BankApp_GroupProject
                     Console.ReadKey();
                     break;
                 }
+                // Compares the entered password with the user's existing password.
                 else if (CheckPassword(oldPassword))
                 {
                     break;
@@ -86,14 +88,15 @@ namespace BankApp_GroupProject
                     Console.ReadKey();
                 }
             }
-
+            
             while (oldPassword != "0")
             {
                 Console.Write("Skriv in ditt nya lösenord: ");
                 newPassword = Console.ReadLine();
-
+                
                 if (VerifyNewPassword(newPassword) && newPassword != oldPassword)
                 {
+                    // The new password is assigned to the property that holds the password.
                     Password = newPassword;
 
                     Console.Write("\nDitt lösenord har nu ändrats!" +
@@ -111,14 +114,14 @@ namespace BankApp_GroupProject
             }
         }
 
-        // Verifierar en användares lösenord.
+        // Method for verifying a new password.
         public static bool VerifyNewPassword(string password)
         {
             byte minLength = 6;
             byte maxLength = 30;
 
-            // Lösenordet måste ha minst en stor bokstav, en siffra och ett specialtecken
-            // och lösenordet kan inte vara null och måste vara mellan 6-30 tecken långt.
+            // The password must be between 6-30 signs long and contain
+            // at least one uppercase letter, a number and a symbol.
             if (password != "" && password.Length >= minLength &&
                 password.Length <= maxLength && password.Any(c => char.IsAsciiLetterUpper(c))
                 && password.Any(c => char.IsAsciiDigit(c)) && CheckValidChar(password))
@@ -128,14 +131,15 @@ namespace BankApp_GroupProject
             return false;
         }
 
-        // Kollar om det inmatade lösenordet matchar lösenordet 
-        // för en viss användare. Returnerar true om det matchar.
+        // Method that checks if entered password matches the password 
+        // for a specific user. If its a match, the method returns true.
         public bool CheckPassword(string password)
         {
             return Password == password;
         }
 
-        // Kollar om användarnamn/lösenord innehåller ett visst specialtecken.
+        // Method that checks if a username/password contains one of 
+        // the symbols in the symbolArray. Returns true if it does.
         private static bool CheckValidChar(string input)
         {
             char[] symbolArray = { ' ', '@', '$', '/', '\\', '#', '¤', '"', '!', '?', '%', '.', ',',

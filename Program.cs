@@ -2,13 +2,12 @@
 {
     internal class Program
     {
-
         static void Main(string[] args)
         {
             Run();
         }
 
-        // LOGIN METHOD
+        // Method to run the program.
         static void Run()
         {
             bool runApp = true;

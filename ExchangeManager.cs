@@ -3,94 +3,100 @@ namespace BankApp_GroupProject
 {
     internal class ExchangeManager
     {
-        //Statisk så vi kommer åt metoderna överallt utan att behöva göra nya instanser.
-        //Det i sin tur skyddar default värdena från att bli överskrivna.
-        public static ExchangeManager _exchange;
+        // Static field, so that its method is reachable from
+        // everywhere without the need to make new instances. 
+        // That prohibits the default values from being altered.
+        public static ExchangeManager exchange;
 
-        //Dictionary som håller valutorna, även där vi sätter växelkurs.
+        // A Dictionary in charge of keeping the currencies, even when their being set by admin.        
         public Dictionary<string, decimal> Currencies { get; set; }
 
         readonly AsciiArt ascii = new();
 
-        //Constructorn som bara körs en gång.
         public ExchangeManager()
         {
-            //Skapar en ny dictionary av valutor med defaultvärden för växelkurserna.
+            // When the constructor is called, a new Dictionary for the currencies is created.            
             Currencies = new Dictionary<string, decimal>()
             {
+                // Default value for every currency.
                 {"SEK", 1.0m },
                 {"EUR", 11.45m },
                 {"USD", 10.46m }
             };
         }
 
-        //Property som kollar ifall objektet är tomt och isåfall skapar en instans.
-        //Fast denna är främst för att slippa göra nya instanser av ExchangeManager.
+        // A property that checks if the object is empty. In 
+        // that case a new instance of the class is created. 
         public static ExchangeManager Exchange
         {
             get
             {
-                if (_exchange == null)
+                if (exchange == null)
                 {
-                    _exchange = new ExchangeManager();
+                    exchange = new ExchangeManager();
                 }
-                return _exchange;
+                return exchange;
             }
         }
 
+        // Allows the admin to enter new values for each foreign currency.
         public void SetCurrencies()
         {
             Console.Clear();
             Console.WriteLine(ascii.Header());
             string currentCurrencies = "Nuvarande växlingskurser" +
-                                     "\n=========================" +
+                                     "\n========================" +
                                     $"\nEUR:\t {Currencies["EUR"]}" +
                                     $"\nUSD:\t {Currencies["USD"]}";
+
             string setCurrencyEur = "\nSkriv in nytt värde för EUR: ";
-            string setCurrencyUsd = "\nSkriv in nytt värde för USD: ";
 
             Currencies["EUR"] = GetUserDecimalInput(setCurrencyEur, currentCurrencies);
 
-            Currencies["USD"] = GetUserDecimalInput(setCurrencyUsd, currentCurrencies);
+            string updatedCurrencies = "Växelkurser uppdaterade" +
+                                "\n=======================" +
+                               $"\nEUR:\t {Currencies["EUR"]}" +
+                               $"\nUSD:\t {Currencies["USD"]}";
+
+            string setCurrencyUsd = "\nSkriv in nytt värde för USD: ";
+
+            Currencies["USD"] = GetUserDecimalInput(setCurrencyUsd, updatedCurrencies);
 
             Console.Clear();
             Console.WriteLine(ascii.Header());
-            Console.WriteLine("Växelkurser uppdaterade" +
-                            "\n=========================" +
-                           $"\nEUR:\t {Currencies["EUR"]}" +
-                           $"\nUSD:\t {Currencies["USD"]}");
-
+            Console.WriteLine(updatedCurrencies);
             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
         }
 
-        //Valutakonvertering med return 
+        // Converts the value from the source currency to a the new value 
+        // in the desired currency and returns the result as a decimal.
         public decimal CurrencyConverter(string sourceCurrency, string targetCurrency, decimal userAmount)
         {
             decimal sourceRate = Currencies[sourceCurrency];
             decimal targetRate = Currencies[targetCurrency];
 
-            //Uträkningen avrundad till 2 decimaler
             decimal result = Math.Round(userAmount * (sourceRate / targetRate), 2);
 
             return result;
         }
 
-        //Valutakonvertering med sumering
+        // Converts the value from the source currency to a the new value 
+        // in the desired currency and displays the summary for the user.
         public void CurrencyConvertSummary(string sourceCurrency, string targetCurrency, decimal userAmount)
         {
             decimal sourceRate = Currencies[sourceCurrency];
             decimal targetRate = Currencies[targetCurrency];
 
-            //Uträkningen avrundad till 2 decimaler
             decimal result = Math.Round(userAmount * (sourceRate / targetRate), 2);
 
-            //Skiver ut en sammanfattning av konverteringen
             Console.WriteLine($"Konverterar {userAmount} {sourceCurrency} till {targetCurrency}.");
             Console.WriteLine($"Växlingskurs {sourceCurrency}: {sourceRate}");
             Console.WriteLine($"Resultat: {result}");
         }
 
+        // Method that prompts the admin to enter a correct vale
+        // while setting new values for the different currencies.
         public decimal GetUserDecimalInput(string question, string currentCurrencies)
         {
             while (true)
@@ -101,13 +107,17 @@ namespace BankApp_GroupProject
                 Console.Write(question);
                 string userInput = Console.ReadLine();
 
-                if (decimal.TryParse(userInput, out decimal newRate) && newRate > 1.0m && newRate < 20.0m)
+                // The user can only enter a new currency rate between 1-20.
+                if (decimal.TryParse(userInput, out decimal newRate) && newRate >= 1 && newRate < 21)
                 {
+                    Console.Write($"\nVäxelkursen har ändrats. Tryck \"ENTER\" för att gå vidare.");
+                    Console.ReadKey();
                     return newRate;
                 }
                 else
                 {
-                    Console.Write("\nOgiltig växelkurs! Ange växelkursen endast i siffror." +
+                    Console.Write("\nOgiltig växelkurs! Växelkursen bör anges i siffror och " +
+                                  "\nkan ej erhålla ett värde mindre än 1 och större än 20.\n" +
                                   "\nTryck \"ENTER\" och försök igen.");
                     Console.ReadKey();
                 }
