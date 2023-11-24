@@ -30,6 +30,7 @@ User Class
 The User class encompassing essential features related to account access and security. The class facilitates user authentication, password management, and security-related functionalities within the application.
 
 Key Methods:
+
 GetUsername(): Returns the username of the user.
 
 Block()/Unblock(): Sets the IsBlocked property to true, blocking the user, or false allowing the user to access the system.
