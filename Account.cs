@@ -120,6 +120,7 @@ namespace BankApp_GroupProject
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(ascii.Header());
                 Console.Write($"Accepterar du en insättning på {deposit} {Currency} till ditt {GetAccountType(account).ToLower()}?" +
                                 "\n[1] JA" +
                                 "\n[2] NEJ" +
