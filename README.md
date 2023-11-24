@@ -1,5 +1,32 @@
 # BankApp_GroupProject
 
+ConsoleIO Class
+
+The ConsoleIO class serves as the user interface. It displays all menus, keeps track of which user in logged in and calls all menu methods that interact with the application.
+
+Key Methods
+
+DisplayMainMenu(): Displays the login screen. Acts as the entry point for users.
+
+LogIn(): Handles user login, including three attempts and account blocking for security. Distinguishes between customer and admin logins, directing to respective menus. 
+Integrates with LogInManager, that handles user authentication, login attempts, and user-related operations.
+
+DisplayCustomerMenu(): Displays the customer menu with various banking options.
+Allows customers to view accounts, perform transactions, open new accounts, and change password.
+
+DisplayTransactionsMenu(): Displays menu for internal and external transactions.
+
+DisplayAccountMenu(): Displays menu for opening checking, savings, or global accounts.
+
+DisplayAdminMenu(): Displays admin menu. Admins can add users, view and delete users, unblock accounts, set exchange rates, and change passwords.
+
+inloggedCustomer: An instance representing the currently logged-in customer.
+
+inloggedAdmin: An instance representing the currently logged-in admin.
+user: An instance representing the user currently attempting to log in.
+
+----------
+
 Account Class
 
 The Account class forms the core structure for managing bank accounts. It introduces the concept of different account types through the AccountType enumeration, which includes values such as Checking, Savings, and Global. Each account instance created from this class is associated with a specific account type.
