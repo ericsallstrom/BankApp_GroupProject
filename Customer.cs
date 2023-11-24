@@ -204,8 +204,7 @@ namespace BankApp_GroupProject
         public void PrintAccountSuccess(Account account)
         {
             Console.Clear();
-            Console.WriteLine($"Grattis! Du har skapat ett nytt {account.GetAccountType(account).ToLower()}." +
-                              $"\n######" +
+            Console.WriteLine($"Grattis! Du har skapat ett nytt {account.GetAccountType(account).ToLower()}.\n" +
                               $"\nKontonummer: {account.AccountNumber}" +
                               $"\nKontotyp:    {account.GetAccountType(account)}" +
                               $"\nSaldo:       {account.Balance}" +
@@ -226,14 +225,12 @@ namespace BankApp_GroupProject
             }
             else
             {
-                Console.WriteLine($"KONTON" +
-                                $"\n{FirstName} {LastName}" +
-                                 "\n######");
+                Console.WriteLine($"{FirstName} {LastName} - Konton\n");
                 CustomerAccounts.ForEach(account => Console.WriteLine($"Kontonummer: {account.AccountNumber}" +
-                                                                $"\nKontotyp:    {account.GetAccountType(account)}" +
-                                                                $"\nSaldo:       {account.Balance}" +
-                                                                $"\nValuta:      {account.Currency}" +
-                                                                $"\nSkapat:      {account.DateCreated:g}\n"));
+                                                                    $"\nKontotyp:    {account.GetAccountType(account)}" +
+                                                                    $"\nSaldo:       {account.Balance}" +
+                                                                    $"\nValuta:      {account.Currency}" +
+                                                                    $"\nSkapat:      {account.DateCreated:g}\n"));
             }
         }
 
@@ -249,9 +246,6 @@ namespace BankApp_GroupProject
         public void PrintEveryCustomersAccount(Customer inloggedCustomer)
         {
             Console.Clear();
-            Console.WriteLine("EXTERNA KUNDKONTON" +
-                               "\n######");
-
 
             if (Account.AllCustomerAccounts.Count == 0)
             {
@@ -259,17 +253,23 @@ namespace BankApp_GroupProject
             }
             else
             {
-                Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tTyp\t\tDatum" +
-                    $"\n==========================================================================");                
+                Console.WriteLine($"EXTERNA KUNDKONTON\n" +
+                    $"\nNamn\t\t\t\tKontonummer\t\tKontotyp" +
+                    $"\n=================================================================");
                 foreach (var account in Account.AllCustomerAccounts)
                 {
-                    if (account.AccountUsername != inloggedCustomer.Username)
+                    if (account.CustomerName != inloggedCustomer.Username)
                     {
-                        Console.Write($"Användarnamn: {account.AccountUsername}");
-
                         if (!inloggedCustomer.CustomerAccounts.Exists(a => a.AccountNumber == account.AccountNumber) && account.Type == AccountType.Checking)
                         {
-                            Console.Write($"\tKontonummer: {account.AccountNumber}\tKontotyp: {account.GetAccountType(account)}\n");
+                            if (account.CustomerName.Length >= 16)
+                            {
+                                Console.Write($"{account.CustomerName}\t\t{account.AccountNumber}\t\t{account.GetAccountType(account)}\n");
+                            }
+                            else
+                            {
+                                Console.Write($"{account.CustomerName}\t\t\t{account.AccountNumber}\t\t{account.GetAccountType(account)}\n");
+                            }
                         }
                     }
                 }
@@ -304,7 +304,7 @@ namespace BankApp_GroupProject
                 else
                 {
                     Console.Write("\nOgiltigt kontonummer! Tryck \"ENTER\" och försök igen.");
-                    Console.ReadKey();                    
+                    Console.ReadKey();
                 }
             }
         }
@@ -806,12 +806,11 @@ namespace BankApp_GroupProject
         public void PrintAllTransactions()
         {
             Console.Clear();
-            Console.WriteLine($"{FirstName} {LastName}: Kontohistorik" +
-                                                "\n=================");
+            Console.WriteLine($"{FirstName} {LastName} - Kontohistorik");
 
             foreach (var account in CustomerAccounts)
-            {                
-                Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tTyp\t\tDatum");
+            {
+                Console.WriteLine($"\nKonto\t\tKontonr.\tBelopp\t\tHändelse\tDatum");
                 Console.WriteLine($"==========================================================================");
                 account.PrintAccountHistory();
             }

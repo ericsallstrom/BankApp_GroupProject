@@ -279,27 +279,39 @@ namespace BankApp_GroupProject
             }
             else
             {
-                Console.WriteLine("Lista över användare:" +
-                          "\n---------------------");
+                Console.WriteLine($"ANVÄNDARE\n" +
+                    $"\nNamn\t\t\t\tAnvändarnamn\t\tKontostatus" +
+                    $"\n===================================================================");                
 
                 foreach (var user in _customers)
                 {
                     if (user is Customer c)
                     {
-                        if (c.IsBlocked)
+                        if (c.FirstName.Length + c.LastName.Length >= 15)
                         {
-                            Console.Write($"Namn: {c.FirstName} {c.LastName}" +
-                                        $"\nAnvändarnamn: {c.Username}" +
-                                        $"\nKontot är för närvarande spärrat.\n");
-                        }
+                            if (c.IsBlocked)
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t{c.Username}\t\t\tSpärrat\n");
+                            }
+                            else
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t{c.Username}\n");
+                            }
+                        }    
                         else
                         {
-                            Console.Write($"Namn: {c.FirstName} {c.LastName}" +
-                                        $"\nAnvändarnamn: {c.Username}\n");
+                            if (c.IsBlocked)
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t\t{c.Username}\t\t\tSpärrat\n");
+                            }
+                            else
+                            {
+                                Console.Write($"{c.FirstName} {c.LastName}\t\t\t{c.Username}\n");
+                            }
                         }
-                        Console.WriteLine();
                     }
                 }
+                Console.WriteLine("\n");
             }
         }
 

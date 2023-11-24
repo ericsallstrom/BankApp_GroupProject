@@ -125,7 +125,7 @@
                         // Anropa metod för att visa kontosaldo!
                         // Anropa metod för att visa kundens konton!
                         inloggedCustomer.PrintAccounts();
-                        Console.Write("Tryck \"ENTER\" för att återgå till föregående meny.");
+                        Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
                         break;
                     case "2":

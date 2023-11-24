@@ -19,7 +19,7 @@ namespace BankApp_GroupProject
         public string Currency { get; set; }
         private List<Transaction> AccountHistory { get; set; }
         public static List<Account> AllCustomerAccounts { get; } = new List<Account>();
-        public string AccountUsername { get; set; }
+        public string CustomerName { get; set; }
         protected decimal _deposit { get; set; }
 
         public Account(AccountType type, Customer customer)
@@ -33,7 +33,7 @@ namespace BankApp_GroupProject
             Customer = customer;
             AccountHistory = new List<Transaction>();
             AllCustomerAccounts.Add(this);
-            AccountUsername = customer.Username;
+            CustomerName = customer.FirstName + " " + customer.LastName;
         }
 
         protected static string GenerateAccountNumber()

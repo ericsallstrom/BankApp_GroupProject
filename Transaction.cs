@@ -27,7 +27,7 @@ namespace BankApp_GroupProject
             SourceAccNumber = sourceAccount.AccountNumber;
             TransactionAmount = transactionAmount;
             TransactionType = transactionType;
-            TransactionDate = DateTime.Now.ToString("yyyy/mm/dd");
+            TransactionDate = DateTime.Now.ToShortDateString().ToString();
 
             // Loggar transaktionen till AccountHistory
             sourceAccount.GetAccountHistory().Add(this);
