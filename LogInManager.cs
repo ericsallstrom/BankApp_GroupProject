@@ -530,7 +530,7 @@ namespace BankApp_GroupProject
         }
 
         // This method checks whether a customers username exists in the _customer-list.       
-        private bool UsernameExistsInList(string username)
+        public bool UsernameExistsInList(string username)
         {
             return _customers.Exists(user => user.Username == username);
         }

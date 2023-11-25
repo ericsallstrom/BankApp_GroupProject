@@ -83,6 +83,14 @@
                         break;
                     }
                 }
+                // Checks whether a username is known to the system or not.
+                else if (!LogInManager.UsernameExistsInList(username))
+                {
+                    Console.Write($"\nAnvändaren {username} är okänd. Kontrollera stavning." +
+                                  $"\nKontakta vår administrativa avdelning om problemet kvarstår.\n" +
+                                  $"\nTryck \"ENTER\" och försök igen.");
+                    Console.ReadKey();
+                }
                 else
                 {
                     // If the user is blocked the following message gets printed.
@@ -94,12 +102,14 @@
                         break;
                     }
 
-                    loginAttempts--;                    
+                    // Only if a user existing in the system fails 
+                    // to log in, the loginAttempts is decremented.
+                    loginAttempts = user.LogInAttempts--;
 
                     // After three failed login attempts the system checks if the user 
                     // is not a admin, then the user gets blocked. Otherwise the admin 
                     // is prompted to contact the banks administrative department. 
-                    if (loginAttempts == 0)
+                    if (user.LogInAttempts == 0)
                     {
                         if (user.Username != "admin")
                         {
@@ -113,10 +123,11 @@
                             Console.ReadKey();
                         }
                     }
-                    // For every failed attempt (up til three attempts) to log in the following message is prompted to the user.
+                    // For every failed attempt (up til three attempts) to log 
+                    // in the following message is prompted to the known user.
                     else
                     {
-                        Console.Write($"\nFel användarnamn eller lösenord! {loginAttempts} försök återstår." +
+                        Console.Write($"\nFel lösenord! {user.LogInAttempts} försök återstår." +
                                       "\nTryck \"ENTER\" och försök igen.");
                         Console.ReadKey();
                     }

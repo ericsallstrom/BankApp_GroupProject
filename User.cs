@@ -15,12 +15,14 @@ namespace BankApp_GroupProject
         private string Password { get; set; }
         public bool IsAdmin { get; protected set; }
         public bool IsBlocked { get; set; }
+        public int LogInAttempts { get; set; }
 
         // Constructor for the User-class.
         public User(string username, string password)
         {
             Username = username;
-            Password = password;            
+            Password = password;
+            LogInAttempts = 3;
         }
 
         // Method that blocks a user after failing to log in.
