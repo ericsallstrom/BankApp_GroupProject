@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BankApp_GroupProject
-{    
+{
     // Base class for both the Customer- and the Admin-class.
     public class User
     {
@@ -16,10 +16,11 @@ namespace BankApp_GroupProject
         public bool IsAdmin { get; protected set; }
         public bool IsBlocked { get; set; }
 
+        // Constructor for the User-class.
         public User(string username, string password)
         {
             Username = username;
-            Password = password;
+            Password = password;            
         }
 
         // Method that blocks a user after failing to log in.
@@ -88,12 +89,12 @@ namespace BankApp_GroupProject
                     Console.ReadKey();
                 }
             }
-            
+
             while (oldPassword != "0")
             {
                 Console.Write("Skriv in ditt nya lösenord: ");
                 newPassword = Console.ReadLine();
-                
+
                 if (VerifyNewPassword(newPassword) && newPassword != oldPassword)
                 {
                     // The new password is assigned to the property that holds the password.

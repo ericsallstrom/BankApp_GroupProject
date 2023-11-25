@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankApp_GroupProject
 {
+    // The bank-logo used throughout the program.
     public class AsciiArt
     {
         string header = @"
@@ -19,9 +20,11 @@ namespace BankApp_GroupProject
       |||||\  
 
  LOGIC LIONS BANK" + "\n";
-		public string Header()
-		{
-			return header;
-		}
+
+        // Method that returns the logo as a string.
+        public string Header()
+        {
+            return header;
+        }
     }
 }

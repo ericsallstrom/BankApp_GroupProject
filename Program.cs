@@ -7,7 +7,7 @@
             Run();
         }
 
-        // Method to run the program.
+        // Method to start the program.
         static void Run()
         {
             bool runApp = true;
@@ -18,7 +18,7 @@
                 string userChoice = "";
 
                 while (userChoice != "0")
-                {
+                {                   
                     io.DisplayMainMenu();
 
                     userChoice = Console.ReadLine();

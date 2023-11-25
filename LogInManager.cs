@@ -372,17 +372,24 @@ namespace BankApp_GroupProject
                 {
                     Console.Clear();
                     Console.WriteLine(ascii.Header());
+
+                    // Displays only the blocked customers.
                     PrintBlockedCustomers();
 
-                    Console.Write("Skriv in användarnamnet på den användare du önskar återställa från listan ovan." +
+                    Console.Write("\nSkriv in användarnamnet på den användare du önskar återställa från listan ovan." +
                                 "\nHar du ändrat dig? Tryck \"ENTER\" och avsluta sedan processen i menyn.\n" +
                                 "\nAnvändarnamn: ");
                     string username = Console.ReadLine();
 
+                    // Checks whether the entered username corresponds with a customer in the list.
                     if (UsernameExistsInList(username))
                     {
+                        // The customer to be unblocked are stored in a temporary Customer-object.
                         var customerToUnblock = _customers.Find(c => c.Username == username);
+
+                        // The blocked customer is then unblocked.
                         customerToUnblock.Unblock();
+
                         Console.WriteLine($"\nAnvändaren {customerToUnblock.Username} är nu återställd.");
                         Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();
@@ -395,12 +402,15 @@ namespace BankApp_GroupProject
                         {
                             Console.Clear();
                             Console.WriteLine(ascii.Header());
+
+                            // Admin is prompted to enter a valid username or terminate the process.
                             Console.Write($"Användaren finns inte registrerad i banken." +
                                            "\nVill du försöka igen?" +
                                            "\n[1] Ja" +
                                            "\n[2] Nej" +
                                            "\n---" +
                                            "\nDitt val: ");
+
                             string answer = Console.ReadLine();
 
                             switch (answer)
@@ -408,11 +418,11 @@ namespace BankApp_GroupProject
                                 case "1":
                                     tryAgain = true;
                                     break;
-                                case "2":                                           
+                                case "2":
                                     Console.Write("\nDu har valt att avsluta processen. " +
                                         "\nTryck \"ENTER\" för att återgå till föregående meny.");
                                     Console.ReadKey();
-                                    return;                                    
+                                    return;
                                 default:
                                     Console.Write("\nOgiltigt menyval! Tryck \"ENTER\" och försök igen.");
                                     Console.ReadKey();
@@ -430,29 +440,41 @@ namespace BankApp_GroupProject
             }
         }
 
-        // Skriver ut alla spärra kunder i listan
+        // Method for printing out all the blocked customers.
         public void PrintBlockedCustomers()
         {
             var blockedCustomers = _customers.FindAll(c => c.IsBlocked);
 
-            Console.WriteLine("Lista över spärrade användare" +
-                      "\n-----------------------------");
+            Console.WriteLine($"SPÄRRADE ANVÄNDARE\n" +
+                   $"\nNamn\t\t\t\tAnvändarnamn\t\tKontostatus" +
+                   $"\n===================================================================");
+
             foreach (var user in blockedCustomers)
             {
                 if (user is Customer c)
                 {
-                    Console.WriteLine($"Namn: {c.FirstName} {c.LastName}" +
-                                    $"\nAnvändarnamn: {c.Username}\n");
+                    // For a nicer formatting, customers whose name is as long or longer than
+                    // 15 characters have a different format when printing to console.
+                    if (c.FirstName.Length + c.LastName.Length >= 15)
+                    {
+                        Console.Write($"{c.FirstName} {c.LastName}\t\t{c.Username}\t\t\tSpärrat\n");
+                    }
+                    else
+                    {
+                        Console.Write($"{c.FirstName} {c.LastName}\t\t\t{c.Username}\t\t\tSpärrat\n");
+                    }
                 }
             }
         }
 
-        // Metod för att spärra en kund
+        // This method is being used to block a customer, if the customer 
+        // exists in the list and fails to log in, in three attempts.
         public void BlockCustomer(User customer)
         {
             if (_customers.Contains(customer))
             {
                 customer.Block();
+
                 Console.Write("\nFör många felaktiga försök har genomförts" +
                          "\noch kontot kommer nu att spärras.\n" +
                          "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
@@ -465,20 +487,23 @@ namespace BankApp_GroupProject
             Console.ReadKey();
         }
 
-        // Metod för att kontrollera att varje användarnamn är unikt.
+        // This method checks whether a username is unique upon a new customer is being created.        
         public bool IsUsernameTaken(string username)
         {
             return _customers.Exists(user => user.Username == username);
         }
 
-        // Metod som kollar om en användares användarnamn stämmer överens med lösenordet i listan
+        // Method that checks if the entered username och password 
+        // corresponds with their respectively value stored in each property.
         public bool ConfirmUserLogin(string username, string password)
         {
+            // First we check if admin is trying to log in.
             if (_admin.Username == username && _admin.CheckPassword(password))
             {
                 return true;
             }
 
+            // Then we check if the customer is registered (i.e. existing in the list).
             if (_customers.Exists(customer => customer.Username == username && customer.CheckPassword(password)))
             {
                 return true;
@@ -486,7 +511,9 @@ namespace BankApp_GroupProject
             return false;
         }
 
-        // Metod för att returnera en User, returnerar en "tom" användare för att programmet inte skall krascha
+        // This method returns a User-object based on the passing argument (username). 
+        // If the username doesn't correspond with either admin or a customer in 
+        // the list, it returns an "empty" user so that the program don't crash.        
         public User GetUserByUsername(string username)
         {
             if (_admin.Username == username)
@@ -496,24 +523,27 @@ namespace BankApp_GroupProject
 
             if (!UsernameExistsInList(username))
             {
-                return new User("n/a", "n/a"); // returnerar en tom användare som inte kommer kunna logga in
+                return new User("n/a", "n/a");
             }
 
             return _customers.Find(user => user.Username == username);
         }
 
-        // Metod för att kolla om ett användarnamn stämmer överens med ett av de användarnamnen i listan
+        // This method checks whether a customers username exists in the _customer-list.       
         private bool UsernameExistsInList(string username)
         {
             return _customers.Exists(user => user.Username == username);
         }
 
-        // Metod för att returnera ett objekt av Customer-klassen
+        // This method returns the Customer-object from the _customer-list 
+        // that corresponds with the username being passed as an argument.
         public Customer GetCustomer(string username)
         {
             return _customers.FirstOrDefault(c => c.Username == username);
         }
 
+        // When a user successfully logs in as admin, this 
+        // method returns the instance _admin to that user.
         public Admin GetAdmin()
         {
             return _admin;

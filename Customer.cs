@@ -12,7 +12,7 @@ namespace BankApp_GroupProject
     public class Customer : User
     {
         public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string LastName { get; set; }        
 
         // Public static list of customers that automatically stores every customer upon creation.
         public static List<Customer> AllCustomers { get; } = new List<Customer>();
@@ -31,7 +31,7 @@ namespace BankApp_GroupProject
             FirstName = firstName;
             LastName = lastName;
             IsAdmin = false;
-            IsBlocked = false;
+            IsBlocked = false;            
 
             // A list of the accounts is instantiated when a new customer is created.
             CustomerAccounts = new List<Account>();

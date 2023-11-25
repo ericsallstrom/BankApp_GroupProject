@@ -18,13 +18,15 @@
         private Customer loggedInCustomer;
         private Admin loggedInAdmin;
 
-        // Through the ascii-object we can print out our logo.
+        // With the ascii-object we can print out our logo.
         readonly AsciiArt ascii = new();
 
         // Main menu.
         public void DisplayMainMenu()
         {
             Console.Clear();
+
+            // Prints out the bank-logo.
             Console.WriteLine(ascii.Header());
 
             Console.WriteLine("==================" +
@@ -45,6 +47,7 @@
             {
                 Console.Clear();
                 Console.WriteLine(ascii.Header());
+
                 Console.WriteLine("Ange ditt användarnamn och lösenord för att logga in." +
                                 "\nEfter tre misslyckade försök spärras ditt konto av säkerhetsskäl.\n");
 
@@ -91,7 +94,7 @@
                         break;
                     }
 
-                    loginAttempts--;
+                    loginAttempts--;                    
 
                     // After three failed login attempts the system checks if the user 
                     // is not a admin, then the user gets blocked. Otherwise the admin 
