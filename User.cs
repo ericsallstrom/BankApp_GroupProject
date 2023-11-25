@@ -22,6 +22,9 @@ namespace BankApp_GroupProject
         {
             Username = username;
             Password = password;
+
+            // The user only gets three attempts to log in. This property
+            // helps keeping track which user that's attempting to log in.            
             LogInAttempts = 3;
         }
 
