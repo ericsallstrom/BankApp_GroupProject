@@ -142,6 +142,10 @@ Holds the header/logo
 The Program class initialises the app and loads the login method.
 Also makes an instance of ConsoleIO
 
+### UML
+
+Link to the UML project 
+https://www.figma.com/file/eK8xe3MsPgWl2qQbtigFJe/Whiteboard?type=whiteboard&node-id=0%3A1&t=CrDfGxKSBu8QMMPC-1
 
 
 
