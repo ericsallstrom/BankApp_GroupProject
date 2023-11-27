@@ -27,6 +27,12 @@ namespace BankApp_GroupProject
             // helps keeping track which user that's attempting to log in.            
             LogInAttempts = 3;
         }
+        
+        // Method that restores a users' log in attempts.
+        public void RestoreLogInAttempts()
+        {
+            LogInAttempts = 3;
+        }
 
         // Method that blocks a user after failing to log in.
         public void Block()

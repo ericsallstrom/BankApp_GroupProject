@@ -121,6 +121,7 @@
                                           "\nDu saknar åtkomst för att utföra administrativa uppgifter.\n" +
                                           "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
                             Console.ReadKey();
+                            user.RestoreLogInAttempts();
                             break;
                         }
                     }
