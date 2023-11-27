@@ -390,6 +390,9 @@ namespace BankApp_GroupProject
                         // The blocked customer is then unblocked.
                         customerToUnblock.Unblock();
 
+                        // When a customer is unblocked, their log in attempts gets reset.
+                        customerToUnblock.LogInAttempts = 3;
+
                         Console.WriteLine($"\nAnvändaren {customerToUnblock.Username} är nu återställd.");
                         Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                         Console.ReadKey();

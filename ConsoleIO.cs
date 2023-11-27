@@ -84,7 +84,7 @@
                     }
                 }
                 // Checks whether a username is known to the system or not.
-                else if (!LogInManager.UsernameExistsInList(username))
+                else if (!LogInManager.UsernameExistsInList(username) && !user.IsAdmin)
                 {
                     Console.Write($"\nAnvändaren {username} är okänd. Kontrollera stavning." +
                                   $"\nKontakta vår administrativa avdelning om problemet kvarstår.\n" +
@@ -121,6 +121,7 @@
                                           "\nDu saknar åtkomst för att utföra administrativa uppgifter.\n" +
                                           "\nTryck \"ENTER\" för att återgå till huvudmenyn.");
                             Console.ReadKey();
+                            break;
                         }
                     }
                     // For every failed attempt (up til three attempts) to log 
