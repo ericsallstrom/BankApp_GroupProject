@@ -391,7 +391,7 @@ namespace BankApp_GroupProject
                         customerToUnblock.Unblock();
 
                         // When a customer is unblocked, their log in attempts gets reset.
-                        customerToUnblock.LogInAttempts = 3;
+                        customerToUnblock.RestoreLogInAttempts();
 
                         Console.WriteLine($"\nAnvändaren {customerToUnblock.Username} är nu återställd.");
                         Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
@@ -504,7 +504,7 @@ namespace BankApp_GroupProject
             if (_admin.Username == username && _admin.CheckPassword(password))
             {
                 // Resets admins log in attempts.
-                _admin.LogInAttempts = 3;
+                _admin.RestoreLogInAttempts();                
                 return true;
             }
 
@@ -513,7 +513,7 @@ namespace BankApp_GroupProject
             {
                 // Resets admins log in attempts.
                 var loggedInCustomer = _customers.Find(c => c.Username == username);
-                loggedInCustomer.LogInAttempts = 3;
+                loggedInCustomer.RestoreLogInAttempts();                
                 return true;
             }
             return false;

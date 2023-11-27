@@ -104,7 +104,7 @@
 
                     // Only if a user existing in the system fails 
                     // to log in, the loginAttempts is decremented.
-                    loginAttempts = user.LogInAttempts--;
+                    loginAttempts = user.DecrementLogInAttempt();
 
                     // After three failed login attempts the system checks if the user 
                     // is not a admin, then the user gets blocked. Otherwise the admin 
