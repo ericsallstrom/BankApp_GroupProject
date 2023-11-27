@@ -500,12 +500,17 @@ namespace BankApp_GroupProject
             // First we check if admin is trying to log in.
             if (_admin.Username == username && _admin.CheckPassword(password))
             {
+                // Resets admins log in attempts.
+                _admin.LogInAttempts = 3;
                 return true;
             }
 
             // Then we check if the customer is registered (i.e. existing in the list).
             if (_customers.Exists(customer => customer.Username == username && customer.CheckPassword(password)))
             {
+                // Resets admins log in attempts.
+                var loggedInCustomer = _customers.Find(c => c.Username == username);
+                loggedInCustomer.LogInAttempts = 3;
                 return true;
             }
             return false;
