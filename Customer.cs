@@ -340,7 +340,7 @@ namespace BankApp_GroupProject
                 foreach (var account in Account.AllCustomerAccounts)
                 {
                     // Making sure the customer trying to make an external 
-                    // transactions doesn't make one to its own account.
+                    // transaction, doesn't make one to its own account.
                     if (account.CustomerName != loggedInCustomer.Username)
                     {
                         // Only the account number of the customers checking account should be visible.
