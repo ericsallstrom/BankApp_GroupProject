@@ -1,4 +1,5 @@
-﻿using System.Transactions;
+﻿using System;
+using System.Transactions;
 
 namespace BankApp_GroupProject
 {
@@ -200,16 +201,31 @@ namespace BankApp_GroupProject
         {
             if (AccountHistory.Any() != true)
             {
-                Console.WriteLine("\nDu har för närvarande inga genomförda kontohändelser.\n");
+                Console.WriteLine($"\nInga kontohändelser finns på {GetAccountType(this)}t.\n");
             }
             else
             {
                 foreach (var item in AccountHistory)
                 {
-                    Console.WriteLine($"{item.SourceAcc}\t{item.SourceCurrency}\t{item.TransactionAmount}" +
-                        $"\t\t{item.TransactionType}\t{item.SourceAccBalance}\t\t{item.TransactionDate}");
+                    string s = item.TransactionType;
+
+                    Console.WriteLine($"{item.SourceAcc}\t" +
+                        $"{item.SourceCurrency}\t" +
+                        $"{ExchangeManager.Exchange.ConvertAmount(item.TransactionAmount)}\t\t" +
+                        $"{item.TransactionType}{StringCheck(s)}" +
+                        $"{ExchangeManager.Exchange.ConvertAmount(item.SourceAccBalance)}\t\t" +
+                        $"{item.TransactionDate}");
                 }
             }
+        }
+
+        //Method just for formatting the tabs in the printouts.
+        //If the string is to short it will mess with the columns,
+        //For example "Lån" in TransactionType.
+        public string StringCheck(string s) 
+        {
+            if (s.Length < 9) { return "\t\t"; }
+            else { return "\t";}
         }
     }
 }

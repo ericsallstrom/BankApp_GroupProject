@@ -586,7 +586,7 @@ namespace BankApp_GroupProject
 
                         // Both transactions (debit & credit) are logged to the list of transactions.
                         Transaction f1 = new(transferAccount, originalTransferAmount, "Överföring", true); // Debit
-                        Transaction t1 = new(accountFirstIndex, originalTransferAmount, "Överföring", false); // Credit
+                        Transaction t1 = new(accountFirstIndex, transferAmount, "Överföring", false); // Credit
 
                         transferComplete = true;
                         break;
@@ -617,7 +617,7 @@ namespace BankApp_GroupProject
 
                         // Both transactions (debit & credit) are logged to the list of transactions.
                         Transaction f2 = new(transferAccount, originalTransferAmount, "Överföring", true); // Debit
-                        Transaction t2 = new(accountSecondIndex, originalTransferAmount, "Överföring", false); // Credit
+                        Transaction t2 = new(accountSecondIndex, transferAmount, "Överföring", false); // Credit
 
                         transferComplete = true;
                         break;
@@ -911,7 +911,7 @@ namespace BankApp_GroupProject
                     Console.WriteLine(ascii.Header());
 
                     Console.WriteLine("Kontonr.\tSaldo\t\tValuta\tLåneskuld" +
-                        "\n=================================================");
+                        "\n==============================================================");
 
                     // Here are the customers accounts being displayed along with details for the 
                     // account number, balance, currency and if they already have a debt to the bank.
@@ -919,19 +919,22 @@ namespace BankApp_GroupProject
                     {
                         totalBalance = 0;
 
+                        //Converts Balance to int rounded up, when displaying in table
+                        int displayBalance = ExchangeManager.Exchange.ConvertAmount(item.Balance);
+
                         if (item.Debt == 0)
                         {
-                            Console.Write($"{item.AccountNumber}\t{item.Balance}\t\t{item.Currency}\t{item.Debt:-}");
+                            Console.Write($"{item.AccountNumber}\t{displayBalance}\t\t{item.Currency}\t{item.Debt:-}");
                         }
                         else
                         {
                             if (item.Type == AccountType.Checking)
                             {
-                                Console.Write($"{item.AccountNumber}\t{item.Balance}\t\t{item.Currency}\t{item.Debt}\n");
+                                Console.Write($"{item.AccountNumber}\t{displayBalance}\t\t{item.Currency}\t{item.Debt}\n");
                             }
                             else
                             {
-                                Console.Write($"{item.AccountNumber}\t{item.Balance}\t\t{item.Currency}\t-");
+                                Console.Write($"{item.AccountNumber}\t{displayBalance}\t\t{item.Currency}\t-");
                             }
                         }
                         Console.WriteLine();
@@ -963,7 +966,7 @@ namespace BankApp_GroupProject
                         }
                     }
 
-                    Console.WriteLine("=================================================");
+                    Console.WriteLine("==============================================================");
 
                     // The customers total balance is printed out along with how much money 
                     // the customer can loan (max five times the amount of total balance). 
@@ -1029,9 +1032,6 @@ namespace BankApp_GroupProject
                                 "\nDin totala månadskostnad kommer att vara " + Math.Round(monthlyDebt, 2) + " kr/månad i " + loanTime * 12 + " månader.");
                            
                             decimal loan = Convert.ToDecimal(loanAmount);
-
-                            // The transactions for the loan is being logged.
-                            Transaction t1 = new(account, loan, "Lån", false);
                            
                             // The loan is stored in the property Debt.
                             account.Debt += Convert.ToDecimal(loanAmount);
@@ -1042,6 +1042,9 @@ namespace BankApp_GroupProject
 
                             // This message shows the customer the total sum of their account on which the loan is being deposit.
                             Console.WriteLine($"Totalsumman på ditt lönekonto: {account.Balance} kr.");
+
+                            // The transactions for the loan is being logged.
+                            Transaction t1 = new(account, loan, "Lån", false);
 
                             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
                             Console.ReadKey();
@@ -1074,7 +1077,7 @@ namespace BankApp_GroupProject
             foreach (var account in CustomerAccounts)
             {
                 Console.WriteLine($"\nKonto\t\tValuta\tBelopp\t\tHändelse\tSaldo\t\tDatum");
-                Console.WriteLine($"===================================================================================");
+                Console.WriteLine($"====================================================================================");
                 account.PrintAccountHistory();
             }
 

@@ -76,7 +76,7 @@ namespace BankApp_GroupProject
             decimal sourceRate = Currencies[sourceCurrency];
             decimal targetRate = Currencies[targetCurrency];
 
-            decimal result = Math.Round(userAmount * (sourceRate / targetRate), 2);
+            decimal result = Math.Round(userAmount * (sourceRate / targetRate), 1);
 
             return result;
         }
@@ -88,7 +88,7 @@ namespace BankApp_GroupProject
             decimal sourceRate = Currencies[sourceCurrency];
             decimal targetRate = Currencies[targetCurrency];
 
-            decimal result = Math.Round(userAmount * (sourceRate / targetRate), 2);
+            decimal result = Math.Round(userAmount * (sourceRate / targetRate), 1);
 
             Console.WriteLine($"Konverterar {userAmount} {sourceCurrency} till {targetCurrency}.");
             Console.WriteLine($"Växlingskurs {sourceCurrency}: {sourceRate}");
@@ -122,6 +122,14 @@ namespace BankApp_GroupProject
                     Console.ReadKey();
                 }
             }
+        }
+
+        //Method for taking away decimals in amounts when printed
+        //in tables, to avoid messing with the tabs when the amount is big
+        public int ConvertAmount(decimal amount)
+        {
+            int convertedAmount = Convert.ToInt32(Math.Round(amount));
+            return convertedAmount;
         }
     }
 }
