@@ -917,8 +917,6 @@ namespace BankApp_GroupProject
                     // account number, balance, currency and if they already have a debt to the bank.
                     foreach (var item in CustomerAccounts)
                     {
-                        totalBalance = 0;
-
                         //Converts Balance to int rounded up, when displaying in table
                         int displayBalance = ExchangeManager.Exchange.ConvertAmount(item.Balance);
 
@@ -1054,6 +1052,7 @@ namespace BankApp_GroupProject
                         {
                             Console.Write("\nDu kan inte låna så mycket pengar. Vänligen försök med en lägre summa." +
                                 "\nTryck \"ENTER\" och försök igen.");
+                            totalBalance = 0; // Resets Total Balance in the loop
                             Console.ReadKey();
                             Console.Clear();
                         }
@@ -1061,6 +1060,7 @@ namespace BankApp_GroupProject
                     else
                     {
                         Console.Write("\nOgiltig input! Tryck \"ENTER\" och försök igen.");
+                        totalBalance = 0; // Resets Total Balance in the loop
                         Console.ReadKey();
                         Console.Clear();
                     }
