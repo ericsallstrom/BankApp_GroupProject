@@ -53,7 +53,7 @@ namespace BankApp_GroupProject
 
             Currencies["EUR"] = GetUserDecimalInput(setCurrencyEur, currentCurrencies);
 
-            string updatedCurrencies = "Växelkurser uppdaterade" +
+            string updatedCurrencies = "Växelkurs för EUR uppdaterad" +
                                 "\n=======================" +
                                $"\nEUR:\t {Currencies["EUR"]}" +
                                $"\nUSD:\t {Currencies["USD"]}";
@@ -63,8 +63,11 @@ namespace BankApp_GroupProject
             Currencies["USD"] = GetUserDecimalInput(setCurrencyUsd, updatedCurrencies);
 
             Console.Clear();
-            Console.WriteLine(ascii.Header());
-            Console.WriteLine(updatedCurrencies);
+            Console.WriteLine(ascii.Header());            
+            Console.WriteLine("Växelkurser uppdaterade" +
+                            "\n=======================" +
+                           $"\nEUR:\t {Currencies["EUR"]}" +
+                           $"\nUSD:\t {Currencies["USD"]}");
             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
         }
@@ -110,7 +113,9 @@ namespace BankApp_GroupProject
                 // The user can only enter a new currency rate between 1-20.
                 if (decimal.TryParse(userInput, out decimal newRate) && newRate >= 1 && newRate < 21)
                 {
-                    Console.Write($"\nVäxelkursen har ändrats. Tryck \"ENTER\" för att gå vidare.");
+                    Console.Write("\nVäxelkurs uppdateras... Vänligen vänta.");
+                    Thread.Sleep(2000);
+                    Console.Write($"\n\nVäxelkursen har ändrats. Tryck \"ENTER\" för att gå vidare.");
                     Console.ReadKey();
                     return newRate;
                 }
