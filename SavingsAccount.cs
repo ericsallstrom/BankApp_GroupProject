@@ -63,7 +63,7 @@
             {
                 Console.WriteLine();
                 Console.WriteLine($"Med en räntesats på {Interest * 100}%, skulle du få " +
-                                    $"{interestAmount:c} i värdeökning över {Months}.");
+                                    $"{interestAmount} kr i värdeökning över {Months}.");
             }
             Console.Write("\nTryck \"ENTER\" för att återgå till föregående meny.");
             Console.ReadKey();
