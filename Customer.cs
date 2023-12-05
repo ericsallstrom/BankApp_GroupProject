@@ -991,7 +991,7 @@ namespace BankApp_GroupProject
                             {
                                 Console.Clear();
                                 Console.WriteLine(ascii.Header());
-                                Console.WriteLine($"Du har valt att låna {loanAmount:c} till 8,48% ränta.");
+                                Console.WriteLine($"Du har valt att låna {loanAmount} kr till 8,48% ränta.");
 
                                 // The customer is prompted to decide how long the 
                                 // time for installment should be (max 10 years).
