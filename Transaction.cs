@@ -23,8 +23,8 @@ namespace BankApp_GroupProject
         public Transaction(Account sourceAccount, decimal transactionAmount,
                            string transactionType, bool isDebet)
         {
-            // When a new transaction is being logged from a account, 
-            // the debit shows the amount of money with a minus sign.
+            // If the transaction being logged is debet,
+            // this turns the amount negative 
             if (isDebet) { transactionAmount *= -1; }
 
             SourceAcc = sourceAccount.GetAccountType(sourceAccount);
@@ -35,8 +35,12 @@ namespace BankApp_GroupProject
             SourceAccBalance = sourceAccount.Balance;
             SourceCurrency = sourceAccount.Currency;
 
-            // Logs the transaction to AccountHistory.
-            sourceAccount.GetAccountHistory().Add(this);
+
+        // Logs the transaction to AccountHistory.
+        sourceAccount.GetAccountHistory().Add(this);
         }
+
+
+
     }
 }
