@@ -114,6 +114,7 @@
                         if (user.Username != "admin")
                         {
                             LogInManager.BlockCustomer(user);
+                            break;
                         }
                         else
                         {
